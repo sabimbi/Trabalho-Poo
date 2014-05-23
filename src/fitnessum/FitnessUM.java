@@ -50,7 +50,7 @@ public HashMap<String,User> getUserlist(){
     }
     public String toString(){
         StringBuilder s=new StringBuilder("-----USERLIST-----\n");
-        TreeSet<String> users=new TreeSet<String>(new NomeComparator());
+        TreeSet<String> users=new TreeSet<String>();
         for(String str:this.userlist.keySet()){
             users.add(str);
         }
