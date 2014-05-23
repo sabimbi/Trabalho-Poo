@@ -123,7 +123,7 @@ public User (String email, String nome, String password, String gen, double altu
     s.append("Sexo: "+this.gen+"\n");
     s.append("Altura: "+this.altura+" m\n");
     s.append("Peso: "+this.peso+" Kg\n");
-    s.append("Data de Nascimento: "+dia+" - "+mes+" - "+ano+"\n");
+    s.append("Data de Nascimento: "+dia+"-"+mes+"-"+ano+"\n");
     s.append("Desporto Favorito: "+this.desporto_favorito+"\n");
     return s.toString();
     }
