@@ -121,8 +121,8 @@ public User (String email, String nome, String password, String gen, double altu
         ano=this.data_de_nascimento.get(Calendar.YEAR);
         s.append("Nome: "+this.getNome()+"\n");
     s.append("Sexo: "+this.gen+"\n");
-    s.append("Altura: "+this.altura+"\n");
-    s.append("Peso: "+this.peso+"\n");
+    s.append("Altura: "+this.altura+" m\n");
+    s.append("Peso: "+this.peso+" Kg\n");
     s.append("Data de Nascimento: "+dia+" - "+mes+" - "+ano+"\n");
     s.append("Desporto Favorito: "+this.desporto_favorito+"\n");
     return s.toString();
