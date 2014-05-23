@@ -21,7 +21,7 @@ public class MenuPrincipal {
     int resultado=1;
    fitness=new FitnessUM();
     fitness.AdicionaUser(new User());
-    
+    fitness.AdicionaUser(new User("joao", "joao", "joao", "Masculino", 1.9, 70.0, "LOL", new GregorianCalendar()));
     while(resultado!=0){
         resultado=MenuPrincipal.Menu();
     }
@@ -73,7 +73,9 @@ private static int MenuUtilizador(User u) throws Excepcoes{
     System.out.println("-----MENU UTILIZADOR----");
     System.out.println("1 - Ver Perfil");
 System.out.println("2 - Mudar informações");
-System.out.println("3 - Sair");
+System.out.println("3 - Adicionar Amigo");
+System.out.println("4 - Ver Amigos");
+System.out.println("5 - Logout");
 System.out.print("Opção: ");
 r=op=2;
 op=ler.nextInt();
@@ -88,11 +90,29 @@ switch(op){
         while(r!=0){
             r=MenuPrincipal.MenuInf(u);
         }
+        
         r=1;
         break;
         
     }
+    
     case 3:{
+        while(r!=0){
+            r=MenuPrincipal.AdicionarAmigo(u);
+        }
+        
+        r=1;
+        break;
+    }
+    case 4:{
+        while(r!=0){
+            r=MenuPrincipal.FriendsList(u);
+        }
+        
+        r=1;
+        break;
+    }
+    case 5:{
         
         r=0;
         break;
@@ -112,11 +132,12 @@ return r;
    pass=ler.nextLine();
    try{
        if(fitness.LoginValido(user,pass)==true){
-           u=fitness.getUser(user);
+       User aux=fitness.getUser(user);    
    while(resultado!=0){
        
-       resultado=MenuPrincipal.MenuUtilizador(u);
+       resultado=MenuPrincipal.MenuUtilizador(aux);
    }
+
        }
            
        
@@ -264,6 +285,7 @@ switch(op){
         sport=ler.nextLine();
         u.setDesporto_favorito(sport);
         r=1;
+        
         break;
     }
     case 4:{
@@ -290,6 +312,43 @@ switch(op){
 }
 
 return r;
+    }
+
+    private static int AdicionarAmigo(User u) throws Excepcoes {
+    String user;
+    Scanner ler =new Scanner(System.in);
+    MenuPrincipal.PrintUserList();
+    System.out.print("User: ");
+    user=ler.nextLine();
+    User aux;
+    try{
+        if(fitness.ExisteUser(user)==true){
+            aux=fitness.getUser(user);
+            u.AdicionarAmigo(aux);
+            
+       
+        }
+        
+    }catch(UserNaoExiste e){
+        System.out.println(e.getMessage());
+    }
+    return 0;
+    }
+
+    private static int FriendsList(User u) throws Excepcoes{
+    String user;
+        System.out.print(u.MostrarFriendsList());
+    Scanner ler=new Scanner(System.in);
+    System.out.print("User: ");
+    user=ler.nextLine();
+    try{
+        if(fitness.ExisteUser(user)==true){
+            System.out.print(u.DetalhesAmigo(user));
+        }
+    }catch(UserNaoExiste e){
+        System.out.println(e.getMessage());
+    }
+    return 0;
     }
 }
 

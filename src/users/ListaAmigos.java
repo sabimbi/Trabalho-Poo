@@ -37,4 +37,25 @@ public class ListaAmigos {
    public ListaAmigos clone(){
        return new ListaAmigos(this);
    }
+
+    public void AdicionarAmigo(User aux) {
+    this.lista.put(aux.getEmail(), aux);
+    }
+    public String DetalhesAmigo(String user){
+        StringBuilder s=new StringBuilder();
+        User aux=this.lista.get(user);
+        s.append(aux.toString());
+        return s.toString();
+    }
+    public String toString(){
+        StringBuilder s=new StringBuilder("----Lista de Amigos----\n");
+        TreeSet<String> aux=new TreeSet<>();
+        for(String str:this.lista.keySet()){
+            aux.add(str);
+        }
+        for(String str:aux){
+            s.append(str+"\n");
+        }
+        return s.toString();
+    }
 }

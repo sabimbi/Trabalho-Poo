@@ -269,6 +269,16 @@ public User (String email, String nome, String password, String gen, double altu
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    public void AdicionarAmigo(User aux) {
+   this.friendslist.AdicionarAmigo(aux);
+    }
+    public String MostrarFriendsList(){
+        return this.friendslist.toString();
+    }
+    public String DetalhesAmigo(String user){
+        return this.friendslist.DetalhesAmigo(user);
+    }
     
     
     

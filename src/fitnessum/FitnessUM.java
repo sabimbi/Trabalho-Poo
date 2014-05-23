@@ -77,7 +77,7 @@ if(userlist.containsKey(email)==false){
 
     public User getUser(String user) {
     
-    return ((User)userlist.get(user));
+   return userlist.get(user);
     }
 
    public boolean LoginValido(String user, String pass)  throws Excepcoes{
