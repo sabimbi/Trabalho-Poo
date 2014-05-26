@@ -126,4 +126,8 @@ public class ListaActividades {
             }
     }
     }
+
+   public int NrdeActividades() {
+   return this.actividades.size();
+   }
 }

@@ -140,7 +140,11 @@ switch(op){
        break;
     }
     case 6:{
-        System.out.print(u.ListarActividades());
+        try{
+        System.out.print(u.ListarActividades());}
+        catch(NaoTemActividades e){
+            System.out.println(e.getMessage());
+        }
         r=1;
         break;
     }
@@ -383,24 +387,28 @@ return r;
 
     private static int FriendsList(User u) throws Excepcoes{
     String user;
-        System.out.print(u.MostrarFriendsList());
     Scanner ler=new Scanner(System.in);
-    int r=1;
+    int r=1;    
+    try{
+        System.out.print(u.MostrarFriendsList());
+    
     System.out.print("User: ");
     
     user=ler.nextLine();
-    try{
         if(fitness.ExisteUser(user)==true){
             User aux=fitness.getUser(user);
             while(r!=0){
                 r=MenuPrincipal.MenuAmigos(aux);
             }
         }
-    }catch(UserNaoExiste e){
+        
+    }catch(NaoTemAmigos | UserNaoExiste e){
         System.out.println(e.getMessage());
     }
     return 0;
     }
+        
+    
 
     private static void RegistarActividade(User u) {
     String tipo,date,duracao;
@@ -462,19 +470,10 @@ return r;
     TreeSet<String> sports=new TreeSet<String>();
         
     System.out.println("-----LISTA DE DESPORTOS-----");
-    for(String s: distancia){
-        sports.add(s);
-    
-    }
-    for(String s: desportos){
-        sports.add(s);
-    }
-    for(String s: ambos){
-        sports.add(s);
-    }
-    for(String s: outros){
-        sports.add(s);
-    }
+    sports.addAll(Arrays.asList(distancia));
+    sports.addAll(Arrays.asList(desportos));
+    sports.addAll(Arrays.asList(ambos));
+    sports.addAll(Arrays.asList(outros));
     for(String s: sports){
         System.out.println(s);
     }

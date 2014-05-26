@@ -58,4 +58,7 @@ public class ListaAmigos {
         }
         return s.toString();
     }
+    public int NrdeAmigos(){
+        return this.lista.size();
+    }
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package users;
-
+import exceptions.*;
 import activities.*;
 import comparators.*;
 import java.io.*;
@@ -273,13 +273,20 @@ public User (String email, String nome, String password, String gen, double altu
     public void AdicionarAmigo(User aux) {
    this.friendslist.AdicionarAmigo(aux);
     }
-    public String MostrarFriendsList(){
+    public String MostrarFriendsList() throws Excepcoes{
+        if(this.friendslist.NrdeAmigos()==0){
+          throw new NaoTemAmigos();
+        }else{
         return this.friendslist.toString();
-    }
+    }}
    
 
-    public String ListarActividades() {
-    return this.lista.toString();
+    public String ListarActividades() throws Excepcoes{
+    if(this.lista.NrdeActividades()==0){
+        throw new NaoTemActividades();
+    }else{
+        return this.lista.toString();
+    }
     }
     public int getIdade() {  
 GregorianCalendar hj=new GregorianCalendar();  
