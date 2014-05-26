@@ -108,7 +108,7 @@ public class User {
     }
 
     public HashMap<String, User> getFriends() {
-        
+
         return this.friends;
     }
 
@@ -205,7 +205,7 @@ public class User {
      * @return the data_de_nascimento
      */
     public GregorianCalendar getData_de_nascimento() {
-        
+
         return this.data_de_nascimento;
     }
 
@@ -240,13 +240,9 @@ public class User {
     /**
      * @return the lista
      */
-    
-
     /**
      * @return the friendslist
      */
-    
-
     /**
      * @param friendslist the friendslist to set
      */
@@ -293,7 +289,7 @@ public class User {
     }
 
     public void AdicionarAmigo(User aux) {
-        this.friends.put(aux.email,aux);
+        this.friends.put(aux.email, aux);
     }
 
     public String MostrarFriendsList() throws Excepcoes {
@@ -304,31 +300,33 @@ public class User {
         }
     }
 
-    public String ListadeAmigos(){
-        StringBuilder s=new StringBuilder("----Lista de Amigos----\n");
-        TreeSet<String> aux=new TreeSet<>();
-        for(String str:this.friends.keySet()){
+    public String ListadeAmigos() {
+        StringBuilder s = new StringBuilder("----Lista de Amigos----\n");
+        TreeSet<String> aux = new TreeSet<>();
+        for (String str : this.friends.keySet()) {
             aux.add(str);
         }
-        for(String str:aux){
-            s.append(str+"\n");
+        for (String str : aux) {
+            s.append(str + "\n");
         }
         return s.toString();
     }
+
     public String ListarActividades() throws Excepcoes {
-        if (this.actividades.isEmpty() ) {
+        if (this.actividades.isEmpty()) {
             throw new NaoTemActividades();
         } else {
             return this.ListaActividades();
         }
     }
-public String ListaActividades(){
-        StringBuilder s=new StringBuilder("-----LISTA DE ACTIVIDADES-----\n");
+
+    public String ListaActividades() {
+        StringBuilder s = new StringBuilder("-----LISTA DE ACTIVIDADES-----\n");
         GeneralActivity aux;
-        for(GeneralActivity g:this.actividades){
+        for (GeneralActivity g : this.actividades) {
             if (g instanceof Distancia) {
-            aux = ((Distancia) g);    
-            s.append(aux.toString());
+                aux = ((Distancia) g);
+                s.append(aux.toString());
             }
             if (g instanceof Desporto) {
                 aux = ((Desporto) g);
@@ -339,13 +337,14 @@ public String ListaActividades(){
                 s.append(aux.toString());
             }
             if (g instanceof Outros) {
-           aux = ((Outros) g);
-                s.append(aux.toString());    
+                aux = ((Outros) g);
+                s.append(aux.toString());
             }
         }
-        
+
         return s.toString();
     }
+
     public int getIdade() {
         GregorianCalendar hj = new GregorianCalendar();
         GregorianCalendar nascimento = this.getData_de_nascimento();
@@ -355,77 +354,79 @@ public String ListaActividades(){
         return anohj - anoNascimento;
     }
 
-    public void AdicionarActividade(GeneralActivity g){
-       GeneralActivity aux;
-       ArrayList<GeneralActivity> copia;
-                if (g instanceof Distancia) {
-            aux = ((Distancia) g).clone();    
-           this.actividades.add(aux);
-            
-                }
-            if (g instanceof Desporto) {
-                aux = ((Desporto) g).clone();
-                this.actividades.add(aux);
-            }
-            if (g instanceof Ambos) {
-                aux = ((Ambos) g).clone();
-                this.actividades.add(aux);
-            }
-            if (g instanceof Outros) {
-           aux = ((Outros) g).clone();
-                this.actividades.add(aux);     
-            }
-           copia=this.getActividades();
-       Collections.sort(copia, new DateComparator());
-       
-       this.setActividades(copia);
-       
-        
-    }
-    private void setActividades(ArrayList<GeneralActivity> copia) {
-    this.actividades=new ArrayList<>();
-    GeneralActivity aux;
-    for(GeneralActivity g:copia){
-        
-            if (g instanceof Distancia) {
-            aux = ((Distancia) g).clone();    
+    public void AdicionarActividade(GeneralActivity g) {
+        GeneralActivity aux;
+        ArrayList<GeneralActivity> copia;
+        if (g instanceof Distancia) {
+            aux = ((Distancia) g).clone();
             this.actividades.add(aux);
+
+        }
+        if (g instanceof Desporto) {
+            aux = ((Desporto) g).clone();
+            this.actividades.add(aux);
+        }
+        if (g instanceof Ambos) {
+            aux = ((Ambos) g).clone();
+            this.actividades.add(aux);
+        }
+        if (g instanceof Outros) {
+            aux = ((Outros) g).clone();
+            this.actividades.add(aux);
+        }
+        copia = this.getActividades();
+        Collections.sort(copia, new DateComparator());
+
+        this.setActividades(copia);
+
+    }
+
+    private void setActividades(ArrayList<GeneralActivity> copia) {
+        this.actividades = new ArrayList<>();
+        GeneralActivity aux;
+        for (GeneralActivity g : copia) {
+
+            if (g instanceof Distancia) {
+                aux = ((Distancia) g).clone();
+                this.actividades.add(aux);
             }
             if (g instanceof Desporto) {
                 aux = ((Desporto) g).clone();
-               this.actividades.add(aux);
+                this.actividades.add(aux);
             }
             if (g instanceof Ambos) {
                 aux = ((Ambos) g).clone();
                 this.actividades.add(aux);
             }
             if (g instanceof Outros) {
-           aux = ((Outros) g).clone();
-               this.actividades.add(aux);   
+                aux = ((Outros) g).clone();
+                this.actividades.add(aux);
             }
-    }
-    }
-public boolean ExisteActividade(int cod){
-    
-    for(GeneralActivity g:this.actividades){
-        if(g.getCod()==cod){
-            return true;
         }
     }
-    return false;
-}
+
+    public boolean ExisteActividade(int cod) {
+
+        for (GeneralActivity g : this.actividades) {
+            if (g.getCod() == cod) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void RemoverActividade(String cod) throws Excepcoes {
-    int code;
-    code=Integer.parseInt(cod);
-    if(this.ExisteActividade(code)==false){
-        throw new ActividadeNaoExiste();
-    }else{
-        for(GeneralActivity g:this.actividades){
-            if(g.getCod()==code){
-                this.actividades.remove(g);
-                break;
+        int code;
+        code = Integer.parseInt(cod);
+        if (this.ExisteActividade(code) == false) {
+            throw new ActividadeNaoExiste();
+        } else {
+            for (GeneralActivity g : this.actividades) {
+                if (g.getCod() == code) {
+                    this.actividades.remove(g);
+                    break;
+                }
             }
         }
-    }
     }
 }

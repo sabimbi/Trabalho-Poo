@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package exceptions;
 
 /**
@@ -13,10 +12,11 @@ package exceptions;
 public class ActividadeNaoExiste extends Excepcoes {
 
     public ActividadeNaoExiste() {
-    super();
+        super();
     }
-    public ActividadeNaoExiste(int cod){
-        super("A actividade com o código "+cod+" não existe");
+
+    public ActividadeNaoExiste(int cod) {
+        super("A actividade com o código " + cod + " não existe");
     }
-    
+
 }

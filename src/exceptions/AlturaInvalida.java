@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package exceptions;
 
 /**
  *
  * @author mesas
  */
-public class AlturaInvalida extends Excepcoes{
-    public AlturaInvalida(){
+public class AlturaInvalida extends Excepcoes {
+
+    public AlturaInvalida() {
         super("Altura inválida");
     }
 }

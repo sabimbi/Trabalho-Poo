@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package exceptions;
 
 /**
@@ -11,7 +10,8 @@ package exceptions;
  * @author Mesas
  */
 public class NaoTemAmigos extends Excepcoes {
-    public NaoTemAmigos(){
+
+    public NaoTemAmigos() {
         super("Nao tem amigos");
     }
 }

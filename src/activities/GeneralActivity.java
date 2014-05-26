@@ -16,7 +16,7 @@ public abstract class GeneralActivity {
     private GregorianCalendar data;
     private String nome;
     private double calories;
-private int cod;
+    private int cod;
     private String duration;
     private double hidratacao;
 
@@ -26,7 +26,7 @@ private int cod;
         this.hidratacao = 0.0;
         this.duration = "";
         this.data = new GregorianCalendar();
-        this.cod=0 + (int)(Math.random() * ((10000) + 1));
+        this.cod = 0 + (int) (Math.random() * ((10000) + 1));
     }
 
     public GeneralActivity(GregorianCalendar date, String nome, double cal, String duration, double hidration) {
@@ -35,7 +35,7 @@ private int cod;
         this.calories = cal;
         this.hidratacao = hidration;
         this.duration = duration;
-        this.cod=0 + (int)(Math.random() * ((10000) + 1));
+        this.cod = 0 + (int) (Math.random() * ((10000) + 1));
     }
 
     public GeneralActivity(GeneralActivity g) {
@@ -45,25 +45,29 @@ private int cod;
         this.duration = g.getDuration();
         this.data = g.getData();
     }
-public void setData(GregorianCalendar date){
-    int dia,mes,ano;
-    this.data=new GregorianCalendar();
-    dia = date.get(Calendar.DATE);
+
+    public void setData(GregorianCalendar date) {
+        int dia, mes, ano;
+        this.data = new GregorianCalendar();
+        dia = date.get(Calendar.DATE);
         mes = date.get(Calendar.MONTH);
         ano = date.get(Calendar.YEAR);
         this.data.set(Calendar.DATE, dia);
         this.data.set(Calendar.MONTH, mes);
         this.data.set(Calendar.YEAR, ano);
-}
+    }
+
     /**
      * @return the nome
      */
     public String getNome() {
         return nome;
     }
-public int getCod(){
-    return this.cod;
-}
+
+    public int getCod() {
+        return this.cod;
+    }
+
     /**
      * @param nome the nome to set
      */
@@ -115,18 +119,19 @@ public int getCod(){
         copia.set(Calendar.YEAR, ano);
         return copia;
     }
-    public String toString(){
-        int dia,mes,ano;
-        StringBuilder s=new StringBuilder();
-        dia=this.data.get(Calendar.DATE);
-        mes=this.data.get(Calendar.MONTH);
-        ano=this.data.get(Calendar.YEAR);
-        s.append("Código: "+this.cod+"\n");
-        s.append("Nome: "+this.nome+"\n");
-        s.append("Data: "+dia+" - "+mes+" - "+ano+"\n");
-        s.append("Duração: "+this.duration+" horas\n");
-        s.append("Calorias: "+this.calories+" kcal\n");
-        s.append("Hidratação: "+this.hidratacao+" litros\n");
+
+    public String toString() {
+        int dia, mes, ano;
+        StringBuilder s = new StringBuilder();
+        dia = this.data.get(Calendar.DATE);
+        mes = this.data.get(Calendar.MONTH);
+        ano = this.data.get(Calendar.YEAR);
+        s.append("Código: " + this.cod + "\n");
+        s.append("Nome: " + this.nome + "\n");
+        s.append("Data: " + dia + " - " + mes + " - " + ano + "\n");
+        s.append("Duração: " + this.duration + " horas\n");
+        s.append("Calorias: " + this.calories + " kcal\n");
+        s.append("Hidratação: " + this.hidratacao + " litros\n");
         return s.toString();
     }
 

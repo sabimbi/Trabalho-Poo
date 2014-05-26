@@ -15,37 +15,37 @@ public class Desporto extends GeneralActivity {
 
     private double distancia;
     private String resultado;
+
     public Desporto() {
         super();
         distancia = 0.0;
-        resultado="";
+        resultado = "";
     }
 
     public Desporto(GregorianCalendar date, String nome, double cal, String duration, double hidration, double distance, String result) {
         super(date, nome, cal, duration, hidration);
-        this.resultado=result;
+        this.resultado = result;
         this.distancia = distance;
     }
 
     public Desporto(Desporto a) {
         super(a.getData(), a.getNome(), a.getCalories(), a.getDuration(), a.getHidration());
-        this.resultado=a.getResultado();
-        this.distancia=a.getDistancia();
+        this.resultado = a.getResultado();
+        this.distancia = a.getDistancia();
     }
 
     public Desporto clone() {
         return new Desporto(this);
     }
 
-    
-public String toString(){
-    StringBuilder s=new StringBuilder();
-    s.append(super.toString());
-    s.append("Distância: "+this.distancia+"m\n");
-    s.append("Resultado: "+this.resultado+"\n");
-    
-    return s.toString();
-}
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(super.toString());
+        s.append("Distância: " + this.distancia + "m\n");
+        s.append("Resultado: " + this.resultado + "\n");
+
+        return s.toString();
+    }
 
     /**
      * @return the distancia

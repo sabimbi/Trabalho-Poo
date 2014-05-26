@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package exceptions;
 
 /**
@@ -11,11 +10,13 @@ package exceptions;
  * @author mesas
  */
 public abstract class Excepcoes extends Exception {
-    public Excepcoes(){
+
+    public Excepcoes() {
         super();
     }
-    public Excepcoes(String s){
+
+    public Excepcoes(String s) {
         super(s);
     }
-    
+
 }

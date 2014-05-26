@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package exceptions;
 
 /**
@@ -13,10 +12,11 @@ package exceptions;
 public class UserNaoExiste extends Excepcoes {
 
     public UserNaoExiste() {
-    super();
+        super();
     }
-    public UserNaoExiste(String s){
-        super("Não existe o user "+s);
+
+    public UserNaoExiste(String s) {
+        super("Não existe o user " + s);
     }
-    
+
 }

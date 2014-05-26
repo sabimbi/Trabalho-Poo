@@ -146,17 +146,18 @@ public class Ambos extends GeneralActivity {
     public void setDistanciadescida(double distanciadescida) {
         this.distanciadescida = distanciadescida;
     }
-public String toString(){
-  StringBuilder s=new StringBuilder();
-  s.append(super.toString());
-  s.append("Distância: "+this.distancia+"km\n");
-  
-    s.append("Velocidade Máxima: "+this.velocidademax+" km/h\n");
-    s.append("Velocidade Mínima: "+this.velocidademedia+" km/h\n");  
-  s.append("Altitude Máxima: "+this.altitudemax+" metros\n");
-    s.append("Altitude Mínima: "+this.altitudemin+" metros\n");
-    s.append("Distância Subida: "+this.distanciasubida+" metros\n");
-    s.append("Distância Descida: "+this.distanciadescida+" metros\n");
-    return s.toString();
-}
+
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append(super.toString());
+        s.append("Distância: " + this.distancia + "km\n");
+
+        s.append("Velocidade Máxima: " + this.velocidademax + " km/h\n");
+        s.append("Velocidade Mínima: " + this.velocidademedia + " km/h\n");
+        s.append("Altitude Máxima: " + this.altitudemax + " metros\n");
+        s.append("Altitude Mínima: " + this.altitudemin + " metros\n");
+        s.append("Distância Subida: " + this.distanciasubida + " metros\n");
+        s.append("Distância Descida: " + this.distanciadescida + " metros\n");
+        return s.toString();
+    }
 }
