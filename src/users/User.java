@@ -276,9 +276,7 @@ public User (String email, String nome, String password, String gen, double altu
     public String MostrarFriendsList(){
         return this.friendslist.toString();
     }
-    public String DetalhesAmigo(String user){
-        return this.friendslist.DetalhesAmigo(user);
-    }
+   
 
     public String ListarActividades() {
     return this.lista.toString();

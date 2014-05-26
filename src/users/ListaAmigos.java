@@ -41,7 +41,7 @@ public class ListaAmigos {
     public void AdicionarAmigo(User aux) {
     this.lista.put(aux.getEmail(), aux);
     }
-    public String DetalhesAmigo(String user){
+    public String DetalhesUser(String user){
         StringBuilder s=new StringBuilder();
         User aux=this.lista.get(user);
         s.append(aux.toString());
