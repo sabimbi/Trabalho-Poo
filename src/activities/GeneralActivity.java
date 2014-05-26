@@ -119,7 +119,7 @@ public void setData(GregorianCalendar date){
         ano=this.data.get(Calendar.YEAR);
         s.append("Nome: "+this.nome+"\n");
         s.append("Data: "+dia+" - "+mes+" - "+ano+"\n");
-        s.append("Duração: "+this.duration+" minutos\n");
+        s.append("Duração: "+this.duration+" horas\n");
         s.append("Calorias: "+this.calories+" kcal\n");
         s.append("Hidratação: "+this.hidratacao+" litros\n");
         return s.toString();

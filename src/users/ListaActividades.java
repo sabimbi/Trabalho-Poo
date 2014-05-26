@@ -15,46 +15,115 @@ import activities.*;
  * @author Mesas
  */
 public class ListaActividades {
-    private TreeMap<GregorianCalendar,Actividades> actividades;
+    private ArrayList<GeneralActivity> actividades;
     public ListaActividades(){
-        actividades=new TreeMap<GregorianCalendar,Actividades>(new DateComparator());
+        actividades= new ArrayList<GeneralActivity>();
     }
-    public TreeMap<GregorianCalendar,Actividades> getActividades(){
-       TreeMap<GregorianCalendar,Actividades> copia=new TreeMap<GregorianCalendar,Actividades>(new DateComparator());
-      Actividades aux;
-      for(GregorianCalendar g:this.actividades.keySet()){
-          aux=this.actividades.get(g).clone();
-          copia.put(g, aux);
+    public ArrayList<GeneralActivity> getActividades(){
+       ArrayList<GeneralActivity> copia=new ArrayList<>();
+     GeneralActivity aux;
+      for(GeneralActivity g:this.actividades){
+          if (g instanceof Distancia) {
+            aux = ((Distancia) g).clone();    
+            copia.add(aux);
+            }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g).clone();
+                copia.add(aux);
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g).clone();
+                copia.add(aux);
+            }
+            if (g instanceof Outros) {
+           aux = ((Outros) g).clone();
+                copia.add(aux);     
+            }
       }
        
      return copia;
     }
     public ListaActividades(ListaActividades l){
-        this.actividades=new TreeMap<GregorianCalendar,Actividades>(new DateComparator());
+        this.actividades=new ArrayList<>();
         actividades=l.getActividades();
     }
     public ListaActividades clone(){
         return new ListaActividades(this);
     }
     public void AdicionarActividade(GeneralActivity g){
-         Actividades a;
-       if(actividades.containsKey(g.getData())==true){
-        a=this.actividades.get(g.getData()).clone();
-        a.AdicionarActividade(g);
-        this.actividades.put(g.getData(),a);
-        }else{
-        a=new Actividades();
-        a.AdicionarActividade(g);
-        this.actividades.put(g.getData(),a);
-        }
+       GeneralActivity aux;
+       ArrayList<GeneralActivity> copia;
+                if (g instanceof Distancia) {
+            aux = ((Distancia) g).clone();    
+           this.actividades.add(aux);
+            
+                }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g).clone();
+                this.actividades.add(aux);
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g).clone();
+                this.actividades.add(aux);
+            }
+            if (g instanceof Outros) {
+           aux = ((Outros) g).clone();
+                this.actividades.add(aux);     
+            }
+           copia=this.getActividades();
+       Collections.sort(copia, new DateComparator());
+       
+       this.setActividades(copia);
+       
         
     }
     public String toString(){
         StringBuilder s=new StringBuilder("-----LISTA DE ACTIVIDADES-----\n");
-        for(GregorianCalendar g:this.actividades.keySet()){
-            s.append(this.actividades.get(g).toString());
+        GeneralActivity aux;
+        for(GeneralActivity g:this.actividades){
+            if (g instanceof Distancia) {
+            aux = ((Distancia) g).clone();    
+            s.append(aux.toString());
+            }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g).clone();
+                s.append(aux.toString());
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g).clone();
+                s.append(aux.toString());
+            }
+            if (g instanceof Outros) {
+           aux = ((Outros) g).clone();
+                s.append(aux.toString());    
+            }
         }
         
         return s.toString();
+    }
+    
+
+    private void setActividades(ArrayList<GeneralActivity> copia) {
+    this.actividades=new ArrayList<>();
+    GeneralActivity aux;
+    for(GeneralActivity g:copia){
+        
+            if (g instanceof Distancia) {
+            aux = ((Distancia) g).clone();    
+            this.actividades.add(aux);
+            }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g).clone();
+               this.actividades.add(aux);
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g).clone();
+                this.actividades.add(aux);
+            }
+            if (g instanceof Outros) {
+           aux = ((Outros) g).clone();
+               this.actividades.add(aux);   
+            }
+    }
     }
 }

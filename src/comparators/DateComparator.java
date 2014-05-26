@@ -6,6 +6,7 @@
 
 package comparators;
 
+import activities.GeneralActivity;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
@@ -13,13 +14,13 @@ import java.util.GregorianCalendar;
  *
  * @author Dimz
  */
-public class DateComparator implements Comparator<GregorianCalendar>{
+public class DateComparator implements Comparator<GeneralActivity>{
 
     @Override
-    public int compare(GregorianCalendar t, GregorianCalendar t1) {
-        if(t1.after(t))
+    public int compare(GeneralActivity t, GeneralActivity t1) {
+        if(t1.getData().after(t.getData()))
             return 1;
-        else if(t1.before(t))
+        else if(t1.getData().before(t.getData()))
             return -1;
         
         return 0;
