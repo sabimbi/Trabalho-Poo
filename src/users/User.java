@@ -26,7 +26,7 @@ public class User {
     private GregorianCalendar data_de_nascimento;
     private String desporto_favorito;
     private ArrayList<GeneralActivity> actividades;
-    private TreeMap<String, User> friends;
+    private TreeSet<String> friends;
 
     public User() {
         email = password = nome = gen = "";
@@ -35,7 +35,7 @@ public class User {
         data_de_nascimento = new GregorianCalendar();
         desporto_favorito = "";
         actividades = new ArrayList<>();
-        friends = new TreeMap<>();
+        friends = new TreeSet<>();
 
     }
 
@@ -56,11 +56,11 @@ public class User {
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-        this.friends = new TreeMap<String, User>();
+        this.friends = new TreeSet<String>();
         this.actividades = new ArrayList<GeneralActivity>();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ArrayList<GeneralActivity> lista, TreeMap<String, User> l) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ArrayList<GeneralActivity> lista, TreeSet<String> l) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -74,12 +74,13 @@ public class User {
         this.data_de_nascimento = date;
         this.desporto_favorito = favorito;
         this.actividades = new ArrayList<GeneralActivity>();
-        this.friends = new TreeMap<String, User>();
+        this.friends = new TreeSet<String>();
         this.data_de_nascimento = new GregorianCalendar();
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-
+this.setFriends(l);
+this.setActividades(lista);
     }
 
     public User(User u) {
@@ -107,11 +108,11 @@ public class User {
         this.data_de_nascimento.set(Calendar.YEAR, ano);
     }
 
-    public TreeMap<String,User> getFriends() {
-        TreeMap<String,User> aux=new TreeMap<>();
-for(String s:this.friends.keySet()){
+    public TreeSet<String> getFriends() {
+        TreeSet<String> aux=new TreeSet<>();
+for(String s:this.friends){
    
-    aux.put(s, this.friends.get(s));
+    aux.add(s);
 }
         return aux;
     }
@@ -130,19 +131,19 @@ for(String s:this.friends.keySet()){
         GeneralActivity aux;
         for (GeneralActivity g : this.actividades) {
             if (g instanceof Distancia) {
-                aux = ((Distancia) g).clone();
+                aux = ((Distancia) g);
                 copia.add(aux);
             }
             if (g instanceof Desporto) {
-                aux = ((Desporto) g).clone();
+                aux = ((Desporto) g);
                 copia.add(aux);
             }
             if (g instanceof Altitude) {
-                aux = ((Altitude) g).clone();
+                aux = ((Altitude) g);
                 copia.add(aux);
             }
             if (g instanceof Outros) {
-                aux = ((Outros) g).clone();
+                aux = ((Outros) g);
                 copia.add(aux);
             }
         }
@@ -292,8 +293,8 @@ for(String s:this.friends.keySet()){
         this.nome = nome;
     }
 
-    public void AdicionarAmigo(User aux) {
-        this.friends.put(aux.email, aux);
+    public void AdicionarAmigo(String user) {
+        this.friends.add(user);
     }
 
     public String MostrarFriendsList() throws Excepcoes {
@@ -306,11 +307,8 @@ for(String s:this.friends.keySet()){
 
     public String ListadeAmigos() {
         StringBuilder s = new StringBuilder("----Lista de Amigos----\n");
-        TreeSet<String> aux = new TreeSet<>();
-        for (String str : this.friends.keySet()) {
-            aux.add(str);
-        }
-        for (String str : aux) {
+        
+        for (String str : this.friends) {
             s.append(str + "\n");
         }
         return s.toString();
@@ -433,4 +431,11 @@ for(String s:this.friends.keySet()){
             }
         }
     }
+
+    private void setFriends(TreeSet<String> l) {
+    for(String s:l){
+    this.friends.add(s);
+        }
+    
+}
 }

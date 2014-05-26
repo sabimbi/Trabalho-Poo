@@ -103,7 +103,7 @@ public class MenuPrincipal {
         System.out.print("Opção: ");
         r = op = 2;
         User aux;
-        aux = fitness.getUser(user);
+        aux = fitness.getUser(user).clone();
         op = ler.nextInt();
         try {
             switch (op) {
@@ -347,7 +347,7 @@ public class MenuPrincipal {
                     u.setPassword(pass1);
                 }
                 case 5: {
-
+fitness.AdicionaUser(u);
                     r = 0;
                     break;
                 }
@@ -372,10 +372,11 @@ public class MenuPrincipal {
         User aux;
         try {
             if (fitness.ExisteUser(user) == true) {
-                aux = fitness.getUser(user);
-                u.AdicionarAmigo(aux);
-                aux.AdicionarAmigo(u);
-
+                aux=fitness.getUser(user);
+                u.AdicionarAmigo(user);
+                aux.AdicionarAmigo(u.getEmail());
+fitness.AdicionaUser(aux);
+fitness.AdicionaUser(u);
             }
 
         } catch (UserNaoExiste e) {
@@ -395,9 +396,9 @@ public class MenuPrincipal {
 
             user = ler.nextLine();
             if (fitness.ExisteUser(user) == true) {
-                User aux = fitness.getUser(user);
+                
                 while (r != 0) {
-                    r = MenuPrincipal.MenuAmigos(aux);
+                    r = MenuPrincipal.MenuAmigos(user);
                 }
             }
 
@@ -458,6 +459,7 @@ public class MenuPrincipal {
                     }
                 }
             }
+        fitness.AdicionaUser(u);
         } catch (TipoNaoExiste e) {
             System.out.println(e.getMessage());
         }
@@ -589,10 +591,11 @@ public class MenuPrincipal {
         u.AdicionarActividade(g);
     }
 
-    private static int MenuAmigos(User aux) throws Excepcoes {
+    private static int MenuAmigos(String user) throws Excepcoes {
         Scanner ler = new Scanner(System.in);
         int op, r;
         r = 1;
+        User aux=fitness.getUser(user).clone();
         System.out.println("-----Perfil de " + aux.getNome() + "-----");
         System.out.println("1 - Ver perfil");
         System.out.println("2 - Ver actividades");
