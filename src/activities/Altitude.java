@@ -11,7 +11,7 @@ package activities;
  */
 import java.util.*;
 
-public class Ambos extends GeneralActivity {
+public class Altitude extends GeneralActivity {
 
     private double altitudemax;
     private double altitudemin;
@@ -20,13 +20,14 @@ public class Ambos extends GeneralActivity {
     private double distancia;
     private double velocidademax;
     private double velocidademedia;
-
-    public Ambos() {
+ private String weather;
+    public Altitude() {
         super();
         altitudemax = altitudemin = distanciasubida = distanciadescida = distancia = velocidademax = velocidademedia = 0.0;
+    weather="";
     }
 
-    public Ambos(GregorianCalendar date, String nome, double cal, String duration, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia) {
+    public Altitude(GregorianCalendar date, String nome, double cal, String duration, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia,String tempo) {
         super(date, nome, cal, duration, hidration);
         this.altitudemax = altitudemax;
         this.altitudemin = altitudemin;
@@ -35,9 +36,10 @@ public class Ambos extends GeneralActivity {
         this.distancia = distancia;
         this.velocidademax = velocidademax;
         this.velocidademedia = velocidademedia;
+        this.weather=tempo;
     }
 
-    public Ambos(Ambos a) {
+    public Altitude(Altitude a) {
         super(a.getData(), a.getNome(), a.getCalories(), a.getDuration(), a.getHidration());
         this.altitudemax = a.getAltitudemax();
         this.altitudemin = a.getAltitudemin();
@@ -46,10 +48,11 @@ public class Ambos extends GeneralActivity {
         this.distancia = a.getDistancia();
         this.velocidademax = a.getVelocidademax();
         this.velocidademedia = a.getVelocidademedia();
+        this.weather=a.getWeather();
     }
 
-    public Ambos clone() {
-        return new Ambos(this);
+    public Altitude clone() {
+        return new Altitude(this);
     }
 
     public double getDistancia() {
@@ -151,13 +154,17 @@ public class Ambos extends GeneralActivity {
         StringBuilder s = new StringBuilder();
         s.append(super.toString());
         s.append("Distância: " + this.distancia + "km\n");
-
         s.append("Velocidade Máxima: " + this.velocidademax + " km/h\n");
         s.append("Velocidade Mínima: " + this.velocidademedia + " km/h\n");
         s.append("Altitude Máxima: " + this.altitudemax + " metros\n");
         s.append("Altitude Mínima: " + this.altitudemin + " metros\n");
         s.append("Distância Subida: " + this.distanciasubida + " metros\n");
         s.append("Distância Descida: " + this.distanciadescida + " metros\n");
+        s.append("Tempo: " + this.weather+ "\n");
         return s.toString();
+    }
+
+    public String getWeather() {
+    return this.weather;
     }
 }

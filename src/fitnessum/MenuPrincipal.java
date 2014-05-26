@@ -5,7 +5,7 @@
  */
 package fitnessum;
 
-import events.Eventos;
+import events.*;
 import activities.*;
 import exceptions.*;
 import java.util.*;
@@ -19,7 +19,7 @@ public class MenuPrincipal {
 
     private static FitnessUM fitness;
     private static String[] desportos;
-    private static String[] ambos;
+    private static String[] alt;
     private static String[] outros;
     private static String[] distancia;
 
@@ -27,7 +27,7 @@ public class MenuPrincipal {
         int resultado = 1;
         distancia = new String[]{"Cycling, Sport", "Cycling, Transport", "Fitness Walking", "Golf", "Indoor Cycling", "Kayaking", "Kitesurfing", "Riding", "Roller Skiing", "Rowing", "Running", "Sailing", "Skating", "Swimming", "Walking", "Wind Surfing"};
         desportos = new String[]{"Badminton", "Baseball", "Basketball", "Boxing", "Cricket", "Football, american", "Football, rugby", "Football, soccer", "Handball", "Hockey", "Polo", "Squash", "Table Tennis", "Tennis", "Volleyball, beach", "Volleyball, indoor"};
-        ambos = new String[]{"Hiking", "Mountain Biking", "Orienteering", "Skiing, cross country", "Skiing, downhill", "Snowboarding", "Climbing stairs", "Scuba diving"};
+        alt = new String[]{"Hiking", "Mountain Biking", "Orienteering", "Skiing, cross country", "Skiing, downhill", "Snowboarding", "Climbing stairs", "Scuba diving"};
         outros = new String[]{"Aerobics", "Eliptical training", "Dancing", "Fencing", "Gymnastics", "Martial Arts", "Pilates",};
         fitness = new FitnessUM();
         fitness.AdicionaUser(new User());
@@ -91,7 +91,7 @@ public class MenuPrincipal {
         int op, r;
 
         Scanner ler = new Scanner(System.in);
-        System.out.println("-----MENU UTILIZADOR----");
+        System.out.println("-----MENU UTILIZADOR-----");
         System.out.println("1 - Ver Perfil");
         System.out.println("2 - Mudar informações");
         System.out.println("3 - Adicionar Amigo");
@@ -148,14 +148,19 @@ public class MenuPrincipal {
                 case 6: {
                     try {
                         System.out.print(aux.ListarActividades());
+                        
                     } catch (NaoTemActividades e) {
                         System.out.println(e.getMessage());
                     }
                     r = 1;
                     break;
                 }
-                case 7: {
-                    MenuPrincipal.RemoverActividade(aux);
+                case 7: {try{
+                    System.out.print(aux.ListarActividades());
+                    MenuPrincipal.RemoverActividade(aux);}
+                catch(NaoTemActividades e){
+                    System.out.println(e.getMessage());
+                }
                     r = 1;
                     break;
                 }
@@ -410,10 +415,10 @@ public class MenuPrincipal {
         GregorianCalendar data = new GregorianCalendar();
         String[] aux;
         MenuPrincipal.ListarDesportos();
-        ArrayList<String> distance, sports, both, others;
+        ArrayList<String> distance, sports, altitude, others;
         distance = new ArrayList<>(Arrays.asList(distancia));
         sports = new ArrayList<>(Arrays.asList(desportos));
-        both = new ArrayList<>(Arrays.asList(ambos));
+        altitude = new ArrayList<>(Arrays.asList(alt));
         others = new ArrayList<>(Arrays.asList(outros));
         System.out.println("-----REGISTAR ACTIVIDADE-----");
         System.out.print("Nome da Actividade: ");
@@ -439,8 +444,8 @@ public class MenuPrincipal {
             if (distance.contains(tipo)) {
                 MenuPrincipal.ActividadeDistancia(u, data, tipo, duracao, hidration);
             } else {
-                if (both.contains(tipo)) {
-                    MenuPrincipal.ActividadeAmbos(u, data, tipo, duracao, hidration);
+                if (altitude.contains(tipo)) {
+                    MenuPrincipal.ActividadeAltitude(u, data, tipo, duracao, hidration);
                 } else {
                     if (sports.contains(tipo)) {
                         MenuPrincipal.ActividadeDesporto(u, data, tipo, duracao, hidration);
@@ -465,7 +470,7 @@ public class MenuPrincipal {
         System.out.println("-----LISTA DE DESPORTOS-----");
         sports.addAll(Arrays.asList(distancia));
         sports.addAll(Arrays.asList(desportos));
-        sports.addAll(Arrays.asList(ambos));
+        sports.addAll(Arrays.asList(alt));
         sports.addAll(Arrays.asList(outros));
         for (String s : sports) {
             System.out.println(s);
@@ -498,13 +503,89 @@ public class MenuPrincipal {
 
     }
 
-    private static void ActividadeAmbos(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
+    private static void ActividadeAltitude(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
+    double avgspd, maxspd, distancia, cal, peso, altura, bmr, duracao,altmax,altmin,maxdesc,mindesc;
+        int idade;
+        Scanner ler = new Scanner(System.in);
+        GeneralActivity g;
+        String genero,tempo;
+        System.out.print("Distância(em KM): ");
+        distancia = ler.nextDouble();
+        ler.nextLine();
+        System.out.print("Tempo: ");
+        tempo=ler.nextLine();
+        System.out.print("Altitude máxima(em metros): ");
+        
+        altmax = ler.nextDouble();
+        System.out.print("Altitude mínima(em metros): ");
+        altmin= ler.nextDouble();
+        System.out.print("Descida máxima(em metros): ");
+        maxdesc = ler.nextDouble();
+        System.out.print("Descida mínima(em metros): ");
+        mindesc = ler.nextDouble();
+        duracao = MenuPrincipal.ConverterParaHoras(duration);
+        avgspd = distancia / duracao;
+        maxspd = ((avgspd * avgspd) / (2 * distancia)) * duracao;
+        peso = u.getPeso();
+        altura = u.getAltura();
+        genero = u.getGen();
+        idade = u.getIdade();
+        if (genero.equals("Masculino") == true) {
+            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * idade));
+        } else {
+            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
+        }
+        cal = bmr * 1.55;
+        g=new Altitude(date, tipo, cal, duration, hidration, altmax, altmin, maxdesc, mindesc, distancia, maxspd, avgspd, tempo);
+        u.AdicionarActividade(g);
     }
 
     private static void ActividadeDesporto(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
+    double avgspd, maxspd, distancia, cal, peso, altura, bmr, duracao;
+        int idade;
+        Scanner ler = new Scanner(System.in);
+        GeneralActivity g;
+        String genero,resultado;
+        System.out.print("Distância(em KM): ");
+        distancia = ler.nextDouble();
+        System.out.print("Resultado(Victória ou Derrota): ");
+        resultado=ler.nextLine();
+        duracao = MenuPrincipal.ConverterParaHoras(duration);
+        avgspd = distancia / duracao;
+        maxspd = ((avgspd * avgspd) / (2 * distancia)) * duracao;
+        peso = u.getPeso();
+        altura = u.getAltura();
+        genero = u.getGen();
+        idade = u.getIdade();
+        if (genero.equals("Masculino") == true) {
+            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * idade));
+        } else {
+            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
+        }
+        cal = bmr * 1.55;
+        g = new Desporto(date, tipo, cal, duration, hidration, distancia, resultado);
+        u.AdicionarActividade(g);
     }
 
     private static void ActividadeOutros(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
+    double cal, peso, altura, bmr, duracao;
+    String genero;
+    int idade;
+    GeneralActivity g;
+    duracao = MenuPrincipal.ConverterParaHoras(duration);
+        
+        peso = u.getPeso();
+        altura = u.getAltura();
+        genero = u.getGen();
+        idade = u.getIdade();
+        if (genero.equals("Masculino") == true) {
+            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * idade));
+        } else {
+            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
+        }
+        cal = bmr * 1.55;
+        g=new Outros(date, tipo, cal, duration, hidration);
+        u.AdicionarActividade(g);
     }
 
     private static int MenuAmigos(User aux) throws Excepcoes {
@@ -567,7 +648,7 @@ public class MenuPrincipal {
         
         try {
             System.out.println("-----REMOVER ACTIVIDADE-----");
-            System.out.print(aux.ListarActividades());
+            
             System.out.print("Código da actividade para remover: ");
             cod = ler.nextLine();
             aux.RemoverActividade(cod);

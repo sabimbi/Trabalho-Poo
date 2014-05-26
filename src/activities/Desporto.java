@@ -15,7 +15,8 @@ public class Desporto extends GeneralActivity {
 
     private double distancia;
     private String resultado;
-
+ private double avgspd;
+ private double maxspd;
     public Desporto() {
         super();
         distancia = 0.0;

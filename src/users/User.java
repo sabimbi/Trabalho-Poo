@@ -7,7 +7,7 @@ package users;
 
 import exceptions.*;
 import activities.*;
-import comparators.DateComparator;
+import comparators.*;
 
 import java.util.*;
 
@@ -26,7 +26,7 @@ public class User {
     private GregorianCalendar data_de_nascimento;
     private String desporto_favorito;
     private ArrayList<GeneralActivity> actividades;
-    private HashMap<String, User> friends;
+    private TreeMap<String, User> friends;
 
     public User() {
         email = password = nome = gen = "";
@@ -35,7 +35,7 @@ public class User {
         data_de_nascimento = new GregorianCalendar();
         desporto_favorito = "";
         actividades = new ArrayList<>();
-        friends = new HashMap<>();
+        friends = new TreeMap<>();
 
     }
 
@@ -56,11 +56,11 @@ public class User {
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-        this.friends = new HashMap<String, User>();
+        this.friends = new TreeMap<String, User>();
         this.actividades = new ArrayList<GeneralActivity>();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ArrayList<GeneralActivity> lista, HashMap<String, User> l) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ArrayList<GeneralActivity> lista, TreeMap<String, User> l) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -74,7 +74,7 @@ public class User {
         this.data_de_nascimento = date;
         this.desporto_favorito = favorito;
         this.actividades = new ArrayList<GeneralActivity>();
-        this.friends = new HashMap<String, User>();
+        this.friends = new TreeMap<String, User>();
         this.data_de_nascimento = new GregorianCalendar();
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
@@ -97,8 +97,8 @@ public class User {
         this.peso = u.getPeso();
 
         this.desporto_favorito = u.getDesporto_favorito();
-        this.actividades = new ArrayList<GeneralActivity>();
-        this.friends = new HashMap<String, User>();
+        
+        
         this.actividades = u.getActividades();
         this.friends = u.getFriends();
         this.data_de_nascimento = new GregorianCalendar();
@@ -107,9 +107,13 @@ public class User {
         this.data_de_nascimento.set(Calendar.YEAR, ano);
     }
 
-    public HashMap<String, User> getFriends() {
-
-        return this.friends;
+    public TreeMap<String,User> getFriends() {
+        TreeMap<String,User> aux=new TreeMap<>();
+for(String s:this.friends.keySet()){
+   
+    aux.put(s, this.friends.get(s));
+}
+        return aux;
     }
 
     @Override
@@ -133,8 +137,8 @@ public class User {
                 aux = ((Desporto) g).clone();
                 copia.add(aux);
             }
-            if (g instanceof Ambos) {
-                aux = ((Ambos) g).clone();
+            if (g instanceof Altitude) {
+                aux = ((Altitude) g).clone();
                 copia.add(aux);
             }
             if (g instanceof Outros) {
@@ -332,8 +336,8 @@ public class User {
                 aux = ((Desporto) g);
                 s.append(aux.toString());
             }
-            if (g instanceof Ambos) {
-                aux = ((Ambos) g);
+            if (g instanceof Altitude) {
+                aux = ((Altitude) g);
                 s.append(aux.toString());
             }
             if (g instanceof Outros) {
@@ -366,8 +370,8 @@ public class User {
             aux = ((Desporto) g).clone();
             this.actividades.add(aux);
         }
-        if (g instanceof Ambos) {
-            aux = ((Ambos) g).clone();
+        if (g instanceof Altitude) {
+            aux = ((Altitude) g).clone();
             this.actividades.add(aux);
         }
         if (g instanceof Outros) {
@@ -394,8 +398,8 @@ public class User {
                 aux = ((Desporto) g).clone();
                 this.actividades.add(aux);
             }
-            if (g instanceof Ambos) {
-                aux = ((Ambos) g).clone();
+            if (g instanceof Altitude) {
+                aux = ((Altitude) g).clone();
                 this.actividades.add(aux);
             }
             if (g instanceof Outros) {
