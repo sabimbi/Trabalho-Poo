@@ -595,7 +595,7 @@ fitness.AdicionaUser(u);
         Scanner ler = new Scanner(System.in);
         int op, r;
         r = 1;
-        User aux=fitness.getUser(user).clone();
+        User aux=fitness.getUser(user);
         System.out.println("-----Perfil de " + aux.getNome() + "-----");
         System.out.println("1 - Ver perfil");
         System.out.println("2 - Ver actividades");
