@@ -17,18 +17,18 @@ public abstract class GeneralActivity {
     private String nome;
     private double calories;
 
-    private double duration;
+    private String duration;
     private double hidratacao;
 
     public GeneralActivity() {
         this.nome = "";
         this.calories = 0.0;
         this.hidratacao = 0.0;
-        this.duration = 0.0;
+        this.duration = "";
         this.data = new GregorianCalendar();
     }
 
-    public GeneralActivity(GregorianCalendar date, String nome, double cal, double duration, double hidration) {
+    public GeneralActivity(GregorianCalendar date, String nome, double cal, String duration, double hidration) {
         this.data = date;
         this.nome = nome;
         this.calories = cal;
@@ -84,14 +84,14 @@ public void setData(GregorianCalendar date){
     /**
      * @return the duration
      */
-    public double getDuration() {
+    public String getDuration() {
         return duration;
     }
 
     /**
      * @param duration the duration to set
      */
-    public void setDuration(double duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
@@ -119,9 +119,9 @@ public void setData(GregorianCalendar date){
         ano=this.data.get(Calendar.YEAR);
         s.append("Nome: "+this.nome+"\n");
         s.append("Data: "+dia+" - "+mes+" - "+ano+"\n");
-        s.append("Duração: "+this.duration+"\n");
-        s.append("Calorias: "+this.calories+"\n");
-        s.append("Hidratação: "+this.hidratacao+"\n");
+        s.append("Duração: "+this.duration+" minutos\n");
+        s.append("Calorias: "+this.calories+" kcal\n");
+        s.append("Hidratação: "+this.hidratacao+" litros\n");
         return s.toString();
     }
 

@@ -26,7 +26,7 @@ public class Ambos extends GeneralActivity {
         altitudemax = altitudemin = distanciasubida = distanciadescida = distancia = velocidademax = velocidademedia = 0.0;
     }
 
-    public Ambos(GregorianCalendar date, String nome, double cal, double duration, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia) {
+    public Ambos(GregorianCalendar date, String nome, double cal, String duration, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia) {
         super(date, nome, cal, duration, hidration);
         this.altitudemax = altitudemax;
         this.altitudemin = altitudemin;
@@ -149,14 +149,14 @@ public class Ambos extends GeneralActivity {
 public String toString(){
   StringBuilder s=new StringBuilder();
   s.append(super.toString());
-  s.append("Distância: "+this.distancia+"\n");
+  s.append("Distância: "+this.distancia+"km\n");
   
-    s.append("Velocidade Máxima: "+this.velocidademax+"\n");
-    s.append("Velocidade Mínima: "+this.velocidademax+"\n");  
-  s.append("Altitude Máxima: "+this.altitudemax+"\n");
-    s.append("Altitude Mínima: "+this.altitudemin+"\n");
-    s.append("Distância Subida: "+this.distanciasubida+"\n");
-    s.append("Distância Descida: "+this.distanciadescida+"\n");
+    s.append("Velocidade Máxima: "+this.velocidademax+" km/h\n");
+    s.append("Velocidade Mínima: "+this.velocidademedia+" km/h\n");  
+  s.append("Altitude Máxima: "+this.altitudemax+" metros\n");
+    s.append("Altitude Mínima: "+this.altitudemin+" metros\n");
+    s.append("Distância Subida: "+this.distanciasubida+" metros\n");
+    s.append("Distância Descida: "+this.distanciadescida+" metros\n");
     return s.toString();
 }
 }

@@ -24,7 +24,7 @@ public class Distancia extends GeneralActivity {
         velocidademedia = 0.0;
     }
 
-    public Distancia(GregorianCalendar date, String nome, double cal, double duration, double hidration, double distance, double velocidademax, double velocidademedia) {
+    public Distancia(GregorianCalendar date, String nome, double cal, String duration, double hidration, double distance, double velocidademax, double velocidademedia) {
         super(date, nome, cal, duration, hidration);
         this.distancia = distance;
         this.velocidademax = velocidademax;
@@ -86,9 +86,9 @@ public class Distancia extends GeneralActivity {
 public String toString(){
     StringBuilder s=new StringBuilder();
     s.append(super.toString());
-    s.append("Distância: "+this.distancia+"\n");
-    s.append("Velocidade Máxima: "+this.velocidademax+"\n");
-    s.append("Velocidade Mínima: "+this.velocidademax+"\n");
+    s.append("Distância: "+this.distancia+" km\n");
+    s.append("Velocidade Máxima: "+this.velocidademax+" km/h\n");
+    s.append("Velocidade Média: "+this.velocidademedia+" km/h\n");
     return s.toString();
 }
 }

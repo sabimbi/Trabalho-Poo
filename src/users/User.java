@@ -279,6 +279,22 @@ public User (String email, String nome, String password, String gen, double altu
     public String DetalhesAmigo(String user){
         return this.friendslist.DetalhesAmigo(user);
     }
+
+    public String ListarActividades() {
+    return this.lista.toString();
+    }
+    public int getIdade() {  
+GregorianCalendar hj=new GregorianCalendar();  
+GregorianCalendar nascimento=this.getData_de_nascimento();  
+         
+int anohj=hj.get(Calendar.YEAR);  
+int anoNascimento=nascimento.get(Calendar.YEAR);  
+return anohj-anoNascimento;
+    }
+    
+    public void AdicionarActividade(GeneralActivity g) {
+    this.lista.AdicionarActividade(g);
+    }
     
     
     

@@ -16,7 +16,7 @@ public class Outros extends GeneralActivity{
     public Outros(){
         super();
     }
-    public Outros(GregorianCalendar date,String nome,double calories,double duration,double hidration){
+    public Outros(GregorianCalendar date,String nome,double calories,String duration,double hidration){
         super(date,nome,calories,duration,hidration);
     }
     public Outros(Outros o){

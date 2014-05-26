@@ -6,73 +6,55 @@
 
 package users;
 
-import activities.*;
+
 import java.util.*;
 import comparators.*;
+import activities.*;
 /**
  *
  * @author Mesas
  */
 public class ListaActividades {
-    private TreeMap<GregorianCalendar,GeneralActivity> actividades;
+    private TreeMap<GregorianCalendar,Actividades> actividades;
     public ListaActividades(){
-        actividades=new TreeMap<GregorianCalendar,GeneralActivity>(new DateComparator());
+        actividades=new TreeMap<GregorianCalendar,Actividades>(new DateComparator());
     }
-    public TreeMap<GregorianCalendar,GeneralActivity> getActividades(){
-       TreeMap<GregorianCalendar,GeneralActivity> copia=new TreeMap<GregorianCalendar,GeneralActivity>(new DateComparator());
-       GeneralActivity aux;
-       for(GregorianCalendar g:actividades.keySet()){
-           if((actividades.get(g)) instanceof Distancia){
-               aux=((Distancia)(actividades.get(g))).clone();
-               
-               copia.put(g,aux );
-           }
-       }
-     return copia;  
-    }
-    public ListaActividades(TreeMap<GregorianCalendar,GeneralActivity> list){
-        actividades=new TreeMap<GregorianCalendar,GeneralActivity>(new DateComparator());
-     GeneralActivity aux;
-       for(GregorianCalendar g:list.keySet()){
-           if((actividades.get(g)) instanceof Distancia){
-               aux=((Distancia)(list.get(g))).clone();
-           actividades.put(g, aux);    
-              
-           }else{
-               if((actividades.get(g)) instanceof Altitude){
-               aux=((Altitude)(list.get(g))).clone();
-               actividades.put(g, aux);
-              
-           }
-           }
-           
-       }
+    public TreeMap<GregorianCalendar,Actividades> getActividades(){
+       TreeMap<GregorianCalendar,Actividades> copia=new TreeMap<GregorianCalendar,Actividades>(new DateComparator());
+      Actividades aux;
+      for(GregorianCalendar g:this.actividades.keySet()){
+          aux=this.actividades.get(g).clone();
+          copia.put(g, aux);
+      }
+       
+     return copia;
     }
     public ListaActividades(ListaActividades l){
-        this.actividades=new TreeMap<GregorianCalendar,GeneralActivity>(new DateComparator());
+        this.actividades=new TreeMap<GregorianCalendar,Actividades>(new DateComparator());
         actividades=l.getActividades();
     }
     public ListaActividades clone(){
         return new ListaActividades(this);
     }
     public void AdicionarActividade(GeneralActivity g){
-         
-        if(g instanceof Altitude){
-         GeneralActivity aux=((Altitude)g).clone();
-         this.actividades.put(aux.getData(), aux);
+         Actividades a;
+       if(actividades.containsKey(g.getData())==true){
+        a=this.actividades.get(g.getData()).clone();
+        a.AdicionarActividade(g);
+        this.actividades.put(g.getData(),a);
         }else{
-        if(g instanceof Distancia){
-           GeneralActivity aux=((Distancia)g).clone();
-         this.actividades.put(aux.getData(), aux);
-        }else{
-        if(g instanceof Ambos){
-            GeneralActivity aux=((Ambos)g).clone();
-         this.actividades.put(aux.getData(), aux);
-        }else{
-        if(g instanceof Outros){
-           GeneralActivity aux=((Outros)g).clone();
-         this.actividades.put(aux.getData(), aux);
-        }}}}
-       
+        a=new Actividades();
+        a.AdicionarActividade(g);
+        this.actividades.put(g.getData(),a);
+        }
+        
+    }
+    public String toString(){
+        StringBuilder s=new StringBuilder("-----LISTA DE ACTIVIDADES-----\n");
+        for(GregorianCalendar g:this.actividades.keySet()){
+            s.append(this.actividades.get(g).toString());
+        }
+        
+        return s.toString();
     }
 }
