@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 package users;
+
 import exceptions.*;
 import activities.*;
-import comparators.*;
-import java.io.*;
+import comparators.DateComparator;
+
 import java.util.*;
 
 /**
@@ -16,53 +17,55 @@ import java.util.*;
  */
 public class User {
 
-private String email;
-    private String password;    
+    private String email;
+    private String password;
     private String nome;
     private String gen;
     private double altura;
     private double peso;
     private GregorianCalendar data_de_nascimento;
     private String desporto_favorito;
-    private ListaActividades lista;
-    private ListaAmigos friendslist;
+    private ArrayList<GeneralActivity> actividades;
+    private HashMap<String, User> friends;
 
     public User() {
-        email=password=nome=gen="";
+        email = password = nome = gen = "";
         altura = 1.0;
         peso = 1.0;
         data_de_nascimento = new GregorianCalendar();
         desporto_favorito = "";
-        lista = new ListaActividades();
-        friendslist = new ListaAmigos();
+        actividades = new ArrayList<>();
+        friends = new HashMap<>();
 
     }
-public User (String email, String nome, String password, String gen, double altura, double peso, String favsport,GregorianCalendar date){
-    
-    this.email=email; 
-      this.password=password;
-                    this.nome=nome;
-    int dia,mes,ano;
-    dia = date.get(Calendar.DATE);
+
+    public User(String email, String nome, String password, String gen, double altura, double peso, String favsport, GregorianCalendar date) {
+
+        this.email = email;
+        this.password = password;
+        this.nome = nome;
+        int dia, mes, ano;
+        dia = date.get(Calendar.DATE);
         mes = date.get(Calendar.MONTH);
         ano = date.get(Calendar.YEAR);
-    this.desporto_favorito=favsport;
-        this.gen=gen;
-    this.altura=altura;
-    this.peso=peso;
-    this.data_de_nascimento=new GregorianCalendar();
-    this.data_de_nascimento.set(Calendar.DATE, dia);
+        this.desporto_favorito = favsport;
+        this.gen = gen;
+        this.altura = altura;
+        this.peso = peso;
+        this.data_de_nascimento = new GregorianCalendar();
+        this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-        this.friendslist=new ListaAmigos();
-        this.lista=new ListaActividades();
-}
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito,ListaActividades lista,ListaAmigos l) {
-        this.email=email; 
-      this.password=password;
-                    this.nome=nome;
-        int dia,mes,ano;
-    dia = date.get(Calendar.DATE);
+        this.friends = new HashMap<String, User>();
+        this.actividades = new ArrayList<GeneralActivity>();
+    }
+
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ArrayList<GeneralActivity> lista, HashMap<String, User> l) {
+        this.email = email;
+        this.password = password;
+        this.nome = nome;
+        int dia, mes, ano;
+        dia = date.get(Calendar.DATE);
         mes = date.get(Calendar.MONTH);
         ano = date.get(Calendar.YEAR);
         this.gen = gen;
@@ -70,63 +73,95 @@ public User (String email, String nome, String password, String gen, double altu
         this.peso = peso;
         this.data_de_nascimento = date;
         this.desporto_favorito = favorito;
-        this.lista=lista.clone();
-        this.friendslist=l.clone();
-        this.data_de_nascimento=new GregorianCalendar();
-    this.data_de_nascimento.set(Calendar.DATE, dia);
+        this.actividades = new ArrayList<GeneralActivity>();
+        this.friends = new HashMap<String, User>();
+        this.data_de_nascimento = new GregorianCalendar();
+        this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
+
     }
 
     public User(User u) {
-        this.email=u.getEmail(); 
-      this.password=u.getPassword();
-                    this.nome=u.getNome();
-        int dia,mes,ano;
-        GregorianCalendar date=new GregorianCalendar();
-        date=u.getData_de_nascimento();
-    dia = date.get(Calendar.DATE);
+        this.email = u.getEmail();
+        this.password = u.getPassword();
+        this.nome = u.getNome();
+        int dia, mes, ano;
+        GregorianCalendar date;
+        date = u.getData_de_nascimento();
+        dia = date.get(Calendar.DATE);
         mes = date.get(Calendar.MONTH);
         ano = date.get(Calendar.YEAR);
         this.gen = u.getGen();
-        this.altura =u.getAltura();
+        this.altura = u.getAltura();
         this.peso = u.getPeso();
-        
+
         this.desporto_favorito = u.getDesporto_favorito();
-        this.lista=new ListaActividades();
-        this.lista=lista.clone();
-        this.friendslist=new ListaAmigos();
-        this.friendslist=u.getFriendslist();
-        this.data_de_nascimento=new GregorianCalendar();
-    this.data_de_nascimento.set(Calendar.DATE, dia);
+        this.actividades = new ArrayList<GeneralActivity>();
+        this.friends = new HashMap<String, User>();
+        this.actividades = u.getActividades();
+        this.friends = u.getFriends();
+        this.data_de_nascimento = new GregorianCalendar();
+        this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
     }
 
-    
-    public User clone() {
+    public HashMap<String, User> getFriends() {
         
-    return new User(this);
+        return this.friends;
+    }
+
+    @Override
+    public User clone() {
+
+        return new User(this);
     }
 
     /**
      * @return the gen
      */
-    public String toString(){
-        int dia,mes,ano;
-        dia=mes=ano=0;
-        StringBuilder s=new StringBuilder();
-        dia=this.data_de_nascimento.get(Calendar.DATE);
-        mes=this.data_de_nascimento.get(Calendar.MONTH);
-        ano=this.data_de_nascimento.get(Calendar.YEAR);
-        s.append("Nome: "+this.getNome()+"\n");
-    s.append("Sexo: "+this.gen+"\n");
-    s.append("Altura: "+this.altura+" m\n");
-    s.append("Peso: "+this.peso+" Kg\n");
-    s.append("Data de Nascimento: "+dia+"-"+mes+"-"+ano+"\n");
-    s.append("Desporto Favorito: "+this.desporto_favorito+"\n");
-    return s.toString();
+    public ArrayList<GeneralActivity> getActividades() {
+        ArrayList<GeneralActivity> copia = new ArrayList<>();
+        GeneralActivity aux;
+        for (GeneralActivity g : this.actividades) {
+            if (g instanceof Distancia) {
+                aux = ((Distancia) g).clone();
+                copia.add(aux);
+            }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g).clone();
+                copia.add(aux);
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g).clone();
+                copia.add(aux);
+            }
+            if (g instanceof Outros) {
+                aux = ((Outros) g).clone();
+                copia.add(aux);
+            }
+        }
+
+        return copia;
     }
+
+    public String toString() {
+        int dia, mes, ano;
+        dia = mes = ano = 0;
+        StringBuilder s = new StringBuilder();
+        dia = this.data_de_nascimento.get(Calendar.DATE);
+        mes = this.data_de_nascimento.get(Calendar.MONTH);
+        ano = this.data_de_nascimento.get(Calendar.YEAR);
+        s.append("Nome: " + this.getNome() + "\n");
+        s.append("Sexo: " + this.gen + "\n");
+        s.append("Altura: " + this.altura + " m\n");
+        s.append("Peso: " + this.peso + " Kg\n");
+        s.append("Data de Nascimento: " + dia + "-" + mes + "-" + ano + "\n");
+        s.append("Desporto Favorito: " + this.desporto_favorito + "\n");
+        return s.toString();
+    }
+
     public String getGen() {
         return gen;
     }
@@ -170,29 +205,22 @@ public User (String email, String nome, String password, String gen, double altu
      * @return the data_de_nascimento
      */
     public GregorianCalendar getData_de_nascimento() {
-        int dia,mes,ano;
-        GregorianCalendar date=new GregorianCalendar();
-        dia=this.data_de_nascimento.get(Calendar.DATE);
-        mes=this.data_de_nascimento.get(Calendar.MONTH);
-        ano=this.data_de_nascimento.get(Calendar.YEAR);
-        date.set(Calendar.DATE, dia);
-    date.set(Calendar.MONTH, mes);
-    date.set(Calendar.YEAR, ano);
-    return date;
+        
+        return this.data_de_nascimento;
     }
 
     /**
      * @param data_de_nascimento the data_de_nascimento to set
      */
     public void setData_de_nascimento(GregorianCalendar data_de_nascimento) {
-        int dia,mes,ano;
-        this.data_de_nascimento=new GregorianCalendar();
-        dia=data_de_nascimento.get(Calendar.DATE);
-        mes=data_de_nascimento.get(Calendar.MONTH);
-        ano=data_de_nascimento.get(Calendar.YEAR);
+        int dia, mes, ano;
+        this.data_de_nascimento = new GregorianCalendar();
+        dia = data_de_nascimento.get(Calendar.DATE);
+        mes = data_de_nascimento.get(Calendar.MONTH);
+        ano = data_de_nascimento.get(Calendar.YEAR);
         this.data_de_nascimento.set(Calendar.DATE, dia);
-    this.data_de_nascimento.set(Calendar.MONTH, mes);
-    this.data_de_nascimento.set(Calendar.YEAR, ano);
+        this.data_de_nascimento.set(Calendar.MONTH, mes);
+        this.data_de_nascimento.set(Calendar.YEAR, ano);
     }
 
     /**
@@ -212,18 +240,12 @@ public User (String email, String nome, String password, String gen, double altu
     /**
      * @return the lista
      */
-    public ListaActividades getLista() {
-        return lista.clone();
-    }
-
     
 
     /**
      * @return the friendslist
      */
-    public ListaAmigos getFriendslist() {
-        return friendslist.clone();
-    }
+    
 
     /**
      * @param friendslist the friendslist to set
@@ -271,36 +293,139 @@ public User (String email, String nome, String password, String gen, double altu
     }
 
     public void AdicionarAmigo(User aux) {
-   this.friendslist.AdicionarAmigo(aux);
+        this.friends.put(aux.email,aux);
     }
-    public String MostrarFriendsList() throws Excepcoes{
-        if(this.friendslist.NrdeAmigos()==0){
-          throw new NaoTemAmigos();
-        }else{
-        return this.friendslist.toString();
-    }}
-   
 
-    public String ListarActividades() throws Excepcoes{
-    if(this.lista.NrdeActividades()==0){
-        throw new NaoTemActividades();
+    public String MostrarFriendsList() throws Excepcoes {
+        if (this.friends.isEmpty()) {
+            throw new NaoTemAmigos();
+        } else {
+            return this.ListadeAmigos();
+        }
+    }
+
+    public String ListadeAmigos(){
+        StringBuilder s=new StringBuilder("----Lista de Amigos----\n");
+        TreeSet<String> aux=new TreeSet<>();
+        for(String str:this.friends.keySet()){
+            aux.add(str);
+        }
+        for(String str:aux){
+            s.append(str+"\n");
+        }
+        return s.toString();
+    }
+    public String ListarActividades() throws Excepcoes {
+        if (this.actividades.isEmpty() ) {
+            throw new NaoTemActividades();
+        } else {
+            return this.ListaActividades();
+        }
+    }
+public String ListaActividades(){
+        StringBuilder s=new StringBuilder("-----LISTA DE ACTIVIDADES-----\n");
+        GeneralActivity aux;
+        for(GeneralActivity g:this.actividades){
+            if (g instanceof Distancia) {
+            aux = ((Distancia) g);    
+            s.append(aux.toString());
+            }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g);
+                s.append(aux.toString());
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g);
+                s.append(aux.toString());
+            }
+            if (g instanceof Outros) {
+           aux = ((Outros) g);
+                s.append(aux.toString());    
+            }
+        }
+        
+        return s.toString();
+    }
+    public int getIdade() {
+        GregorianCalendar hj = new GregorianCalendar();
+        GregorianCalendar nascimento = this.getData_de_nascimento();
+
+        int anohj = hj.get(Calendar.YEAR);
+        int anoNascimento = nascimento.get(Calendar.YEAR);
+        return anohj - anoNascimento;
+    }
+
+    public void AdicionarActividade(GeneralActivity g){
+       GeneralActivity aux;
+       ArrayList<GeneralActivity> copia;
+                if (g instanceof Distancia) {
+            aux = ((Distancia) g).clone();    
+           this.actividades.add(aux);
+            
+                }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g).clone();
+                this.actividades.add(aux);
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g).clone();
+                this.actividades.add(aux);
+            }
+            if (g instanceof Outros) {
+           aux = ((Outros) g).clone();
+                this.actividades.add(aux);     
+            }
+           copia=this.getActividades();
+       Collections.sort(copia, new DateComparator());
+       
+       this.setActividades(copia);
+       
+        
+    }
+    private void setActividades(ArrayList<GeneralActivity> copia) {
+    this.actividades=new ArrayList<>();
+    GeneralActivity aux;
+    for(GeneralActivity g:copia){
+        
+            if (g instanceof Distancia) {
+            aux = ((Distancia) g).clone();    
+            this.actividades.add(aux);
+            }
+            if (g instanceof Desporto) {
+                aux = ((Desporto) g).clone();
+               this.actividades.add(aux);
+            }
+            if (g instanceof Ambos) {
+                aux = ((Ambos) g).clone();
+                this.actividades.add(aux);
+            }
+            if (g instanceof Outros) {
+           aux = ((Outros) g).clone();
+               this.actividades.add(aux);   
+            }
+    }
+    }
+public boolean ExisteActividade(int cod){
+    
+    for(GeneralActivity g:this.actividades){
+        if(g.getCod()==cod){
+            return true;
+        }
+    }
+    return false;
+}
+    public void RemoverActividade(String cod) throws Excepcoes {
+    int code;
+    code=Integer.parseInt(cod);
+    if(this.ExisteActividade(code)==false){
+        throw new ActividadeNaoExiste();
     }else{
-        return this.lista.toString();
+        for(GeneralActivity g:this.actividades){
+            if(g.getCod()==code){
+                this.actividades.remove(g);
+                break;
+            }
+        }
     }
     }
-    public int getIdade() {  
-GregorianCalendar hj=new GregorianCalendar();  
-GregorianCalendar nascimento=this.getData_de_nascimento();  
-         
-int anohj=hj.get(Calendar.YEAR);  
-int anoNascimento=nascimento.get(Calendar.YEAR);  
-return anohj-anoNascimento;
-    }
-    
-    public void AdicionarActividade(GeneralActivity g) {
-    this.lista.AdicionarActividade(g);
-    }
-    
-    
-    
 }

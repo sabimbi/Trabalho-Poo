@@ -16,7 +16,7 @@ public abstract class GeneralActivity {
     private GregorianCalendar data;
     private String nome;
     private double calories;
-
+private int cod;
     private String duration;
     private double hidratacao;
 
@@ -26,6 +26,7 @@ public abstract class GeneralActivity {
         this.hidratacao = 0.0;
         this.duration = "";
         this.data = new GregorianCalendar();
+        this.cod=0 + (int)(Math.random() * ((10000) + 1));
     }
 
     public GeneralActivity(GregorianCalendar date, String nome, double cal, String duration, double hidration) {
@@ -34,6 +35,7 @@ public abstract class GeneralActivity {
         this.calories = cal;
         this.hidratacao = hidration;
         this.duration = duration;
+        this.cod=0 + (int)(Math.random() * ((10000) + 1));
     }
 
     public GeneralActivity(GeneralActivity g) {
@@ -59,7 +61,9 @@ public void setData(GregorianCalendar date){
     public String getNome() {
         return nome;
     }
-
+public int getCod(){
+    return this.cod;
+}
     /**
      * @param nome the nome to set
      */
@@ -117,6 +121,7 @@ public void setData(GregorianCalendar date){
         dia=this.data.get(Calendar.DATE);
         mes=this.data.get(Calendar.MONTH);
         ano=this.data.get(Calendar.YEAR);
+        s.append("Código: "+this.cod+"\n");
         s.append("Nome: "+this.nome+"\n");
         s.append("Data: "+dia+" - "+mes+" - "+ano+"\n");
         s.append("Duração: "+this.duration+" horas\n");

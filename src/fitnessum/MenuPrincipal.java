@@ -6,6 +6,7 @@
 
 package fitnessum;
 
+import events.Eventos;
 import activities.*;
 import exceptions.*;
 import java.util.*;
@@ -21,7 +22,8 @@ public class MenuPrincipal {
     private static String[] desportos;
     private static String[] ambos;
     private static String[] outros;
-    private static String[] distancia;
+    private static String[] distancia; 
+    
     public static void main(String[] args) throws Excepcoes{
     int resultado=1;
     distancia=new String[] {"Cycling, Sport","Cycling, Transport","Fitness Walking","Golf","Indoor Cycling","Kayaking","Kitesurfing","Riding","Roller Skiing","Rowing","Running","Sailing","Skating","Swimming","Walking","Wind Surfing"};
@@ -84,7 +86,7 @@ private static int Menu() throws Excepcoes {
     }
     return r;
     }
-private static int MenuUtilizador(User u) throws Excepcoes{
+private static int MenuUtilizador(String user) throws Excepcoes{
     int op,r;
     
     Scanner ler=new Scanner(System.in);
@@ -95,21 +97,24 @@ System.out.println("3 - Adicionar Amigo");
 System.out.println("4 - Ver Amigos");
 System.out.println("5 - Registar Actividade");
 System.out.println("6 - Listar Actividades");
-System.out.println("7 - Logout");
+System.out.println("7 - Remover Actividade");
+System.out.println("8 - Logout");
 System.out.print("Opção: ");
 r=op=2;
+User aux;
+aux=fitness.getUser(user);
 op=ler.nextInt();
 try{
 switch(op){
     case 1:{
-        System.out.print(u.toString());
+        System.out.print(aux.toString());
         r=1;
         break;
     }
     case 2:{
         
         while(r!=0){
-            r=MenuPrincipal.MenuInf(u);
+            r=MenuPrincipal.MenuInf(aux);
         }
         
         r=1;
@@ -119,7 +124,7 @@ switch(op){
     
     case 3:{
         while(r!=0){
-            r=MenuPrincipal.AdicionarAmigo(u);
+            r=MenuPrincipal.AdicionarAmigo(aux);
         }
         
         r=1;
@@ -127,21 +132,21 @@ switch(op){
     }
     case 4:{
         while(r!=0){
-            r=MenuPrincipal.FriendsList(u);
+            r=MenuPrincipal.FriendsList(aux);
         }
         
         r=1;
         break;
     }
     case 5:{
-       MenuPrincipal.RegistarActividade(u);
+       MenuPrincipal.RegistarActividade(aux);
        
        r=1;
        break;
     }
     case 6:{
         try{
-        System.out.print(u.ListarActividades());}
+        System.out.print(aux.ListarActividades());}
         catch(NaoTemActividades e){
             System.out.println(e.getMessage());
         }
@@ -149,7 +154,12 @@ switch(op){
         break;
     }
     case 7:{
-        fitness.AdicionaUser(u);
+        MenuPrincipal.RemoverActividade(aux);
+        r=1;
+        break;
+    }
+    case 8:{
+        fitness.AdicionaUser(aux);
         r=0;
         break;
     }
@@ -169,29 +179,25 @@ return r;
         Scanner ler=new Scanner(System.in);
         User u;
         int resultado=1;
-   System.out.println("PÁGINA DE LOGIN");
+   System.out.println("PAGINA DE LOGIN");
    System.out.print("Username: ");
    user=ler.nextLine();
    System.out.print("Password: ");
    pass=ler.nextLine();
    try{
        if(fitness.LoginValido(user,pass)==true){
-       User aux=fitness.getUser(user);    
+           
    while(resultado!=0){
        fitness.setUserLogado(user);
-       resultado=MenuPrincipal.MenuUtilizador(aux);
+       resultado=MenuPrincipal.MenuUtilizador(user);
    }
 
        }
            
        
    
-   }catch(Excepcoes e){
-       if(e instanceof UserNaoExiste){
-       System.out.println(((UserNaoExiste)e).getMessage());    
-       }else{
-       System.out.println(((LoginInvalido)e).getMessage());    
-       }
+   }catch(UserNaoExiste e){
+       System.out.println(e.getMessage());
        
    }
    
@@ -208,7 +214,7 @@ return r;
         GregorianCalendar data=new GregorianCalendar();
         Scanner ler=new Scanner(System.in);
         User u;
-        System.out.println("PÁGINA DE REGISTO");
+        System.out.println("P�?GINA DE REGISTO");
         
         System.out.print("Email: ");
         email=ler.nextLine();
@@ -375,7 +381,7 @@ return r;
         if(fitness.ExisteUser(user)==true){
             aux=fitness.getUser(user);
             u.AdicionarAmigo(aux);
-            
+            aux.AdicionarAmigo(u);
        
         }
         
@@ -532,7 +538,11 @@ return r;
            break;
         }
         case 2:{
-            System.out.print(aux.ListarActividades());
+            try{
+            System.out.print(aux.ListarActividades());}
+            catch(NaoTemActividades e){
+                System.out.println(e.getMessage());
+            }
         r=1;
         break;
         }
@@ -565,6 +575,21 @@ return r;
     minutos=(Double.parseDouble(aux[1]))/60;
     horas+=minutos;
     return horas;
+    }
+
+    private static void RemoverActividade(User aux) throws Excepcoes{
+    String cod;
+    Scanner ler=new Scanner(System.in);
+        System.out.println("-----REMOVER ACTIVIDADE-----");
+    try{
+        System.out.print(aux.ListarActividades());
+        System.out.print("Código da actividade para remover: ");
+        cod=ler.nextLine();
+        aux.RemoverActividade(cod);
+    }
+    catch(NaoTemActividades | ActividadeNaoExiste e){
+        System.out.println(e.getMessage());
+    }
     }
     
 }

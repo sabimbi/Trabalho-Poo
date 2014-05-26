@@ -7,7 +7,7 @@
 package events;
 
 import java.util.*;
-
+import users.*;
 /**
  *
  * @author Mesas
@@ -15,20 +15,21 @@ import java.util.*;
 public class Evento {
     private String nome;
     private String local;
-    private int inscritos;
+    private int ninscritos;
     private GregorianCalendar datainicio;
 private GregorianCalendar datafim;
-
+    private HashMap<String,User> inscritos;
 public Evento(){
     nome=local="";
-    inscritos=0;
+    ninscritos=0;
     datafim=datainicio=new GregorianCalendar();
+    inscritos=new HashMap<>();
 }
-public Evento(String name,String local,int num,GregorianCalendar init,GregorianCalendar fim){
+public Evento(String name,String local,int num,GregorianCalendar init,GregorianCalendar fim,HashMap<String,User> list){
     int dia,mes,ano;
     this.nome=name;
     this.local=local;
-    this.inscritos=num;
+    this.ninscritos=num;
     this.datafim=this.datainicio=new GregorianCalendar();
     dia=init.get(Calendar.DATE);
     mes=init.get(Calendar.MONTH);
@@ -42,13 +43,18 @@ dia=fim.get(Calendar.DATE);
     this.datafim.set(Calendar.DATE, dia);
     this.datafim.set(Calendar.MONTH, mes);
     this.datafim.set(Calendar.YEAR, ano);
+    this.inscritos=new HashMap<>();
+    for(String s:list.keySet()){
+       this.inscritos.put(s, list.get(s).clone());
+    }
 }
 public Evento(Evento e){
     this.nome=e.getNome();
     this.local=e.getLocal();
     this.datainicio=e.getDatainicio();
     this.datafim=e.getDatafim();
-    this.inscritos=e.getInscritos();
+    this.ninscritos=e.getInscritos();
+    this.inscritos=e.getUsersInscritos();
 }
 public Evento clone(){
     return new Evento(this);
@@ -87,7 +93,7 @@ dia=this.datafim.get(Calendar.DATE);
      * @return the inscritos
      */
     public int getInscritos() {
-        return inscritos;
+        return ninscritos;
     }
 
     /**
@@ -138,7 +144,7 @@ dia=this.datafim.get(Calendar.DATE);
      * @param inscritos the inscritos to set
      */
     public void setInscritos(int inscritos) {
-        this.inscritos = inscritos;
+        this.ninscritos = inscritos;
     }
 
     /**
@@ -168,4 +174,13 @@ dia=this.datafim.get(Calendar.DATE);
    this.datafim.set(Calendar.MONTH, mes);
     this.datafim.set(Calendar.YEAR, ano);
     }
+
+    private HashMap<String, User> getUsersInscritos() {
+    HashMap<String,User> copia=new HashMap<>();
+    for(String s:this.inscritos.keySet()){
+        copia.put(s, this.inscritos.get(s).clone());
+    }
+    return copia;
+    }
 }
+

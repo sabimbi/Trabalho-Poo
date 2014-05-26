@@ -11,23 +11,26 @@ package fitnessum;
  * @author Mesas
  */
 import comparators.*;
+import events.*;
 import java.util.*;
 import users.*;
 import exceptions.*;
 public class FitnessUM {
     private HashMap<String,User> userlist;
     private String userlogado;
+    private Eventos lista;
     
 public FitnessUM(){
     userlist=new HashMap<String,User>();
     userlogado="";
-    
+    lista=new Eventos();
     
 }
 
-public FitnessUM(HashMap<String,User> list,String user){
+public FitnessUM(HashMap<String,User> list,String user,Eventos e){
     this.userlist=new HashMap<String,User>();
-    
+    this.lista=new Eventos();
+    this.lista=e.clone();
     for(String s:list.keySet()){
         this.userlist.put(s, list.get(s).clone());
     }
@@ -37,7 +40,7 @@ public FitnessUM(FitnessUM f){
     this.userlist=new HashMap<String,User>();
     this.userlist=f.getUserlist();
     this.userlogado=f.getUserLogado();
-    
+    this.lista=f.getEventos();
 }
 public FitnessUM clone(){
     return new FitnessUM(this);
@@ -123,6 +126,10 @@ if(this.userlist.containsKey(email)==false){
      */
     public void setUserlogado(String userlogado) {
         this.userlogado = userlogado;
+    }
+
+    public Eventos getEventos() {
+    return this.lista.clone();
     }
 
     
