@@ -42,7 +42,7 @@ public class Desporto extends GeneralActivity {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(super.toString());
-        s.append("Distância: " + this.distancia + "m\n");
+        s.append("Distância: " + this.distancia + "km\n");
         s.append("Resultado: " + this.resultado + "\n");
 
         return s.toString();

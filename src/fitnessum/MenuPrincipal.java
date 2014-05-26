@@ -548,7 +548,8 @@ public class MenuPrincipal {
         String genero,resultado;
         System.out.print("Distância(em KM): ");
         distancia = ler.nextDouble();
-        System.out.print("Resultado(Victória ou Derrota): ");
+        ler.nextLine();
+        System.out.print("Resultado(Victoria ou Derrota): ");
         resultado=ler.nextLine();
         duracao = MenuPrincipal.ConverterParaHoras(duration);
         avgspd = distancia / duracao;
