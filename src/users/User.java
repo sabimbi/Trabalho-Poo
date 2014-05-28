@@ -25,8 +25,8 @@ public class User {
     private double peso;
     private GregorianCalendar data_de_nascimento;
     private String desporto_favorito;
-    private ArrayList<GeneralActivity> actividades;
-    private TreeSet<String> friends;
+    private ListadeActividades actividades;
+    private ListadeAmigos friends;
 
     public User() {
         email = password = nome = gen = "";
@@ -34,8 +34,8 @@ public class User {
         peso = 1.0;
         data_de_nascimento = new GregorianCalendar();
         desporto_favorito = "";
-        actividades = new ArrayList<>();
-        friends = new TreeSet<>();
+        actividades = new ListadeActividades();
+        friends = new ListadeAmigos();
 
     }
 
@@ -56,11 +56,11 @@ public class User {
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-        this.friends = new TreeSet<String>();
-        this.actividades = new ArrayList<GeneralActivity>();
+        this.friends =new ListadeAmigos();
+        this.actividades = new ListadeActividades();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ArrayList<GeneralActivity> lista, TreeSet<String> l) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListadeActividades lista, ListadeAmigos l) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -73,14 +73,16 @@ public class User {
         this.peso = peso;
         this.data_de_nascimento = date;
         this.desporto_favorito = favorito;
-        this.actividades = new ArrayList<GeneralActivity>();
-        this.friends = new TreeSet<String>();
+        this.actividades = new ListadeActividades();
+        this.actividades=lista.clone();
+        this.friends=new ListadeAmigos();
+        this.friends=l.clone();
         this.data_de_nascimento = new GregorianCalendar();
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-this.setFriends(l);
-this.setActividades(lista);
+
+
     }
 
     public User(User u) {
@@ -100,22 +102,15 @@ this.setActividades(lista);
         this.desporto_favorito = u.getDesporto_favorito();
         
         
-        this.actividades = u.getActividades();
-        this.friends = u.getFriends();
+        this.actividades = u.getListadeActividades();
+        this.friends = u.getListaAmigos();
         this.data_de_nascimento = new GregorianCalendar();
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
     }
 
-    public TreeSet<String> getFriends() {
-        TreeSet<String> aux=new TreeSet<>();
-for(String s:this.friends){
-   
-    aux.add(s);
-}
-        return aux;
-    }
+    
 
     @Override
     public User clone() {
@@ -126,29 +121,8 @@ for(String s:this.friends){
     /**
      * @return the gen
      */
-    public ArrayList<GeneralActivity> getActividades() {
-        ArrayList<GeneralActivity> copia = new ArrayList<>();
-        GeneralActivity aux;
-        for (GeneralActivity g : this.actividades) {
-            if (g instanceof Distancia) {
-                aux = ((Distancia) g);
-                copia.add(aux);
-            }
-            if (g instanceof Desporto) {
-                aux = ((Desporto) g);
-                copia.add(aux);
-            }
-            if (g instanceof Altitude) {
-                aux = ((Altitude) g);
-                copia.add(aux);
-            }
-            if (g instanceof Outros) {
-                aux = ((Outros) g);
-                copia.add(aux);
-            }
-        }
-
-        return copia;
+    public ListadeActividades getListadeActividades() {
+        return this.actividades.clone();
     }
 
     public String toString() {
@@ -285,7 +259,9 @@ for(String s:this.friends){
     public String getNome() {
         return nome;
     }
-
+public ListadeAmigos getListaAmigos(){
+    return this.friends.clone();
+}
     /**
      * @param nome the nome to set
      */
@@ -293,59 +269,23 @@ for(String s:this.friends){
         this.nome = nome;
     }
 
-    public void AdicionarAmigo(String user) {
-        this.friends.add(user);
-    }
+    
 
     public String MostrarFriendsList() throws Excepcoes {
-        if (this.friends.isEmpty()) {
-            throw new NaoTemAmigos();
-        } else {
-            return this.ListadeAmigos();
-        }
+        return this.friends.toString();
     }
 
-    public String ListadeAmigos() {
-        StringBuilder s = new StringBuilder("----Lista de Amigos----\n");
-        
-        for (String str : this.friends) {
-            s.append(str + "\n");
-        }
-        return s.toString();
-    }
+    
 
     public String ListarActividades() throws Excepcoes {
-        if (this.actividades.isEmpty()) {
+        if (this.actividades.NrdeActividades()==0) {
             throw new NaoTemActividades();
         } else {
-            return this.ListaActividades();
+            return this.actividades.toString();
         }
     }
 
-    public String ListaActividades() {
-        StringBuilder s = new StringBuilder("-----LISTA DE ACTIVIDADES-----\n");
-        GeneralActivity aux;
-        for (GeneralActivity g : this.actividades) {
-            if (g instanceof Distancia) {
-                aux = ((Distancia) g);
-                s.append(aux.toString());
-            }
-            if (g instanceof Desporto) {
-                aux = ((Desporto) g);
-                s.append(aux.toString());
-            }
-            if (g instanceof Altitude) {
-                aux = ((Altitude) g);
-                s.append(aux.toString());
-            }
-            if (g instanceof Outros) {
-                aux = ((Outros) g);
-                s.append(aux.toString());
-            }
-        }
-
-        return s.toString();
-    }
+    
 
     public int getIdade() {
         GregorianCalendar hj = new GregorianCalendar();
@@ -356,86 +296,19 @@ for(String s:this.friends){
         return anohj - anoNascimento;
     }
 
-    public void AdicionarActividade(GeneralActivity g) {
-        GeneralActivity aux;
-        ArrayList<GeneralActivity> copia;
-        if (g instanceof Distancia) {
-            aux = ((Distancia) g).clone();
-            this.actividades.add(aux);
-
-        }
-        if (g instanceof Desporto) {
-            aux = ((Desporto) g).clone();
-            this.actividades.add(aux);
-        }
-        if (g instanceof Altitude) {
-            aux = ((Altitude) g).clone();
-            this.actividades.add(aux);
-        }
-        if (g instanceof Outros) {
-            aux = ((Outros) g).clone();
-            this.actividades.add(aux);
-        }
-        copia = this.getActividades();
-        Collections.sort(copia, new DateComparator());
-
-        this.setActividades(copia);
-
-    }
-
-    private void setActividades(ArrayList<GeneralActivity> copia) {
-        this.actividades = new ArrayList<>();
-        GeneralActivity aux;
-        for (GeneralActivity g : copia) {
-
-            if (g instanceof Distancia) {
-                aux = ((Distancia) g).clone();
-                this.actividades.add(aux);
-            }
-            if (g instanceof Desporto) {
-                aux = ((Desporto) g).clone();
-                this.actividades.add(aux);
-            }
-            if (g instanceof Altitude) {
-                aux = ((Altitude) g).clone();
-                this.actividades.add(aux);
-            }
-            if (g instanceof Outros) {
-                aux = ((Outros) g).clone();
-                this.actividades.add(aux);
-            }
-        }
-    }
-
-    public boolean ExisteActividade(int cod) {
-
-        for (GeneralActivity g : this.actividades) {
-            if (g.getCod() == cod) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void RemoverActividade(String cod) throws Excepcoes {
-        int code;
-        code = Integer.parseInt(cod);
-        if (this.ExisteActividade(code) == false) {
-            throw new ActividadeNaoExiste();
-        } else {
-            for (GeneralActivity g : this.actividades) {
-                if (g.getCod() == code) {
-                    this.actividades.remove(g);
-                    break;
-                }
-            }
-        }
-    }
-
-    private void setFriends(TreeSet<String> l) {
-    for(String s:l){
-    this.friends.add(s);
-        }
     
+    
+    
+
+    
+
+    
+public void AdicionarAmigo(String user){
+    this.friends.AdicionarAmigo(user);
+}    
+
+    public void AdicionarActividade(GeneralActivity g) {
+    this.actividades.AdicionarActividade(g);
+    }
 }
-}
+

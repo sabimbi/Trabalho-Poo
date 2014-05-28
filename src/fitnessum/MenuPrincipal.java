@@ -98,8 +98,7 @@ public class MenuPrincipal {
         System.out.println("4 - Ver Amigos");
         System.out.println("5 - Registar Actividade");
         System.out.println("6 - Listar Actividades");
-        System.out.println("7 - Remover Actividade");
-        System.out.println("8 - Logout");
+        System.out.println("7 - Logout");
         System.out.print("Opção: ");
         r = op = 2;
         User aux;
@@ -155,16 +154,8 @@ public class MenuPrincipal {
                     r = 1;
                     break;
                 }
-                case 7: {try{
-                    System.out.print(aux.ListarActividades());
-                    MenuPrincipal.RemoverActividade(aux);}
-                catch(NaoTemActividades e){
-                    System.out.println(e.getMessage());
-                }
-                    r = 1;
-                    break;
-                }
-                case 8: {
+                
+                case 7: {
                     fitness.AdicionaUser(aux);
                     r = 0;
                     break;
@@ -646,19 +637,6 @@ fitness.AdicionaUser(u);
         return horas;
     }
 
-    private static void RemoverActividade(User aux) throws Excepcoes {
-        String cod;
-        Scanner ler = new Scanner(System.in);
-        
-        try {
-            System.out.println("-----REMOVER ACTIVIDADE-----");
-            
-            System.out.print("Código da actividade para remover: ");
-            cod = ler.nextLine();
-            aux.RemoverActividade(cod);
-        } catch (NaoTemActividades | ActividadeNaoExiste e) {
-            System.out.println(e.getMessage());
-        }
-    }
+    
 
 }
