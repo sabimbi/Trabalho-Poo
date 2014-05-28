@@ -32,19 +32,19 @@ public class ListadeActividades {
         GeneralActivity aux;
         for (GeneralActivity g : this.actividades) {
             if (g instanceof Distancia) {
-                aux = ((Distancia) g);
+                aux = ((Distancia) g).clone();
                 copia.add(aux);
             }
             if (g instanceof Desporto) {
-                aux = ((Desporto) g);
+                aux = ((Desporto) g).clone();
                 copia.add(aux);
             }
             if (g instanceof Altitude) {
-                aux = ((Altitude) g);
+                aux = ((Altitude) g).clone();
                 copia.add(aux);
             }
             if (g instanceof Outros) {
-                aux = ((Outros) g);
+                aux = ((Outros) g).clone();
                 copia.add(aux);
             }
         }
