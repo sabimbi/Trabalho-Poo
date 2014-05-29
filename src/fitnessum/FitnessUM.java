@@ -9,13 +9,14 @@ package fitnessum;
  *
  * @author Mesas
  */
-import comparators.*;
+
 import events.*;
 import java.util.*;
 import users.*;
 import exceptions.*;
+import java.io.*;
 
-public class FitnessUM {
+public class FitnessUM implements Serializable{
 
     private HashMap<String, User> userlist;
     private String userlogado;
@@ -136,5 +137,29 @@ public class FitnessUM {
     public Eventos getEventos() {
         return this.lista.clone();
     }
+public void gravaObj(String fich) throws IOException {
+      ObjectOutputStream oos = new ObjectOutputStream(
+                                new FileOutputStream(fich));
+      oos.writeObject(this.userlist);
+      oos.writeObject(this.lista);
+      oos.writeObject(this.userlogado);
+      oos.flush(); oos.close();
+  }
+  
+  public void gravaTxt(String fich) throws IOException {
+      
+      PrintWriter pw = new PrintWriter(fich);
+      pw.print(this);
+      pw.flush(); pw.close();
+      
+  }
 
+    public void CarregaObj() throws IOException,ClassNotFoundException{
+        InputStream file = new FileInputStream("fitness");
+      InputStream buffer = new BufferedInputStream(file);
+      ObjectInput input = new ObjectInputStream (buffer);
+       this.userlist=(HashMap<String, User>)input.readObject();
+       this.lista=(Eventos)input.readObject();
+       this.userlogado=input.readUTF();
+    }
 }

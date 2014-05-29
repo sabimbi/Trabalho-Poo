@@ -8,6 +8,7 @@ package fitnessum;
 import events.*;
 import activities.*;
 import exceptions.*;
+import java.io.IOException;
 import java.util.*;
 import users.*;
 
@@ -46,7 +47,10 @@ public class MenuPrincipal {
         System.out.println("2 - Registar");
         System.out.println("3 - Userlist");
         System.out.println("4 - Listar Desportos disponíveis");
-        System.out.println("5 - Sair");
+        System.out.println("5 - Gravar objecto");
+        System.out.println("6 - Gravar txt");
+        System.out.println("7 - Carregar Objecto");
+        System.out.println("8 - Sair");
         System.out.print("Opção: ");
         r = 0;
 
@@ -73,6 +77,33 @@ public class MenuPrincipal {
                     break;
                 }
                 case 5: {
+                    try{
+                    fitness.gravaObj("fitness");}
+                    catch(IOException e){
+                        System.out.println(e.getMessage());
+                    }
+                    r = 1;
+                    break;
+                }
+                case 6: {
+                    try{
+                    fitness.gravaTxt("fitness.txt");}
+                    catch(IOException e){
+                        System.out.println(e.getMessage());
+                    }
+                    r = 1;
+                    break;
+                }
+                case 7: {
+                    try{
+                    fitness.CarregaObj();}
+                    catch(IOException |ClassNotFoundException e){
+                        System.out.println(e.getMessage());
+                    }
+                    r=1;
+                    break;
+                }
+                case 8: {
                     r = 0;
                     break;
                 }

@@ -6,13 +6,14 @@
 
 package events;
 
+import java.io.Serializable;
 import java.util.*;
 import users.*;
 /**
  *
  * @author Mesas
  */
-public class Evento {
+public class Evento implements Serializable{
     private String nome;
     private String local;
     private int ninscritos;

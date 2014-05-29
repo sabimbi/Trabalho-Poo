@@ -7,15 +7,15 @@ package users;
 
 import exceptions.*;
 import activities.*;
-import comparators.*;
+
 
 import java.util.*;
-
+import java.io.*;
 /**
  *
  * @author Dimz
  */
-public class User {
+public class User implements Serializable {
 
     private String email;
     private String password;

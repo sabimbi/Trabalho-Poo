@@ -10,8 +10,9 @@ package events;
  *
  * @author Mesas
  */
+import java.io.Serializable;
 import java.util.*;
-public class Eventos {
+public class Eventos implements Serializable{
     private ArrayList<Evento> eventos;
     public Eventos(){
         eventos=new ArrayList<>();

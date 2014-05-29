@@ -7,12 +7,13 @@
 package users;
 import java.util.*;
 import activities.*;
+import java.io.*;
 import comparators.DateComparator;
 /**
  *
  * @author Mesas
  */
-public class ListadeActividades {
+public class ListadeActividades implements Serializable{
     private ArrayList<GeneralActivity> actividades;
     public ListadeActividades(){
         actividades=new ArrayList<>();

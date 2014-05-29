@@ -7,12 +7,12 @@
 package users;
 
 import java.util.*;
-
+import java.io.*;
 /**
  *
  * @author Mesas
  */
-public class ListadeAmigos {
+public class ListadeAmigos implements Serializable{
     private TreeSet<String> friends;
     private ArrayList<String> pedidos;
     public ListadeAmigos(){

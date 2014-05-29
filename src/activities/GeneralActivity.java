@@ -9,9 +9,10 @@ package activities;
  *
  * @author Dimz
  */
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class GeneralActivity {
+public abstract class GeneralActivity implements Serializable{
 
     private GregorianCalendar data;
     private String nome;
