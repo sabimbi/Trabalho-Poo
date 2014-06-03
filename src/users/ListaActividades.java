@@ -3,132 +3,176 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package users;
+
 import java.util.*;
 import activities.*;
 import java.io.*;
 import comparators.DateComparator;
+import exceptions.*;
+
 /**
  *
  * @author Mesas
  */
-public class ListadeActividades implements Serializable{
-    private ArrayList<GeneralActivity> actividades;
-    public ListadeActividades(){
-        actividades=new ArrayList<>();
+public class ListaActividades implements Serializable {
+
+    private TreeMap<GregorianCalendar, GeneralActivity> actividades;
+
+    public ListaActividades() {
+        actividades = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
     }
-    public ListadeActividades(ArrayList<GeneralActivity> l){
-     this.setActividades(l);
+
+    public ListaActividades(TreeMap<GregorianCalendar, GeneralActivity> l) {
+        this.setActividades(l);
     }
-    public ListadeActividades(ListadeActividades l){
-        actividades=new ArrayList<>();
-        actividades=l.getActividades();
+
+    public ListaActividades(ListaActividades l) {
+        actividades = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
+        actividades = l.getActividades();
     }
-    public ListadeActividades clone(){
-        return new ListadeActividades(this);
+
+    public ListaActividades clone() {
+        return new ListaActividades(this);
     }
-    public ArrayList<GeneralActivity> getActividades() {
-        ArrayList<GeneralActivity> copia = new ArrayList<>();
-        GeneralActivity aux;
-        for (GeneralActivity g : this.actividades) {
-            if (g instanceof Distancia) {
-                aux = ((Distancia) g).clone();
-                copia.add(aux);
+
+    public TreeMap<GregorianCalendar, GeneralActivity> getActividades() {
+        TreeMap<GregorianCalendar, GeneralActivity> copia = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
+        GeneralActivity aux, a;
+        for (GregorianCalendar g : this.actividades.keySet()) {
+            a = this.actividades.get(g);
+            if (a instanceof Distancia) {
+                aux = ((Distancia) a).clone();
+                copia.put(aux.getData(), aux);
             }
-            if (g instanceof Desporto) {
-                aux = ((Desporto) g).clone();
-                copia.add(aux);
+            if (a instanceof Desporto) {
+                aux = ((Desporto) a).clone();
+                copia.put(aux.getData(), aux);
             }
-            if (g instanceof Altitude) {
-                aux = ((Altitude) g).clone();
-                copia.add(aux);
+            if (a instanceof Altitude) {
+                aux = ((Altitude) a).clone();
+                copia.put(aux.getData(), aux);
             }
-            if (g instanceof Outros) {
-                aux = ((Outros) g).clone();
-                copia.add(aux);
+            if (a instanceof Outros) {
+                aux = ((Outros) a).clone();
+                copia.put(aux.getData(), aux);
             }
         }
-
         return copia;
     }
-    public void setActividades(ArrayList<GeneralActivity> copia) {
-        this.actividades = new ArrayList<>();
-        GeneralActivity aux;
-        for (GeneralActivity g : copia) {
 
-            if (g instanceof Distancia) {
-                aux = ((Distancia) g).clone();
-                this.actividades.add(aux);
+    public void setActividades(TreeMap<GregorianCalendar, GeneralActivity> lista) {
+        this.actividades = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
+        GeneralActivity aux, a;
+        for (GregorianCalendar g : lista.keySet()) {
+            a = lista.get(g);
+            if (a instanceof Distancia) {
+                aux = ((Distancia) a).clone();
+                this.actividades.put(aux.getData(), aux);
             }
-            if (g instanceof Desporto) {
-                aux = ((Desporto) g).clone();
-                this.actividades.add(aux);
+            if (a instanceof Desporto) {
+                aux = ((Desporto) a).clone();
+                this.actividades.put(aux.getData(), aux);
             }
-            if (g instanceof Altitude) {
-                aux = ((Altitude) g).clone();
-                this.actividades.add(aux);
+            if (a instanceof Altitude) {
+                aux = ((Altitude) a).clone();
+                this.actividades.put(aux.getData(), aux);
             }
-            if (g instanceof Outros) {
-                aux = ((Outros) g).clone();
-                this.actividades.add(aux);
+            if (a instanceof Outros) {
+                aux = ((Outros) a).clone();
+                this.actividades.put(aux.getData(), aux);
             }
         }
     }
 
-public String toString() {
-        StringBuilder s = new StringBuilder("-----LISTA DE ACTIVIDADES-----\n");
-        GeneralActivity aux;
-        for (GeneralActivity g : this.actividades) {
-            if (g instanceof Distancia) {
-                aux = ((Distancia) g);
-                s.append(aux.toString());
+    public String toString() {
+        StringBuilder s = new StringBuilder("-----ULTIMAS DEZ ACTIVIDADES-----\n");
+        int i = 0;
+        int dia,mes,ano,hora,minuto;
+        if (this.actividades.size() < 10) {
+            for (GregorianCalendar g : this.actividades.descendingKeySet()) {
+                dia=g.get(Calendar.DATE);
+                mes=g.get(Calendar.MONTH);
+                ano=g.get(Calendar.YEAR);
+                hora=g.get(Calendar.HOUR_OF_DAY);
+                minuto=g.get(Calendar.MINUTE);
+                s.append("Data: "+dia+"-"+mes+"-"+ano+" Hora: "+hora+":"+minuto+" Nome: "+this.actividades.get(g).getNome()+"\n");
+                
             }
-            if (g instanceof Desporto) {
-                aux = ((Desporto) g);
-                s.append(aux.toString());
-            }
-            if (g instanceof Altitude) {
-                aux = ((Altitude) g);
-                s.append(aux.toString());
-            }
-            if (g instanceof Outros) {
-                aux = ((Outros) g);
-                s.append(aux.toString());
+        } else {
+            for (GregorianCalendar g : this.actividades.descendingKeySet()) {
+                if (i < 10) {
+                    s.append(this.actividades.get(g).toString());
+                } else {
+                    break;
+                }
+
             }
         }
 
         return s.toString();
     }
-        public void AdicionarActividade(GeneralActivity g) {
+
+    public boolean ExisteActividade(GregorianCalendar g) {
+        return this.actividades.containsKey(g);
+    }
+
+    public void AdicionarActividade(GeneralActivity g) {
         GeneralActivity aux;
-        ArrayList<GeneralActivity> copia;
+
         if (g instanceof Distancia) {
             aux = ((Distancia) g).clone();
-            this.actividades.add(aux);
+            this.actividades.put(aux.getData(), aux);
 
         }
         if (g instanceof Desporto) {
             aux = ((Desporto) g).clone();
-            this.actividades.add(aux);
+            this.actividades.put(aux.getData(), aux);
         }
         if (g instanceof Altitude) {
             aux = ((Altitude) g).clone();
-            this.actividades.add(aux);
+            this.actividades.put(aux.getData(), aux);
         }
         if (g instanceof Outros) {
             aux = ((Outros) g).clone();
-            this.actividades.add(aux);
+            this.actividades.put(aux.getData(), aux);
         }
-        copia = this.getActividades();
-        Collections.sort(copia, new DateComparator());
-
-        this.setActividades(copia);
 
     }
+
+    public String ConsultarActividade(GregorianCalendar date) throws Excepcoes {
+        GeneralActivity aux;
+        String details=new String();
+        try {
+            if(this.NrdeActividades()==0 || this.ExisteActividade(date) ==false ) {
+                throw new ActividadeNaoExiste();
+            } else {
+       
+               
+               
+               aux=this.actividades.get(date);
+                if (aux instanceof Distancia) {
+         return ((Distancia)aux).toString();
+        }
+        if (aux instanceof Desporto) {
+            return ((Desporto)aux).toString();
+        }
+        if (aux instanceof Altitude) {
+            return ((Altitude)aux).toString();
+        }
+        if (aux instanceof Outros) {
+            return ((Outros)aux).toString();
+        }
+    
+            }
+        }catch(ActividadeNaoExiste e){
+            System.out.println(e.getMessage());
+        }
+    
+    return details;}
 
     public int NrdeActividades() {
-    return this.actividades.size();
+        return this.actividades.size();
     }
-    
+
 }

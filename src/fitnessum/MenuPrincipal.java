@@ -122,14 +122,16 @@ public class MenuPrincipal {
         int op, r;
 
         Scanner ler = new Scanner(System.in);
+        int dia,mes,ano,hora,minuto;
+        String date,horas;
+        String[] datas,time;
         System.out.println("-----MENU UTILIZADOR-----");
         System.out.println("1 - Ver Perfil");
         System.out.println("2 - Mudar informações");
         System.out.println("3 - Adicionar Amigo");
         System.out.println("4 - Ver Amigos");
-        System.out.println("5 - Registar Actividade");
-        System.out.println("6 - Listar Actividades");
-        System.out.println("7 - Logout");
+        System.out.println("5 - Actividades");
+        System.out.println("6 - Logout");
         System.out.print("Opção: ");
         r = op = 2;
         User aux;
@@ -170,26 +172,15 @@ public class MenuPrincipal {
                     break;
                 }
                 case 5: {
-                    MenuPrincipal.RegistarActividade(aux);
-
-                    r = 1;
-                    break;
-                }
-                case 6: {
-                    try {
-                        System.out.print(aux.ListarActividades());
-                        
-                    } catch (NaoTemActividades e) {
-                        System.out.println(e.getMessage());
+                    while(r!=0){
+                        r=MenuPrincipal.MenuActividades(aux);
                     }
                     r = 1;
                     break;
                 }
-                
-                case 7: {
+                case 6:{
+                    r=0;
                     fitness.AdicionaUser(aux);
-                    r = 0;
-                    break;
                 }
                 default: {
                     throw new OpcaoInvalida();
@@ -291,9 +282,7 @@ public class MenuPrincipal {
             dia = Integer.parseInt(aux[0]);
             mes = Integer.parseInt(aux[1]);
             ano = Integer.parseInt(aux[2]);
-            data.set(Calendar.DATE, dia);
-            data.set(Calendar.MONTH, mes);
-            data.set(Calendar.YEAR, ano);
+            data=new GregorianCalendar(ano, mes, dia);
             u = new User(email, nome, pass1, genero, altura, peso, favsport, data);
             fitness.AdicionaUser(u);
         } catch (UserInvalido | PassInvalida | DataInvalida | AlturaInvalida | PesoInvalido user) {
@@ -431,12 +420,12 @@ fitness.AdicionaUser(u);
     }
 
     private static void RegistarActividade(User u) {
-        String tipo, date, duracao;
-        int dia, mes, ano;
+        String tipo, date, duracao,horas;
+        int dia, mes, ano,hora,minuto;
         Double cal, hidration, duration;
         Scanner ler = new Scanner(System.in);
-        GregorianCalendar data = new GregorianCalendar();
-        String[] aux;
+        GregorianCalendar data ;
+        String[] datas,time;
         MenuPrincipal.ListarDesportos();
         ArrayList<String> distance, sports, altitude, others;
         distance = new ArrayList<>(Arrays.asList(distancia));
@@ -455,14 +444,20 @@ fitness.AdicionaUser(u);
         System.out.print("Data de realização(dd-mm-aa): ");
         ler.nextLine();
         date = ler.nextLine();
-        aux = date.split("-");
-        dia = Integer.parseInt(aux[0]);
-        mes = Integer.parseInt(aux[1]);
-        ano = Integer.parseInt(aux[2]);
-        data.set(Calendar.DATE, dia);
-        data.set(Calendar.MONTH, mes);
-        data.set(Calendar.YEAR, ano);
+        System.out.print("Hora de Início da Actividade(hh:mm): ");
+        horas=ler.nextLine();
+        datas = date.split("-");
+        time=horas.split(":");
+        hora=Integer.parseInt(time[0]);
+        minuto=Integer.parseInt(time[1]);
+        
+        dia = Integer.parseInt(datas[0]);
+        mes = Integer.parseInt(datas[1]);
+        ano = Integer.parseInt(datas[2]);
+        data=new GregorianCalendar(ano, mes, dia, hora, minuto);
+        
         duration = MenuPrincipal.ConverterParaHoras(duracao);
+        
         try {
             if (distance.contains(tipo)) {
                 MenuPrincipal.ActividadeDistancia(u, data, tipo, duracao, hidration);
@@ -666,6 +661,89 @@ fitness.AdicionaUser(u);
         minutos = (Double.parseDouble(aux[1])) / 60;
         horas += minutos;
         return horas;
+    }
+    private static void ConsultarActividade(User aux) throws Excepcoes{
+        int dia,mes,ano,hora,minuto; 
+        String date,horas,detalhes;
+        String[] datas,time;
+        GregorianCalendar data;
+        GeneralActivity g=null;
+        Scanner ler=new Scanner(System.in);
+        try{
+            
+        System.out.print("Data de realização(dd-mm-aa): ");
+        
+        date = ler.nextLine();
+        System.out.print("Hora de Início da Actividade(hh:mm): ");
+        horas=ler.nextLine();
+        datas = date.split("-");
+        time=horas.split(":");
+        hora=Integer.parseInt(time[0]);
+         minuto=Integer.parseInt(time[1]);
+        
+        dia = Integer.parseInt(datas[0]);
+        mes = Integer.parseInt(datas[1]);
+        ano = Integer.parseInt(datas[2]);
+        data=new GregorianCalendar(ano, mes, dia, hora, minuto);
+        
+       System.out.println(aux.ConsultarActividade(data));
+       
+        }catch(ActividadeNaoExiste | NaoTemActividades e ){
+            System.out.println(e.getMessage());
+        }
+    }
+    public static int MenuActividades(User aux) throws Excepcoes {
+        Scanner ler=new Scanner(System.in);
+        int op,r;
+        r=1;
+        System.out.println("----ACTIVIDADES----");
+        System.out.println("1 - Registar Actividades");
+        System.out.println("2 - Listar Actividade");
+        System.out.println("3 - Consultar Actividade");
+        System.out.println("4 - Voltar ao menu de utilizador");
+    System.out.print("Opção: ");
+        op=ler.nextInt();
+        try{
+    switch(op){
+        case 1: {
+                    MenuPrincipal.RegistarActividade(aux);
+
+                    r = 1;
+                    break;
+                }
+                case 2: {
+                    try {
+                        System.out.print(aux.ListarActividades());
+                        
+                    } catch (NaoTemActividades e) {
+                        System.out.println(e.getMessage());
+                    }
+                    r = 1;
+                    break;
+                }
+                case 3:{
+                    try {
+                        System.out.print(aux.ListarActividades());
+                        MenuPrincipal.ConsultarActividade(aux);
+                    } catch (NaoTemActividades e) {
+                        System.out.println(e.getMessage());
+                    }
+                    
+                    r=1;
+                    break;
+                }
+                case 4:{
+                    r=0;
+                    break;
+                }
+                default:{
+                    throw new OpcaoInvalida();
+                }
+    }}
+        catch(OpcaoInvalida e){
+            System.out.println(e.getMessage());
+        }
+    return r;
     }
 
     

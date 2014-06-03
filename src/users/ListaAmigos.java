@@ -12,10 +12,10 @@ import java.io.*;
  *
  * @author Mesas
  */
-public class ListadeAmigos implements Serializable{
+public class ListaAmigos implements Serializable{
     private TreeSet<String> friends;
     private ArrayList<String> pedidos;
-    public ListadeAmigos(){
+    public ListaAmigos(){
         friends=new TreeSet<>();
         pedidos=new ArrayList<>();
     }
@@ -34,7 +34,7 @@ for(String s:this.friends){
         }
     return copia;
     }
-    public ListadeAmigos(TreeSet<String> users,ArrayList<String> requests){
+    public ListaAmigos(TreeSet<String> users,ArrayList<String> requests){
         this.friends=new TreeSet<>();
         this.pedidos=new ArrayList<>();
         for(String s:users){
@@ -45,14 +45,14 @@ for(String s:this.friends){
         }
         
     }
-    public ListadeAmigos(ListadeAmigos l){
+    public ListaAmigos(ListaAmigos l){
         this.friends=new TreeSet<>();
         this.pedidos=new ArrayList<>();
         this.friends=l.getFriends();
         this.pedidos=l.getPedidos();
     }
-    public ListadeAmigos clone(){
-        return new ListadeAmigos(this);
+    public ListaAmigos clone(){
+        return new ListaAmigos(this);
     }
     public void AdicionarAmigo(String user) {
         this.friends.add(user);

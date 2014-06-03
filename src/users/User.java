@@ -25,17 +25,17 @@ public class User implements Serializable {
     private double peso;
     private GregorianCalendar data_de_nascimento;
     private String desporto_favorito;
-    private ListadeActividades actividades;
-    private ListadeAmigos friends;
-
+    private ListaActividades actividades;
+    private ListaAmigos friends;
+    private ListaRecordes records;
     public User() {
         email = password = nome = gen = "";
         altura = 1.0;
         peso = 1.0;
         data_de_nascimento = new GregorianCalendar();
         desporto_favorito = "";
-        actividades = new ListadeActividades();
-        friends = new ListadeAmigos();
+        actividades = new ListaActividades();
+        friends = new ListaAmigos();
 
     }
 
@@ -56,11 +56,11 @@ public class User implements Serializable {
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-        this.friends =new ListadeAmigos();
-        this.actividades = new ListadeActividades();
+        this.friends =new ListaAmigos();
+        this.actividades = new ListaActividades();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListadeActividades lista, ListadeAmigos l) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -73,9 +73,9 @@ public class User implements Serializable {
         this.peso = peso;
         this.data_de_nascimento = date;
         this.desporto_favorito = favorito;
-        this.actividades = new ListadeActividades();
+        this.actividades = new ListaActividades();
         this.actividades=lista.clone();
-        this.friends=new ListadeAmigos();
+        this.friends=new ListaAmigos();
         this.friends=l.clone();
         this.data_de_nascimento = new GregorianCalendar();
         this.data_de_nascimento.set(Calendar.DATE, dia);
@@ -121,7 +121,7 @@ public class User implements Serializable {
     /**
      * @return the gen
      */
-    public ListadeActividades getListadeActividades() {
+    public ListaActividades getListadeActividades() {
         return this.actividades.clone();
     }
 
@@ -259,7 +259,7 @@ public class User implements Serializable {
     public String getNome() {
         return nome;
     }
-public ListadeAmigos getListaAmigos(){
+public ListaAmigos getListaAmigos(){
     return this.friends.clone();
 }
     /**
@@ -309,6 +309,10 @@ public void AdicionarAmigo(String user){
 
     public void AdicionarActividade(GeneralActivity g) {
     this.actividades.AdicionarActividade(g);
+    }
+
+    public String ConsultarActividade(GregorianCalendar data) throws Excepcoes{
+    return this.actividades.ConsultarActividade(data);
     }
 }
 

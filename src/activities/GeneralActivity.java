@@ -48,14 +48,8 @@ public abstract class GeneralActivity implements Serializable{
     }
 
     public void setData(GregorianCalendar date) {
-        int dia, mes, ano;
-        this.data = new GregorianCalendar();
-        dia = date.get(Calendar.DATE);
-        mes = date.get(Calendar.MONTH);
-        ano = date.get(Calendar.YEAR);
-        this.data.set(Calendar.DATE, dia);
-        this.data.set(Calendar.MONTH, mes);
-        this.data.set(Calendar.YEAR, ano);
+        int dia, mes, ano,hora,minuto;
+        this.data = date;
     }
 
     /**
@@ -108,15 +102,8 @@ public abstract class GeneralActivity implements Serializable{
     }
 
     public GregorianCalendar getData() {
-        int dia, mes, ano;
-        GregorianCalendar copia = new GregorianCalendar();
-        dia = this.data.get(Calendar.DATE);
-        mes = this.data.get(Calendar.MONTH);
-        ano = this.data.get(Calendar.YEAR);
-        copia.set(Calendar.DATE, dia);
-        copia.set(Calendar.MONTH, mes);
-        copia.set(Calendar.YEAR, ano);
-        return copia;
+       
+        return this.data;
     }
 
     public String toString() {
