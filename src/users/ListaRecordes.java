@@ -6,6 +6,7 @@
 package users;
 
 import activities.*;
+import java.io.Serializable;
 import recordes.*;
 import java.util.*;
 
@@ -13,7 +14,7 @@ import java.util.*;
  *
  * @author mesas
  */
-public class ListaRecordes {
+public class ListaRecordes  implements Serializable{
     
     private TreeMap<String, Recorde> lista;
     

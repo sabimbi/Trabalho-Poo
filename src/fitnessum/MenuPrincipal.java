@@ -42,6 +42,13 @@ public class MenuPrincipal {
     private static int Menu() throws Excepcoes {
         int op, r;
         Scanner ler = new Scanner(System.in);
+System.out.println("  _____ _ _                       _   _ __  __ \n" +
+" |  ___(_) |_ _ __   ___  ___ ___| | | |  \\/  |\n" +
+" | |_  | | __| '_ \\ / _ \\/ __/ __| | | | |\\/| |\n" +
+" |  _| | | |_| | | |  __/\\__ \\__ \\ |_| | |  | |\n" +
+" |_|   |_|\\__|_| |_|\\___||___/___/\\___/|_|  |_|\n" +
+"                                               \n" +
+"");
 
         System.out.println("BEM VINDO AO FITNESSUM!");
         System.out.println("1 - Login");
@@ -79,7 +86,7 @@ public class MenuPrincipal {
                 }
                 case 5: {
                     try {
-                        fitness.gravaObj("fitness");
+                        MenuPrincipal.GravarObjecto();
                     } catch (IOException e) {
                         System.out.println(e.getMessage());
                     }
@@ -88,7 +95,8 @@ public class MenuPrincipal {
                 }
                 case 6: {
                     try {
-                        fitness.gravaTxt("fitness.txt");
+                        MenuPrincipal.GravarTxt();
+                        
                     } catch (IOException e) {
                         System.out.println(e.getMessage());
                     }
@@ -97,7 +105,8 @@ public class MenuPrincipal {
                 }
                 case 7: {
                     try {
-                        fitness.CarregaObj();
+                        MenuPrincipal.CarregarObjecto();
+                        
                     } catch (IOException | ClassNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
@@ -220,7 +229,7 @@ public class MenuPrincipal {
             if (fitness.LoginValido(user, pass) == true) {
 
                 while (resultado != 0) {
-                    fitness.setUserLogado(user);
+                  
                     resultado = MenuPrincipal.MenuUtilizador(user);
                 }
             }
@@ -945,6 +954,30 @@ convertido=(double)minuto/60;
         System.out.println(e.getMessage());
     }
     return r;
+    }
+
+    private static void GravarObjecto() throws IOException {
+    String file;
+    Scanner ler=new Scanner(System.in);
+    System.out.print("Nome do ficheiro onde quer gravar o estado: ");
+    file=ler.nextLine();
+    fitness.gravaObj(file);
+    }
+
+    private static void GravarTxt() throws IOException{
+    String file;
+    Scanner ler=new Scanner(System.in);
+    System.out.print("Nome do ficheiro onde quer gravar o txt: ");
+    file=ler.nextLine();
+    fitness.gravaTxt(file);
+    }
+
+    private static void CarregarObjecto()  throws IOException, ClassNotFoundException {
+    String file;
+    Scanner ler=new Scanner(System.in);
+    System.out.print("Nome do ficheiro de onde quer ler o estado guardado: ");
+    file=ler.nextLine();
+        fitness.CarregaObj(file);
     }
     
 }

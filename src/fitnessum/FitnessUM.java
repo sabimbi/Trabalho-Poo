@@ -18,32 +18,32 @@ import java.io.*;
 public class FitnessUM implements Serializable {
 
     private HashMap<String, User> userlist;
-    private String userlogado;
+    
     private Eventos lista;
     
 
     public FitnessUM() {
         userlist = new HashMap<String, User>();
-        userlogado = "";
+        
         lista = new Eventos();
         
     }
 
-    public FitnessUM(HashMap<String, User> list, String user, Eventos e) {
+    public FitnessUM(HashMap<String, User> list, Eventos e) {
         this.userlist = new HashMap<String, User>();
         this.lista = new Eventos();
         this.lista = e.clone();
         for (String s : list.keySet()) {
             this.userlist.put(s, list.get(s).clone());
         }
-        this.userlogado = user;
+        
         
     }
 
     public FitnessUM(FitnessUM f) {
         this.userlist = new HashMap<String, User>();
         this.userlist = f.getUserlist();
-        this.userlogado = f.getUserLogado();
+        
         this.lista = f.getEventos();
        
     }
@@ -62,13 +62,7 @@ public class FitnessUM implements Serializable {
 
     
 
-    public void setUserLogado(String user) {
-        this.setUserlogado(user);
-    }
-
-    public String getUserLogado() {
-        return getUserlogado();
-    }
+   
 
     public String toString() {
         StringBuilder s = new StringBuilder("-----USERLIST-----\n");
@@ -124,19 +118,7 @@ public class FitnessUM implements Serializable {
         }
     }
 
-    /**
-     * @return the userlogado
-     */
-    public String getUserlogado() {
-        return userlogado;
-    }
-
-    /**
-     * @param userlogado the userlogado to set
-     */
-    public void setUserlogado(String userlogado) {
-        this.userlogado = userlogado;
-    }
+   
 
     public Eventos getEventos() {
         return this.lista.clone();
@@ -147,7 +129,6 @@ public class FitnessUM implements Serializable {
                 new FileOutputStream(fich));
         oos.writeObject(this.userlist);
         oos.writeObject(this.lista);
-        oos.writeObject(this.userlogado);
         oos.flush();
         oos.close();
     }
@@ -161,13 +142,13 @@ public class FitnessUM implements Serializable {
 
     }
 
-    public void CarregaObj() throws IOException, ClassNotFoundException {
-        InputStream file = new FileInputStream("fitness");
+    public void CarregaObj(String fich) throws IOException, ClassNotFoundException {
+        InputStream file = new FileInputStream(fich);
         InputStream buffer = new BufferedInputStream(file);
         ObjectInput input = new ObjectInputStream(buffer);
         this.userlist = (HashMap<String, User>) input.readObject();
         this.lista = (Eventos) input.readObject();
-        this.userlogado = input.readUTF();
+        
     }
 
     public void RemoverUtilizador(String user) {

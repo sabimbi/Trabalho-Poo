@@ -5,6 +5,7 @@
  */
 package comparators;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 
@@ -12,7 +13,7 @@ import java.util.GregorianCalendar;
  *
  * @author Dimz
  */
-public class DateComparator implements Comparator<GregorianCalendar> {
+public class DateComparator implements Comparator<GregorianCalendar>,Serializable {
 
     @Override
     public int compare(GregorianCalendar a,GregorianCalendar b) {

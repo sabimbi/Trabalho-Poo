@@ -7,12 +7,13 @@
 package recordes;
 
 import activities.GeneralActivity;
+import java.io.Serializable;
 
 /**
  *
  * @author Mesas
  */
-public abstract class Recorde {
+public abstract class Recorde implements Serializable{
     private String nome;
    
     private double maiorcal;
