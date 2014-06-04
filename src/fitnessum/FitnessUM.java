@@ -9,24 +9,24 @@ package fitnessum;
  *
  * @author Mesas
  */
-
 import events.*;
 import java.util.*;
 import users.*;
 import exceptions.*;
 import java.io.*;
 
-public class FitnessUM implements Serializable{
+public class FitnessUM implements Serializable {
 
     private HashMap<String, User> userlist;
     private String userlogado;
     private Eventos lista;
+    
 
     public FitnessUM() {
         userlist = new HashMap<String, User>();
         userlogado = "";
         lista = new Eventos();
-
+        
     }
 
     public FitnessUM(HashMap<String, User> list, String user, Eventos e) {
@@ -37,6 +37,7 @@ public class FitnessUM implements Serializable{
             this.userlist.put(s, list.get(s).clone());
         }
         this.userlogado = user;
+        
     }
 
     public FitnessUM(FitnessUM f) {
@@ -44,6 +45,7 @@ public class FitnessUM implements Serializable{
         this.userlist = f.getUserlist();
         this.userlogado = f.getUserLogado();
         this.lista = f.getEventos();
+       
     }
 
     public FitnessUM clone() {
@@ -57,6 +59,8 @@ public class FitnessUM implements Serializable{
         }
         return copia;
     }
+
+    
 
     public void setUserLogado(String user) {
         this.setUserlogado(user);
@@ -75,7 +79,7 @@ public class FitnessUM implements Serializable{
         for (String str : users) {
             s.append(str + "\n");
         }
-        s.append("Nr de Users: " + this.getUserlist().size());
+        s.append("Nr de Users: " + this.getUserlist().size()+"\n");
         return s.toString();
     }
 
@@ -137,29 +141,47 @@ public class FitnessUM implements Serializable{
     public Eventos getEventos() {
         return this.lista.clone();
     }
-public void gravaObj(String fich) throws IOException {
-      ObjectOutputStream oos = new ObjectOutputStream(
-                                new FileOutputStream(fich));
-      oos.writeObject(this.userlist);
-      oos.writeObject(this.lista);
-      oos.writeObject(this.userlogado);
-      oos.flush(); oos.close();
-  }
-  
-  public void gravaTxt(String fich) throws IOException {
-      
-      PrintWriter pw = new PrintWriter(fich);
-      pw.print(this);
-      pw.flush(); pw.close();
-      
-  }
 
-    public void CarregaObj() throws IOException,ClassNotFoundException{
-        InputStream file = new FileInputStream("fitness");
-      InputStream buffer = new BufferedInputStream(file);
-      ObjectInput input = new ObjectInputStream (buffer);
-       this.userlist=(HashMap<String, User>)input.readObject();
-       this.lista=(Eventos)input.readObject();
-       this.userlogado=input.readUTF();
+    public void gravaObj(String fich) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(
+                new FileOutputStream(fich));
+        oos.writeObject(this.userlist);
+        oos.writeObject(this.lista);
+        oos.writeObject(this.userlogado);
+        oos.flush();
+        oos.close();
     }
+
+    public void gravaTxt(String fich) throws IOException {
+
+        PrintWriter pw = new PrintWriter(fich);
+        pw.print(this);
+        pw.flush();
+        pw.close();
+
+    }
+
+    public void CarregaObj() throws IOException, ClassNotFoundException {
+        InputStream file = new FileInputStream("fitness");
+        InputStream buffer = new BufferedInputStream(file);
+        ObjectInput input = new ObjectInputStream(buffer);
+        this.userlist = (HashMap<String, User>) input.readObject();
+        this.lista = (Eventos) input.readObject();
+        this.userlogado = input.readUTF();
+    }
+
+    public void RemoverUtilizador(String user) {
+        this.userlist.remove(user);
+    }
+
+    public String ListarEventos() {
+    return this.lista.toString();
+    }
+
+   public void RemoverEvento(String event) throws Excepcoes {
+    if(this.lista.ExisteEvento(event)==false){
+        throw new EventoNaoExiste(event);
+    }else{
+       this.lista.RemoverEvento(event);
+   }}
 }

@@ -5,6 +5,7 @@
  */
 package fitnessum;
 
+import exceptions.EventoNaoExiste;
 import events.*;
 import activities.*;
 import exceptions.*;
@@ -77,30 +78,30 @@ public class MenuPrincipal {
                     break;
                 }
                 case 5: {
-                    try{
-                    fitness.gravaObj("fitness");}
-                    catch(IOException e){
+                    try {
+                        fitness.gravaObj("fitness");
+                    } catch (IOException e) {
                         System.out.println(e.getMessage());
                     }
                     r = 1;
                     break;
                 }
                 case 6: {
-                    try{
-                    fitness.gravaTxt("fitness.txt");}
-                    catch(IOException e){
+                    try {
+                        fitness.gravaTxt("fitness.txt");
+                    } catch (IOException e) {
                         System.out.println(e.getMessage());
                     }
                     r = 1;
                     break;
                 }
                 case 7: {
-                    try{
-                    fitness.CarregaObj();}
-                    catch(IOException |ClassNotFoundException e){
+                    try {
+                        fitness.CarregaObj();
+                    } catch (IOException | ClassNotFoundException e) {
                         System.out.println(e.getMessage());
                     }
-                    r=1;
+                    r = 1;
                     break;
                 }
                 case 8: {
@@ -122,16 +123,17 @@ public class MenuPrincipal {
         int op, r;
 
         Scanner ler = new Scanner(System.in);
-        int dia,mes,ano,hora,minuto;
-        String date,horas;
-        String[] datas,time;
+        int dia, mes, ano, hora, minuto;
+        String date, horas;
+        String[] datas, time;
         System.out.println("-----MENU UTILIZADOR-----");
         System.out.println("1 - Ver Perfil");
         System.out.println("2 - Mudar informações");
-        System.out.println("3 - Adicionar Amigo");
-        System.out.println("4 - Ver Amigos");
-        System.out.println("5 - Actividades");
-        System.out.println("6 - Logout");
+        System.out.println("3 - Amigos");
+        System.out.println("4 - Actividades");
+        System.out.println("5 - Eventos");
+        System.out.println("6 - Recordes");
+        System.out.println("7 - Logout");
         System.out.print("Opção: ");
         r = op = 2;
         User aux;
@@ -157,30 +159,35 @@ public class MenuPrincipal {
 
                 case 3: {
                     while (r != 0) {
-                        r = MenuPrincipal.AdicionarAmigo(aux);
+                        r = MenuPrincipal.MenuAmigos(aux);
                     }
 
                     r = 1;
                     break;
                 }
-                case 4: {
+                
+                case 4:{
                     while (r != 0) {
-                        r = MenuPrincipal.FriendsList(aux);
+                        r = MenuPrincipal.MenuActividades(aux);
                     }
-
                     r = 1;
                     break;
                 }
-                case 5: {
-                    while(r!=0){
-                        r=MenuPrincipal.MenuActividades(aux);
-                    }
-                    r = 1;
+                case 5:{
+                    r=1;
                     break;
                 }
                 case 6:{
-                    r=0;
+                    while(r!=0){
+                        r=MenuPrincipal.MenuRecordes(aux);
+                    }
+                    r=1;
+                    break;
+                }
+                case 7: {
+                    r = 0;
                     fitness.AdicionaUser(aux);
+                    break;
                 }
                 default: {
                     throw new OpcaoInvalida();
@@ -205,15 +212,21 @@ public class MenuPrincipal {
         System.out.print("Password: ");
         pass = ler.nextLine();
         try {
+            if(user.equals("admin")== true && pass.equals("admin")==true){
+                    while(resultado!=0){
+                        resultado=MenuPrincipal.MenuAdmin();
+                    }
+                }else{
             if (fitness.LoginValido(user, pass) == true) {
 
                 while (resultado != 0) {
                     fitness.setUserLogado(user);
                     resultado = MenuPrincipal.MenuUtilizador(user);
                 }
-
+            }
             }
 
+            
         } catch (UserNaoExiste e) {
             System.out.println(e.getMessage());
 
@@ -282,7 +295,7 @@ public class MenuPrincipal {
             dia = Integer.parseInt(aux[0]);
             mes = Integer.parseInt(aux[1]);
             ano = Integer.parseInt(aux[2]);
-            data=new GregorianCalendar(ano, mes, dia);
+            data = new GregorianCalendar(ano, mes, dia);
             u = new User(email, nome, pass1, genero, altura, peso, favsport, data);
             fitness.AdicionaUser(u);
         } catch (UserInvalido | PassInvalida | DataInvalida | AlturaInvalida | PesoInvalido user) {
@@ -293,7 +306,7 @@ public class MenuPrincipal {
     }
 
     private static void PrintUserList() {
-        System.out.println(fitness.toString());
+        System.out.print(fitness.toString());
     }
 
     private static int MenuInf(User u) {
@@ -358,7 +371,7 @@ public class MenuPrincipal {
                     u.setPassword(pass1);
                 }
                 case 5: {
-fitness.AdicionaUser(u);
+                    fitness.AdicionaUser(u);
                     r = 0;
                     break;
                 }
@@ -374,6 +387,54 @@ fitness.AdicionaUser(u);
         return r;
     }
 
+    private static int MenuAdmin() throws Excepcoes {
+        Scanner ler = new Scanner(System.in);
+        int op, r;
+        String user, event;
+        op = r = 1;
+        System.out.println("-------MENU ADMIN-------");
+        System.out.println("1 - Remover Utilizador");
+        System.out.println("2 - Remover Evento");
+        System.out.println("3 - Logout");
+        System.out.print("Opção: ");
+        op = ler.nextInt();
+        try {
+            switch (op) {
+                case 1: {
+
+                    System.out.print(fitness.toString());
+                    System.out.print("Utilizador a remover: ");
+                    ler.nextLine();
+                    user = ler.nextLine();
+                    if (fitness.ExisteUser(user) == true) {
+                        fitness.RemoverUtilizador(user);
+                    }
+                    r = 1;
+                    break;
+                }
+                case 2: {
+
+                    System.out.print(fitness.ListarEventos());
+                    ler.nextLine();
+                    event = ler.nextLine();
+                    fitness.RemoverEvento(event);
+                    r = 1;
+                    break;
+                }
+                case 3: {
+                    r = 0;
+                    break;
+                }
+                default: {
+                    throw new OpcaoInvalida();
+                }
+            }
+        } catch (OpcaoInvalida | EventoNaoExiste | UserNaoExiste e) {
+            System.out.println(e.getMessage());
+        }
+    return r;
+    }
+
     private static int AdicionarAmigo(User u) throws Excepcoes {
         String user;
         Scanner ler = new Scanner(System.in);
@@ -383,11 +444,11 @@ fitness.AdicionaUser(u);
         User aux;
         try {
             if (fitness.ExisteUser(user) == true) {
-                aux=fitness.getUser(user);
+                aux = fitness.getUser(user);
                 u.AdicionarAmigo(user);
                 aux.AdicionarAmigo(u.getEmail());
-fitness.AdicionaUser(aux);
-fitness.AdicionaUser(u);
+                fitness.AdicionaUser(aux);
+                fitness.AdicionaUser(u);
             }
 
         } catch (UserNaoExiste e) {
@@ -395,7 +456,29 @@ fitness.AdicionaUser(u);
         }
         return 0;
     }
+private static int RemoverAmigo(User u) throws Excepcoes {
+        String user;
+        Scanner ler = new Scanner(System.in);
+        
+        
+        User aux;
+        try {
+            System.out.println(u.MostrarFriendsList());
+            System.out.print("User: ");
+        user = ler.nextLine();
+            if (fitness.ExisteUser(user) == true) {
+                aux = fitness.getUser(user);
+                u.RemoverAmigo(user);
+                aux.RemoverAmigo(u.getEmail());
+                fitness.AdicionaUser(aux);
+                fitness.AdicionaUser(u);
+            }
 
+        } catch (UserNaoExiste e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
     private static int FriendsList(User u) throws Excepcoes {
         String user;
         Scanner ler = new Scanner(System.in);
@@ -407,9 +490,9 @@ fitness.AdicionaUser(u);
 
             user = ler.nextLine();
             if (fitness.ExisteUser(user) == true) {
-                
+
                 while (r != 0) {
-                    r = MenuPrincipal.MenuAmigos(user);
+                    r = MenuPrincipal.MenuAmigo(user);
                 }
             }
 
@@ -420,12 +503,12 @@ fitness.AdicionaUser(u);
     }
 
     private static void RegistarActividade(User u) {
-        String tipo, date, duracao,horas;
-        int dia, mes, ano,hora,minuto;
+        String tipo, date, duracao, horas;
+        int dia, mes, ano, hora, minuto;
         Double cal, hidration, duration;
         Scanner ler = new Scanner(System.in);
-        GregorianCalendar data ;
-        String[] datas,time;
+        GregorianCalendar data;
+        String[] datas, time;
         MenuPrincipal.ListarDesportos();
         ArrayList<String> distance, sports, altitude, others;
         distance = new ArrayList<>(Arrays.asList(distancia));
@@ -445,19 +528,19 @@ fitness.AdicionaUser(u);
         ler.nextLine();
         date = ler.nextLine();
         System.out.print("Hora de Início da Actividade(hh:mm): ");
-        horas=ler.nextLine();
+        horas = ler.nextLine();
         datas = date.split("-");
-        time=horas.split(":");
-        hora=Integer.parseInt(time[0]);
-        minuto=Integer.parseInt(time[1]);
-        
+        time = horas.split(":");
+        hora = Integer.parseInt(time[0]);
+        minuto = Integer.parseInt(time[1]);
+
         dia = Integer.parseInt(datas[0]);
         mes = Integer.parseInt(datas[1]);
         ano = Integer.parseInt(datas[2]);
-        data=new GregorianCalendar(ano, mes, dia, hora, minuto);
-        
-        duration = MenuPrincipal.ConverterParaHoras(duracao);
-        
+        data = new GregorianCalendar(ano, mes, dia, hora, minuto);
+
+       
+
         try {
             if (distance.contains(tipo)) {
                 MenuPrincipal.ActividadeDistancia(u, data, tipo, duracao, hidration);
@@ -476,7 +559,7 @@ fitness.AdicionaUser(u);
                     }
                 }
             }
-        fitness.AdicionaUser(u);
+            fitness.AdicionaUser(u);
         } catch (TipoNaoExiste e) {
             System.out.println(e.getMessage());
         }
@@ -499,14 +582,21 @@ fitness.AdicionaUser(u);
     private static void ActividadeDistancia(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
         double avgspd, maxspd, distancia, cal, peso, altura, bmr, duracao;
         int idade;
+        int hora,minuto;
+        double convertido;
+        String[] time;
+        time=duration.split(":");
+        hora=Integer.parseInt(time[0]);
+        minuto=Integer.parseInt(time[1]);
+        convertido=((double)minuto)/60;
+        convertido+=(double)hora;
         Scanner ler = new Scanner(System.in);
         GeneralActivity g;
         String genero;
         System.out.print("Distância(em KM): ");
-        distancia = ler.nextDouble();
-        duracao = MenuPrincipal.ConverterParaHoras(duration);
-        avgspd = distancia / duracao;
-        maxspd = ((avgspd * avgspd) / (2 * distancia)) * duracao;
+        distancia=ler.nextDouble();
+        avgspd = distancia / convertido;
+        maxspd = ((avgspd * avgspd) / (2 * distancia)) * convertido;
         peso = u.getPeso();
         altura = u.getAltura();
         genero = u.getGen();
@@ -517,34 +607,39 @@ fitness.AdicionaUser(u);
             bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
         }
         cal = bmr * 1.55;
-        g = new Distancia(date, tipo, cal, duration, hidration, distancia, maxspd, avgspd);
+        g = new Distancia(date, tipo, cal,hidration, distancia, maxspd, avgspd,hora,minuto);
         u.AdicionarActividade(g);
+        u.ActualizarRecorde(g);
 
     }
 
     private static void ActividadeAltitude(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
-    double avgspd, maxspd, distancia, cal, peso, altura, bmr, duracao,altmax,altmin,maxdesc,mindesc;
-        int idade;
+        double avgspd, maxspd, distancia, cal, peso, altura, bmr, altmax, altmin, maxdesc, mindesc,convertido;
+        int idade,hora,minuto;
+        String time[]=duration.split("-");
+        hora=Integer.parseInt(time[0]);
+        minuto=Integer.parseInt(time[1]);
         Scanner ler = new Scanner(System.in);
         GeneralActivity g;
-        String genero,tempo;
+        String genero, tempo;
         System.out.print("Distância(em KM): ");
         distancia = ler.nextDouble();
         ler.nextLine();
         System.out.print("Tempo: ");
-        tempo=ler.nextLine();
+        tempo = ler.nextLine();
         System.out.print("Altitude máxima(em metros): ");
-        
+
         altmax = ler.nextDouble();
         System.out.print("Altitude mínima(em metros): ");
-        altmin= ler.nextDouble();
+        altmin = ler.nextDouble();
         System.out.print("Descida máxima(em metros): ");
         maxdesc = ler.nextDouble();
         System.out.print("Descida mínima(em metros): ");
         mindesc = ler.nextDouble();
-        duracao = MenuPrincipal.ConverterParaHoras(duration);
-        avgspd = distancia / duracao;
-        maxspd = ((avgspd * avgspd) / (2 * distancia)) * duracao;
+        convertido=minuto/60;
+        convertido+=(double)hora;
+        avgspd = distancia / convertido;
+        maxspd = ((avgspd * avgspd) / (2 * distancia)) * convertido;
         peso = u.getPeso();
         altura = u.getAltura();
         genero = u.getGen();
@@ -555,24 +650,28 @@ fitness.AdicionaUser(u);
             bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
         }
         cal = bmr * 1.55;
-        g=new Altitude(date, tipo, cal, duration, hidration, altmax, altmin, maxdesc, mindesc, distancia, maxspd, avgspd, tempo);
+        g = new Altitude(date, tipo, cal,hidration, altmax, altmin, maxdesc, mindesc, distancia, maxspd, avgspd, tempo,hora,minuto);
         u.AdicionarActividade(g);
     }
 
     private static void ActividadeDesporto(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
-    double avgspd, maxspd, distancia, cal, peso, altura, bmr, duracao;
-        int idade;
+        double avgspd, maxspd, distancia, cal, peso, altura, bmr, convertido;
+        int idade,hora,minuto;
+        String time[]=duration.split("-");
+        hora=Integer.parseInt(time[0]);
+        minuto=Integer.parseInt(time[1]);
         Scanner ler = new Scanner(System.in);
         GeneralActivity g;
-        String genero,resultado;
+        String genero, resultado;
         System.out.print("Distância(em KM): ");
         distancia = ler.nextDouble();
         ler.nextLine();
-        System.out.print("Resultado(Victoria ou Derrota): ");
-        resultado=ler.nextLine();
-        duracao = MenuPrincipal.ConverterParaHoras(duration);
-        avgspd = distancia / duracao;
-        maxspd = ((avgspd * avgspd) / (2 * distancia)) * duracao;
+        System.out.print("Resultado(Victória/Derrota/Empate): ");
+        resultado = ler.nextLine();
+        convertido=(double)minuto/60;
+        convertido+=(double )hora;
+        avgspd = distancia / convertido;
+        maxspd = ((avgspd * avgspd) / (2 * distancia)) * convertido;
         peso = u.getPeso();
         altura = u.getAltura();
         genero = u.getGen();
@@ -583,17 +682,20 @@ fitness.AdicionaUser(u);
             bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
         }
         cal = bmr * 1.55;
-        g = new Desporto(date, tipo, cal, duration, hidration, distancia, resultado);
+        g = new Desporto(date, tipo, cal, hidration, distancia, resultado,avgspd,maxspd,hora,minuto);
         u.AdicionarActividade(g);
     }
 
     private static void ActividadeOutros(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
-    double cal, peso, altura, bmr, duracao;
-    String genero;
-    int idade;
-    GeneralActivity g;
-    duracao = MenuPrincipal.ConverterParaHoras(duration);
-        
+        double cal, peso, altura, bmr, convertido;
+        String genero;
+        int idade,hora,minuto;
+        GeneralActivity g;
+        String time[]=duration.split("-");
+        hora=Integer.parseInt(time[0]);
+        minuto=Integer.parseInt(time[1]);
+convertido=(double)minuto/60;
+        convertido+=(double )hora;
         peso = u.getPeso();
         altura = u.getAltura();
         genero = u.getGen();
@@ -604,19 +706,20 @@ fitness.AdicionaUser(u);
             bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
         }
         cal = bmr * 1.55;
-        g=new Outros(date, tipo, cal, duration, hidration);
+        g = new Outros(date, tipo, cal, hidration,hora,minuto);
         u.AdicionarActividade(g);
     }
 
-    private static int MenuAmigos(String user) throws Excepcoes {
+    private static int MenuAmigo(String user) throws Excepcoes {
         Scanner ler = new Scanner(System.in);
         int op, r;
         r = 1;
-        User aux=fitness.getUser(user);
+        User aux = fitness.getUser(user);
         System.out.println("-----Perfil de " + aux.getNome() + "-----");
         System.out.println("1 - Ver perfil");
         System.out.println("2 - Ver actividades");
-        System.out.println("3 - Voltar atrás");
+        System.out.println("3 - Consultar Actividades");
+        System.out.println("4 - Voltar atrás");
         System.out.print("Opção: ");
         op = ler.nextInt();
         try {
@@ -627,15 +730,23 @@ fitness.AdicionaUser(u);
                     break;
                 }
                 case 2: {
-                    try {
-                        System.out.print(aux.ListarActividades());
-                    } catch (NaoTemActividades e) {
-                        System.out.println(e.getMessage());
-                    }
+                    
+
+                    System.out.print(aux.ListarActividades());
+
                     r = 1;
                     break;
                 }
                 case 3: {
+
+                    System.out.print(aux.ListarActividades());
+                    MenuPrincipal.ConsultarActividade(aux);
+
+                    r = 1;
+                    break;
+                }
+                
+                case 4: {
                     r = 0;
                     break;
                 }
@@ -647,7 +758,7 @@ fitness.AdicionaUser(u);
 
             }
             return r;
-        } catch (OpcaoInvalida e) {
+        } catch (OpcaoInvalida | NaoTemActividades | ActividadeNaoExiste e) {
             System.out.println(e.getMessage());
             return r;
         }
@@ -662,90 +773,178 @@ fitness.AdicionaUser(u);
         horas += minutos;
         return horas;
     }
-    private static void ConsultarActividade(User aux) throws Excepcoes{
-        int dia,mes,ano,hora,minuto; 
-        String date,horas,detalhes;
-        String[] datas,time;
+
+    private static void ConsultarActividade(User aux) throws Excepcoes {
+        int dia, mes, ano, hora, minuto;
+        String date, horas, detalhes;
+        String[] datas, time;
         GregorianCalendar data;
-        GeneralActivity g=null;
-        Scanner ler=new Scanner(System.in);
-        try{
-            
-        System.out.print("Data de realização(dd-mm-aa): ");
-        
-        date = ler.nextLine();
-        System.out.print("Hora de Início da Actividade(hh:mm): ");
-        horas=ler.nextLine();
-        datas = date.split("-");
-        time=horas.split(":");
-        hora=Integer.parseInt(time[0]);
-         minuto=Integer.parseInt(time[1]);
-        
-        dia = Integer.parseInt(datas[0]);
-        mes = Integer.parseInt(datas[1]);
-        ano = Integer.parseInt(datas[2]);
-        data=new GregorianCalendar(ano, mes, dia, hora, minuto);
-        
-       System.out.println(aux.ConsultarActividade(data));
-       
-        }catch(ActividadeNaoExiste | NaoTemActividades e ){
+        GeneralActivity g = null;
+        Scanner ler = new Scanner(System.in);
+        try {
+
+            System.out.print("Data de realização(dd-mm-aa): ");
+
+            date = ler.nextLine();
+            System.out.print("Hora de Início da Actividade(hh:mm): ");
+            horas = ler.nextLine();
+            datas = date.split("-");
+            time = horas.split(":");
+            hora = Integer.parseInt(time[0]);
+            minuto = Integer.parseInt(time[1]);
+
+            dia = Integer.parseInt(datas[0]);
+            mes = Integer.parseInt(datas[1]);
+            ano = Integer.parseInt(datas[2]);
+            data = new GregorianCalendar(ano, mes, dia, hora, minuto);
+
+            System.out.println(aux.ConsultarActividade(data));
+
+        } catch (ActividadeNaoExiste | NaoTemActividades e) {
             System.out.println(e.getMessage());
         }
     }
-    public static int MenuActividades(User aux) throws Excepcoes {
-        Scanner ler=new Scanner(System.in);
-        int op,r;
-        r=1;
+
+    private static int MenuActividades(User aux) throws Excepcoes {
+        Scanner ler = new Scanner(System.in);
+        int op, r;
+        r = 1;
         System.out.println("----ACTIVIDADES----");
         System.out.println("1 - Registar Actividades");
         System.out.println("2 - Listar Actividade");
         System.out.println("3 - Consultar Actividade");
         System.out.println("4 - Voltar ao menu de utilizador");
-    System.out.print("Opção: ");
-        op=ler.nextInt();
-        try{
-    switch(op){
-        case 1: {
+        System.out.print("Opção: ");
+        op = ler.nextInt();
+        try {
+            switch (op) {
+                case 1: {
                     MenuPrincipal.RegistarActividade(aux);
 
                     r = 1;
                     break;
                 }
                 case 2: {
-                    try {
-                        System.out.print(aux.ListarActividades());
-                        
-                    } catch (NaoTemActividades e) {
-                        System.out.println(e.getMessage());
-                    }
+
+                    System.out.print(aux.ListarActividades());
+
                     r = 1;
                     break;
                 }
-                case 3:{
-                    try {
-                        System.out.print(aux.ListarActividades());
-                        MenuPrincipal.ConsultarActividade(aux);
-                    } catch (NaoTemActividades e) {
-                        System.out.println(e.getMessage());
-                    }
-                    
-                    r=1;
+                case 3: {
+
+                    System.out.print(aux.ListarActividades());
+                    MenuPrincipal.ConsultarActividade(aux);
+
+                    r = 1;
                     break;
                 }
-                case 4:{
-                    r=0;
+                case 4: {
+                    r = 0;
                     break;
                 }
-                default:{
+                default: {
                     throw new OpcaoInvalida();
                 }
-    }}
-        catch(OpcaoInvalida e){
+            }
+        } catch (OpcaoInvalida | NaoTemActividades e) {
             System.out.println(e.getMessage());
         }
-    return r;
+        return r;
+
+    }
+    private static int MenuAmigos(User aux) throws Excepcoes{
+        Scanner ler=new Scanner(System.in);
+        int op,r;
+        
+        op=r=1;
+        System.out.println("----AMIGOS----");
+        System.out.println("1 - Adicionar Amigos");
+        System.out.println("2 - Ver Amigos");
+        System.out.println("3 - Remover Amigos");
+        System.out.println("4 - Voltar atrás");
+        System.out.print("Opção: ");
+        op=ler.nextInt();
+        try{
+        switch(op){
+            case 1:{
+            while (r != 0) {
+                        r = MenuPrincipal.AdicionarAmigo(aux);
+                    }
+                    r = 1;
+                    break;
+        }
+            case 2:{
+                while (r != 0) {
+                        r = MenuPrincipal.FriendsList(aux);
+                    }
+                r=1;
+                break;
+            }
+            case 3:{
+                while (r != 0) {
+                        r = MenuPrincipal.RemoverAmigo(aux);
+                    }
+                r=1;
+                break;
+            }
+            case 4:{
+                r=0;
+                break;
+            }
+            default:{
+                throw new OpcaoInvalida();
+            }
+        }
+        }catch(NaoTemAmigos | UserNaoExiste e ){
+            System.out.println(e.getMessage());
+        }
+        return r;
     }
 
+    private static int MenuRecordes(User aux) throws Excepcoes {
+    Scanner ler=new Scanner(System.in);
+    String nome;
+    int op=1,r=1;
+    System.out.println("------RECORDES------");
+    System.out.println("1 - Listar Recordes");
+    System.out.println("2 - Consultar Recordes");
+    System.out.println("3 - Voltar atrás");
+    System.out.print("Opção: ");
+    op=ler.nextInt();
     
-
+    try{
+        switch(op){
+            case 1:{
+                System.out.print(aux.ListarRecordes());
+            r=1;
+            break;
+            }
+            case 2:{
+               System.out.print(aux.ListarRecordes());
+               System.out.print("Tipo do Recorde: ");
+               ler.nextLine();
+               nome=ler.nextLine();
+               if(aux.ExisteRecorde(nome)==false){
+              throw new RecordeNaoExistente(nome);     
+               }else{
+               System.out.print(aux.ConsultarRecorde(nome));
+            }
+            r=1;
+            break;
+            }
+            case 3:{
+                r=0;
+                break;
+            }
+            default:{
+                throw new OpcaoInvalida();
+            }
+        }
+    }catch(NaoTemActividades | RecordeNaoExistente | OpcaoInvalida e){
+        System.out.println(e.getMessage());
+    }
+    return r;
+    }
+    
 }

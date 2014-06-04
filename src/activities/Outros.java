@@ -17,12 +17,12 @@ public class Outros extends GeneralActivity {
         super();
     }
 
-    public Outros(GregorianCalendar date, String nome, double calories, String duration, double hidration) {
-        super(date, nome, calories, duration, hidration);
+    public Outros(GregorianCalendar date, String nome, double calories,double hidration,int hora,int minuto) {
+        super(date, nome, calories,hidration,hora,minuto);
     }
 
     public Outros(Outros o) {
-        super(o.getData(), o.getNome(), o.getCalories(), o.getDuration(), o.getHidration());
+        super(o.getData(), o.getNome(), o.getCalories(), o.getHidration(),o.getHora(),o.getMinuto());
     }
 
     public Outros clone() {

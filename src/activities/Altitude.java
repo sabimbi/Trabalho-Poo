@@ -27,8 +27,8 @@ public class Altitude extends GeneralActivity {
     weather="";
     }
 
-    public Altitude(GregorianCalendar date, String nome, double cal, String duration, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia,String tempo) {
-        super(date, nome, cal, duration, hidration);
+    public Altitude(GregorianCalendar date, String nome, double cal, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia,String tempo,int hora,int minuto) {
+        super(date, nome, cal, hidration,hora,minuto);
         this.altitudemax = altitudemax;
         this.altitudemin = altitudemin;
         this.distanciadescida = distanciadescida;
@@ -40,7 +40,7 @@ public class Altitude extends GeneralActivity {
     }
 
     public Altitude(Altitude a) {
-        super(a.getData(), a.getNome(), a.getCalories(), a.getDuration(), a.getHidration());
+        super(a.getData(), a.getNome(), a.getCalories(), a.getHidration(),a.getHora(),a.getMinuto());
         this.altitudemax = a.getAltitudemax();
         this.altitudemin = a.getAltitudemin();
         this.distanciadescida = a.getDistanciadescida();

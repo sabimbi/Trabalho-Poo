@@ -24,15 +24,15 @@ public class Distancia extends GeneralActivity {
         velocidademedia = 0.0;
     }
 
-    public Distancia(GregorianCalendar date, String nome, double cal, String duration, double hidration, double distance, double velocidademax, double velocidademedia) {
-        super(date, nome, cal, duration, hidration);
+    public Distancia(GregorianCalendar date, String nome, double cal, double hidration, double distance, double velocidademax, double velocidademedia,int hora,int minuto) {
+        super(date, nome, cal, hidration,hora,minuto);
         this.distancia = distance;
         this.velocidademax = velocidademax;
         this.velocidademedia = velocidademedia;
     }
 
     public Distancia(Distancia d) {
-        super(d.getData(), d.getNome(), d.getCalories(), d.getDuration(), d.getHidration());
+        super(d.getData(), d.getNome(), d.getCalories(), d.getHidration(),d.getHora(),d.getMinuto());
         this.distancia = d.getDistancia();
         this.velocidademax = d.getVelocidademax();
         this.velocidademedia = d.getVelocidademedia();

@@ -23,16 +23,20 @@ public class Desporto extends GeneralActivity {
         resultado = "";
     }
 
-    public Desporto(GregorianCalendar date, String nome, double cal, String duration, double hidration, double distance, String result) {
-        super(date, nome, cal, duration, hidration);
+    public Desporto(GregorianCalendar date, String nome, double cal, double hidration, double distance, String result,double avgspd,double maxspd,int hora,int minuto) {
+        super(date, nome, cal, hidration,hora,minuto);
         this.resultado = result;
         this.distancia = distance;
+        this.avgspd=avgspd;
+        this.maxspd=maxspd;
     }
 
     public Desporto(Desporto a) {
-        super(a.getData(), a.getNome(), a.getCalories(), a.getDuration(), a.getHidration());
+        super(a.getData(), a.getNome(), a.getCalories(), a.getHidration(),a.getHora(),a.getMinuto());
         this.resultado = a.getResultado();
         this.distancia = a.getDistancia();
+        this.avgspd=a.getAvgspd();
+        this.maxspd=a.getMaxspd();
     }
 
     public Desporto clone() {
@@ -44,6 +48,8 @@ public class Desporto extends GeneralActivity {
         s.append(super.toString());
         s.append("Distância: " + this.distancia + "km\n");
         s.append("Resultado: " + this.resultado + "\n");
+        s.append("Velocidade Máxima: " + this.maxspd + "\n");
+        s.append("Velocidade Média: " + this.avgspd + "\n");
 
         return s.toString();
     }
@@ -74,5 +80,33 @@ public class Desporto extends GeneralActivity {
      */
     public void setResultado(String resultado) {
         this.resultado = resultado;
+    }
+
+    /**
+     * @return the avgspd
+     */
+    public double getAvgspd() {
+        return avgspd;
+    }
+
+    /**
+     * @return the maxspd
+     */
+    public double getMaxspd() {
+        return maxspd;
+    }
+
+    /**
+     * @param avgspd the avgspd to set
+     */
+    public void setAvgspd(double avgspd) {
+        this.avgspd = avgspd;
+    }
+
+    /**
+     * @param maxspd the maxspd to set
+     */
+    public void setMaxspd(double maxspd) {
+        this.maxspd = maxspd;
     }
 }

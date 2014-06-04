@@ -6,6 +6,8 @@
 
 package recordes;
 
+import activities.Altitude;
+
 /**
  *
  * @author Mesas
@@ -23,8 +25,8 @@ public class RecordeAltitude extends Recorde {
         super();
         maxaltitudemax=maxaltitudemin=maxdistancia=maxdistanciadescida=maxdistanciasubida=maxvelocidademax=maxvelocidademedia=0.0;
     }
-    public RecordeAltitude(String nome,String maiordur,double maxcal,double maxhidrat,double maxalt,double minalt,double maxdistsub,double maxdistdesc,double maxdist,double maxspd,double avgspd){
-        super(nome, maiordur, maxcal, maxhidrat);
+    public RecordeAltitude(String nome,int hora,int minuto,double maxcal,double maxhidrat,double maxalt,double minalt,double maxdistsub,double maxdistdesc,double maxdist,double maxspd,double avgspd){
+        super(nome,hora,minuto,maxcal, maxhidrat);
         this.maxaltitudemax=maxalt;
         this.maxaltitudemin=minalt;
         this.maxdistanciadescida=maxdistdesc;
@@ -34,7 +36,7 @@ public class RecordeAltitude extends Recorde {
         this.maxvelocidademedia=avgspd;
     }
 public RecordeAltitude(RecordeAltitude r){
-    super(r.getNome(), r.getMaiorduration(), r.getMaiorcal(), r.getMaiorhidrat());
+    super(r.getNome(), r.getHora(),r.getMinuto(), r.getMaiorcal(), r.getMaiorhidrat());
     this.maxaltitudemax=r.getMaxaltitudemax();
     this.maxaltitudemin=r.getMaxaltitudemin();
     this.maxdistanciadescida=r.getMaxdistanciadescida();
@@ -142,5 +144,31 @@ public RecordeAltitude clone(){
      */
     public void setMaxvelocidademedia(double maxvelocidademedia) {
         this.maxvelocidademedia = maxvelocidademedia;
+    }
+    public void ActualizarRecorde(Altitude a){
+        super.ActualizarRecorde(a);
+        if(a.getAltitudemax()>this.maxaltitudemax){
+            this.setMaxaltitudemax(a.getAltitudemax());
+        }
+        if(a.getAltitudemin()>this.maxaltitudemin){
+            this.setMaxaltitudemin(a.getAltitudemin());
+        }
+        if(a.getDistancia()>this.maxdistancia){
+            this.setMaxdistancia(a.getDistancia());
+        }
+        if(a.getDistanciadescida()>this.maxdistanciadescida){
+            this.setMaxdistanciadescida(a.getDistanciadescida());
+        }
+        if(a.getDistanciasubida()>this.maxdistanciasubida){
+            this.setMaxdistanciasubida(a.getDistanciasubida());
+        }
+        if(a.getVelocidademax()>this.maxvelocidademax){
+            this.setMaxvelocidademax(a.getVelocidademax());
+            
+        }
+        if(a.getVelocidademedia()>this.maxvelocidademedia){
+            this.setMaxvelocidademedia(a.getVelocidademedia());
+            
+        }
     }
 }

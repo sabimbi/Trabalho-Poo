@@ -65,4 +65,12 @@ for(String s:this.friends){
         }
         return s.toString();
     }
+
+    public void RemoverAmigo(String user) {
+    this.friends.remove(user);
+    }
+
+  public int NrdeAmigos() {
+  return this.friends.size();
+  }
 }

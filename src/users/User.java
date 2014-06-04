@@ -8,9 +8,9 @@ package users;
 import exceptions.*;
 import activities.*;
 
-
 import java.util.*;
 import java.io.*;
+
 /**
  *
  * @author Dimz
@@ -28,6 +28,7 @@ public class User implements Serializable {
     private ListaActividades actividades;
     private ListaAmigos friends;
     private ListaRecordes records;
+
     public User() {
         email = password = nome = gen = "";
         altura = 1.0;
@@ -36,7 +37,7 @@ public class User implements Serializable {
         desporto_favorito = "";
         actividades = new ListaActividades();
         friends = new ListaAmigos();
-
+        records = new ListaRecordes();
     }
 
     public User(String email, String nome, String password, String gen, double altura, double peso, String favsport, GregorianCalendar date) {
@@ -56,11 +57,12 @@ public class User implements Serializable {
         this.data_de_nascimento.set(Calendar.DATE, dia);
         this.data_de_nascimento.set(Calendar.MONTH, mes);
         this.data_de_nascimento.set(Calendar.YEAR, ano);
-        this.friends =new ListaAmigos();
+        this.friends = new ListaAmigos();
         this.actividades = new ListaActividades();
+        this.records=new ListaRecordes();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l, ListaRecordes r) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -74,14 +76,12 @@ public class User implements Serializable {
         this.data_de_nascimento = date;
         this.desporto_favorito = favorito;
         this.actividades = new ListaActividades();
-        this.actividades=lista.clone();
-        this.friends=new ListaAmigos();
-        this.friends=l.clone();
-        this.data_de_nascimento = new GregorianCalendar();
-        this.data_de_nascimento.set(Calendar.DATE, dia);
-        this.data_de_nascimento.set(Calendar.MONTH, mes);
-        this.data_de_nascimento.set(Calendar.YEAR, ano);
-
+        this.actividades = lista.clone();
+        this.friends = new ListaAmigos();
+        this.friends = l.clone();
+        this.records = new ListaRecordes();
+        this.records = r.clone();
+        this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
 
     }
 
@@ -100,17 +100,12 @@ public class User implements Serializable {
         this.peso = u.getPeso();
 
         this.desporto_favorito = u.getDesporto_favorito();
-        
-        
+
         this.actividades = u.getListadeActividades();
         this.friends = u.getListaAmigos();
-        this.data_de_nascimento = new GregorianCalendar();
-        this.data_de_nascimento.set(Calendar.DATE, dia);
-        this.data_de_nascimento.set(Calendar.MONTH, mes);
-        this.data_de_nascimento.set(Calendar.YEAR, ano);
+        this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
+this.records=u.getRecords();
     }
-
-    
 
     @Override
     public User clone() {
@@ -193,13 +188,11 @@ public class User implements Serializable {
      */
     public void setData_de_nascimento(GregorianCalendar data_de_nascimento) {
         int dia, mes, ano;
-        this.data_de_nascimento = new GregorianCalendar();
-        dia = data_de_nascimento.get(Calendar.DATE);
+
+        dia = data_de_nascimento.get(Calendar.DAY_OF_MONTH);
         mes = data_de_nascimento.get(Calendar.MONTH);
         ano = data_de_nascimento.get(Calendar.YEAR);
-        this.data_de_nascimento.set(Calendar.DATE, dia);
-        this.data_de_nascimento.set(Calendar.MONTH, mes);
-        this.data_de_nascimento.set(Calendar.YEAR, ano);
+        this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
     }
 
     /**
@@ -259,9 +252,11 @@ public class User implements Serializable {
     public String getNome() {
         return nome;
     }
-public ListaAmigos getListaAmigos(){
-    return this.friends.clone();
-}
+
+    public ListaAmigos getListaAmigos() {
+        return this.friends.clone();
+    }
+
     /**
      * @param nome the nome to set
      */
@@ -269,23 +264,21 @@ public ListaAmigos getListaAmigos(){
         this.nome = nome;
     }
 
-    
-
     public String MostrarFriendsList() throws Excepcoes {
-        return this.friends.toString();
+        if (this.friends.NrdeAmigos() == 0) {
+            throw new NaoTemAmigos();
+        } else {
+            return this.friends.toString();
+        }
     }
 
-    
-
     public String ListarActividades() throws Excepcoes {
-        if (this.actividades.NrdeActividades()==0) {
+        if (this.actividades.NrdeActividades() == 0) {
             throw new NaoTemActividades();
         } else {
             return this.actividades.toString();
         }
     }
-
-    
 
     public int getIdade() {
         GregorianCalendar hj = new GregorianCalendar();
@@ -296,23 +289,43 @@ public ListaAmigos getListaAmigos(){
         return anohj - anoNascimento;
     }
 
-    
-    
-    
-
-    
-
-    
-public void AdicionarAmigo(String user){
-    this.friends.AdicionarAmigo(user);
-}    
+    public void AdicionarAmigo(String user) {
+        this.friends.AdicionarAmigo(user);
+    }
 
     public void AdicionarActividade(GeneralActivity g) {
-    this.actividades.AdicionarActividade(g);
+        this.actividades.AdicionarActividade(g);
     }
 
-    public String ConsultarActividade(GregorianCalendar data) throws Excepcoes{
-    return this.actividades.ConsultarActividade(data);
+    public String ConsultarActividade(GregorianCalendar data) throws Excepcoes {
+        return this.actividades.ConsultarActividade(data);
+    }
+
+    public void RemoverAmigo(String user) {
+        this.friends.RemoverAmigo(user);
+    }
+
+    public String ListarRecordes() throws Excepcoes {
+        if (this.actividades.NrdeActividades() == 0) {
+            throw new NaoTemActividades();
+        } else {
+            return this.records.toString();
+        }
+    }
+
+    public String ConsultarRecorde(String nome) {
+        return this.records.ConsultarRecorde(nome);
+    }
+
+    public boolean ExisteRecorde(String nome) {
+        return this.records.ExisteRecorde(nome);
+    }
+
+    public void ActualizarRecorde(GeneralActivity g) {
+        this.records.AdicionarRecorde(g);
+    }
+
+    public ListaRecordes getRecords() {
+    return this.records.clone();
     }
 }
-
