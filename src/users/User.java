@@ -28,7 +28,7 @@ public class User implements Serializable {
     private ListaActividades actividades;
     private ListaAmigos friends;
     private ListaRecordes records;
-
+    private ListaEventos events;
     public User() {
         email = password = nome = gen = "";
         altura = 1.0;
@@ -38,6 +38,7 @@ public class User implements Serializable {
         actividades = new ListaActividades();
         friends = new ListaAmigos();
         records = new ListaRecordes();
+        events=new ListaEventos();
     }
 
     public User(String email, String nome, String password, String gen, double altura, double peso, String favsport, GregorianCalendar date) {
@@ -60,9 +61,11 @@ public class User implements Serializable {
         this.friends = new ListaAmigos();
         this.actividades = new ListaActividades();
         this.records=new ListaRecordes();
+        
+        this.events=new ListaEventos();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l, ListaRecordes r) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l, ListaRecordes r,ListaEventos e) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -82,7 +85,8 @@ public class User implements Serializable {
         this.records = new ListaRecordes();
         this.records = r.clone();
         this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
-
+this.events=new ListaEventos();
+this.events=e.clone();
     }
 
     public User(User u) {
@@ -105,6 +109,7 @@ public class User implements Serializable {
         this.friends = u.getListaAmigos();
         this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
 this.records=u.getRecords();
+this.events=u.getEvents();
     }
 
     @Override
@@ -327,5 +332,13 @@ this.records=u.getRecords();
 
     public ListaRecordes getRecords() {
     return this.records.clone();
+    }
+
+    public void InscreverEvento(String nome) {
+    this.events.InscreverEvento(nome);
+    }
+
+    public ListaEventos getEvents() {
+    return this.events.clone();
     }
 }

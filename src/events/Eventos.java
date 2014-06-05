@@ -41,9 +41,20 @@ public class Eventos implements Serializable{
     }
     public String toString(){
     StringBuilder s=new StringBuilder();
-    s.append("-----LISTA DE EVENTOS DISPONÍVEIS----");
+    Evento e;
+    GregorianCalendar data=new GregorianCalendar();
+    GregorianCalendar fim;
+    int dia,mes,ano;
+    s.append("-----LISTA DE EVENTOS DISPONÍVEIS----\n");
     for(String event:this.eventos.keySet()){
-        s.append(event+"\n");
+        e=this.eventos.get(event);
+        fim=e.getDatafim();
+        dia=fim.get(Calendar.DAY_OF_MONTH);
+        mes=fim.get(Calendar.MONTH);
+        ano=fim.get(Calendar.YEAR);
+        if(fim.after(data)==true){
+        s.append(event+" Data de fim de inscrições: "+dia+"-"+mes+"-"+ano+"\n");
+        }
     }
     return s.toString();
     }
@@ -53,11 +64,34 @@ public class Eventos implements Serializable{
     }
 
     public boolean ExisteEvento(String event) throws Excepcoes {
-    if(this.eventos.containsKey(event)==false){
-        throw new EventoNaoExiste(event);
+    if(this.eventos.containsKey(event)==true){
+        throw new EventoJaExistente(event);
     }else{
-        return true;
+        return false;
     }
+    }
+
+    public int NrdeEventos() {
+    return this.eventos.size();
+    }
+
+    public void AdicionarEvento(Evento e) {
+    this.eventos.put(e.getNome(), e);
+    }
+
+    public int NrdeEventosValidos() {
+    int n=0;
+    Evento e;
+    GregorianCalendar hoje=new GregorianCalendar();
+        for(String s:this.eventos.keySet()){
+        e=this.eventos.get(s);
+        if(e.getDatafim().after(hoje)==true){
+            n++;
+        }else{
+            break;
+        }
+    }
+        return n;
     }
     
 }

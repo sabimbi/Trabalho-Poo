@@ -18,25 +18,37 @@ import java.io.*;
 public class FitnessUM implements Serializable {
 
     private HashMap<String, User> userlist;
-    
+    private TreeSet<String> distancia,altitude,desporto,outros;
     private Eventos lista;
     
 
     public FitnessUM() {
         userlist = new HashMap<String, User>();
-        
+        distancia=altitude=desporto=outros=new TreeSet<String>();
         lista = new Eventos();
         
     }
 
-    public FitnessUM(HashMap<String, User> list, Eventos e) {
+    public FitnessUM(HashMap<String, User> list, Eventos e,TreeSet<String> distance,TreeSet<String> sports,TreeSet<String> alt,TreeSet<String> others) {
         this.userlist = new HashMap<String, User>();
         this.lista = new Eventos();
         this.lista = e.clone();
         for (String s : list.keySet()) {
             this.userlist.put(s, list.get(s).clone());
         }
-        
+        this.altitude=this.desporto=this.distancia=this.outros=new TreeSet<String>();
+        for(String s:distance){
+            this.distancia.add(s);
+        }
+        for(String s:sports){
+            this.desporto.add(s);
+        }
+        for(String s:alt){
+            this.altitude.add(s);
+        }
+        for(String s:others){
+            this.outros.add(s);
+        }
         
     }
 
@@ -45,7 +57,10 @@ public class FitnessUM implements Serializable {
         this.userlist = f.getUserlist();
         
         this.lista = f.getEventos();
-       
+       this.altitude=f.getAltitude();
+       this.desporto=f.getDesporto();
+       this.distancia=f.getDistancia();
+       this.outros=f.getOutros();
     }
 
     public FitnessUM clone() {
@@ -66,14 +81,16 @@ public class FitnessUM implements Serializable {
 
     public String toString() {
         StringBuilder s = new StringBuilder("-----USERLIST-----\n");
-        TreeSet<String> users = new TreeSet<String>();
-        for (String str : this.getUserlist().keySet()) {
-            users.add(str);
+        TreeSet<String> lista=new TreeSet<String>();
+        User aux;
+        for (String str : this.userlist.keySet()) {
+            aux=this.userlist.get(str);
+            lista.add(aux.getNome());
         }
-        for (String str : users) {
+        for (String str : lista) {
             s.append(str + "\n");
         }
-        s.append("Nr de Users: " + this.getUserlist().size()+"\n");
+        s.append("Nr de Users: " + this.userlist.size()+"\n");
         return s.toString();
     }
 
@@ -112,7 +129,7 @@ public class FitnessUM implements Serializable {
      * @param userlist the userlist to set
      */
     public void setUserlist(HashMap<String, User> userlist) {
-        this.userlist = new HashMap<>();
+        this.userlist = new HashMap<String, User>();
         for (String s : userlist.keySet()) {
             this.userlist.put(s, userlist.get(s).clone());
         }
@@ -165,4 +182,92 @@ public class FitnessUM implements Serializable {
     }else{
        this.lista.RemoverEvento(event);
    }}
+
+    public int NrdeEventos() {
+    return this.lista.NrdeEventos();
+    }
+
+    public TreeSet<String> getAltitude() {
+    TreeSet<String> alt=new TreeSet<String>();
+    for(String s:this.altitude){
+        alt.add(s);
+    }
+    return alt;
+    }
+
+    public TreeSet<String> getDesporto() {
+    TreeSet<String> sports=new TreeSet<String>();
+    for(String s:this.desporto){
+        sports.add(s);
+    }
+    return sports;
+    }
+
+    public TreeSet<String> getDistancia() {
+    TreeSet<String> distance=new TreeSet<String>();
+    for(String s:this.distancia){
+        distance.add(s);
+    }
+    return distance;
+    }
+
+    public TreeSet<String> getOutros() {
+    TreeSet<String> others=new TreeSet<String>();
+    for(String s:this.outros){
+        others.add(s);
+    }
+    return others;
+    }
+
+    public String ListarDesportos() {
+        StringBuilder s=new StringBuilder();
+        TreeSet<String> actividades=new TreeSet<String>();
+        for(String str:this.altitude){
+            actividades.add(str);
+        }
+        for(String str:this.desporto){
+            actividades.add(str);
+        }
+        for(String str:this.distancia){
+            actividades.add(str);
+        }
+        for(String str:this.outros){
+            actividades.add(str);
+        }
+        for(String str:actividades){
+            s.append(str+"\n");
+        }
+        return s.toString();
+    }
+
+ public boolean ExisteActvidade(String tipo) {
+ return (this.altitude.contains(tipo) ||this.desporto.contains(tipo) || this.distancia.contains(tipo) || this.outros.contains(tipo) );   
+ }
+
+public void CarregarDesportos(String[] distancia, String[] desportos, String[] alt, String[] outros) {
+for(String s:distancia){
+    this.distancia.add(s);
+}
+for(String s:desportos){
+    this.desporto.add(s);
+}
+for(String s:alt){
+    this.altitude.add(s);
+}
+for(String s:outros){
+    this.altitude.add(s);
+}
+}
+
+   public void AdicionarEvento(Evento e) {
+   this.lista.AdicionarEvento(e); 
+   }
+
+   public boolean ExisteEvento(String nome) throws Excepcoes {
+   return this.lista.ExisteEvento(nome);
+   }
+
+ public int NrdeEventosValidos() {
+ return this.lista.NrdeEventosValidos();   
+ }
 }

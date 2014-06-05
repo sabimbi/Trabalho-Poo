@@ -20,20 +20,24 @@ import users.*;
 public class MenuPrincipal {
 
     private static FitnessUM fitness;
-    private static String[] desportos;
-    private static String[] alt;
-    private static String[] outros;
-    private static String[] distancia;
+    
+    
 
     public static void main(String[] args) throws Excepcoes {
         int resultado = 1;
+        String[] desportos;
+   String[] alt;
+    String[] outros;
+    String[] distancia;
         distancia = new String[]{"Cycling, Sport", "Cycling, Transport", "Fitness Walking", "Golf", "Indoor Cycling", "Kayaking", "Kitesurfing", "Riding", "Roller Skiing", "Rowing", "Running", "Sailing", "Skating", "Swimming", "Walking", "Wind Surfing"};
         desportos = new String[]{"Badminton", "Baseball", "Basketball", "Boxing", "Cricket", "Football, american", "Football, rugby", "Football, soccer", "Handball", "Hockey", "Polo", "Squash", "Table Tennis", "Tennis", "Volleyball, beach", "Volleyball, indoor"};
         alt = new String[]{"Hiking", "Mountain Biking", "Orienteering", "Skiing, cross country", "Skiing, downhill", "Snowboarding", "Climbing stairs", "Scuba diving"};
         outros = new String[]{"Aerobics", "Eliptical training", "Dancing", "Fencing", "Gymnastics", "Martial Arts", "Pilates",};
         fitness = new FitnessUM();
+        fitness.CarregarDesportos(distancia,desportos,alt,outros);
         fitness.AdicionaUser(new User());
-        fitness.AdicionaUser(new User("joao", "joao", "joao", "Masculino", 1.9, 70.0, "LOL", new GregorianCalendar()));
+        fitness.AdicionaUser(new User("joao", "Joao Fernandes", "joao", "Masculino", 1.9, 70.0, "LOL", new GregorianCalendar()));
+        
         while (resultado != 0) {
             resultado = MenuPrincipal.Menu();
         }
@@ -183,6 +187,9 @@ System.out.println("  _____ _ _                       _   _ __  __ \n" +
                     break;
                 }
                 case 5:{
+                    while(r!=0){
+                        r=MenuPrincipal.MenuEventos(aux);
+                    }
                     r=1;
                     break;
                 }
@@ -252,7 +259,7 @@ System.out.println("  _____ _ _                       _   _ __  __ \n" +
         GregorianCalendar data = new GregorianCalendar();
         Scanner ler = new Scanner(System.in);
         User u;
-        System.out.println("P�?GINA DE REGISTO");
+        System.out.println("PÁGINA DE REGISTO");
 
         System.out.print("Email: ");
         email = ler.nextLine();
@@ -281,12 +288,15 @@ System.out.println("  _____ _ _                       _   _ __  __ \n" +
         ler.nextLine();
         favsport = ler.nextLine();
         try {
-            if (email.equals("") == true) {
+            if (email.equals("") == true || email.contains("@")==false) {
                 throw new UserInvalido(email);
             } else {
                 if (pass1.equals(pass2) == false) {
                     throw new PassInvalida();
                 } else {
+                    if(nome.equals("")==true){
+                        throw new NomeInvalido();
+                    }else{
                     if (date.equals("")) {
                         throw new DataInvalida();
                     } else {
@@ -299,7 +309,8 @@ System.out.println("  _____ _ _                       _   _ __  __ \n" +
                         }
                     }
                 }
-            }
+            }}
+            
             String[] aux = date.split("-");
             dia = Integer.parseInt(aux[0]);
             mes = Integer.parseInt(aux[1]);
@@ -519,11 +530,12 @@ private static int RemoverAmigo(User u) throws Excepcoes {
         GregorianCalendar data;
         String[] datas, time;
         MenuPrincipal.ListarDesportos();
-        ArrayList<String> distance, sports, altitude, others;
-        distance = new ArrayList<>(Arrays.asList(distancia));
-        sports = new ArrayList<>(Arrays.asList(desportos));
-        altitude = new ArrayList<>(Arrays.asList(alt));
-        others = new ArrayList<>(Arrays.asList(outros));
+        TreeSet<String> distance, sports, altitude, others;
+        distance=sports=altitude=others=new TreeSet<String>();
+        distance=fitness.getDistancia();
+        sports=fitness.getDesporto();
+        altitude=fitness.getAltitude();
+        others=fitness.getOutros();
         System.out.println("-----REGISTAR ACTIVIDADE-----");
         System.out.print("Nome da Actividade: ");
         tipo = ler.nextLine();
@@ -579,13 +591,7 @@ private static int RemoverAmigo(User u) throws Excepcoes {
         TreeSet<String> sports = new TreeSet<String>();
 
         System.out.println("-----LISTA DE DESPORTOS-----");
-        sports.addAll(Arrays.asList(distancia));
-        sports.addAll(Arrays.asList(desportos));
-        sports.addAll(Arrays.asList(alt));
-        sports.addAll(Arrays.asList(outros));
-        for (String s : sports) {
-            System.out.println(s);
-        }
+        System.out.print(fitness.ListarDesportos());
     }
 
     private static void ActividadeDistancia(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
@@ -979,5 +985,105 @@ convertido=(double)minuto/60;
     file=ler.nextLine();
         fitness.CarregaObj(file);
     }
-    
+
+    private static int MenuEventos(User aux) throws Excepcoes {
+    Scanner ler=new Scanner(System.in);
+    int op,r;
+    r=1;
+    System.out.println("----EVENTOS----");
+        System.out.println("1 - Criar Evento");
+        System.out.println("2 - Listar Eventos disponíveis");
+        System.out.println("3 - Inscrever num Evento");
+        System.out.println("4 - Voltar ao menu de utilizador");
+        System.out.print("Opção: ");
+        op=ler.nextInt();
+        try{
+            switch(op){
+                case 1:{
+                    MenuPrincipal.CriarEvento(aux);
+                    r=1;
+                    break;
+                }
+                case 2:{
+                    MenuPrincipal.ListarEventos();
+                    r=1;
+                    break;
+                }
+                case 3:{
+                    r=1;
+                    break;
+                }
+                case 4:{
+                    fitness.AdicionaUser(aux);
+                    r=0;
+                    break;
+                }
+                default:{
+                    throw new OpcaoInvalida();
+                }
+            }
+        }catch(NaoTemEventos | EventoNaoExiste | OpcaoInvalida e){
+            System.out.println(e.getMessage());
+        }
+    return r;
+    }
+
+    private static void CriarEvento(User aux) throws Excepcoes {
+    Scanner ler=new Scanner(System.in);
+    int dia,mes,ano;
+    String []args;
+    String nome,local,date,tipo;
+    GregorianCalendar datafim;
+    Evento e;
+    try{
+      System.out.print("Nome do Evento: ");
+      nome=ler.nextLine();
+      System.out.print("Local do Evento: ");
+      local=ler.nextLine();
+      if(nome.equals("")==true || local.equals("")==true){
+          throw new NomeInvalido();
+      }
+      if(fitness.ExisteEvento(nome)==true){
+          throw new EventoJaExistente(nome);
+      }
+      System.out.print("Tipo de Actividade: ");
+     tipo=ler.nextLine();
+     if(MenuPrincipal.ExisteActividade(tipo)==false){
+         throw new TipoNaoExiste(tipo);
+     }
+     System.out.print("Data limite de inscrições(dd-mm-aa): ");
+     date=ler.nextLine();
+     if(date.equals("")==true){
+          throw new DataInvalida();
+      }
+     args=date.split("-");
+     dia=Integer.parseInt(args[0]);
+     mes=Integer.parseInt(args[1]);
+     ano=Integer.parseInt(args[2]);
+     datafim=new GregorianCalendar(ano, mes, dia);
+     e=new Evento(nome, local, 1, datafim);
+     e.InscreverUser(aux.getNome());
+     fitness.AdicionarEvento(e);
+    aux.InscreverEvento(e.getNome());
+    fitness.AdicionaUser(aux);
+    }catch(NomeInvalido | TipoNaoExiste | DataInvalida | EventoJaExistente a){
+        System.out.println(a.getMessage());
+    }
+    }
+
+    private static void ListarEventos() throws Excepcoes {
+    if(fitness.NrdeEventosValidos()==0){
+        throw new NaoTemEventos();
+    }else{
+        System.out.print(fitness.ListarEventos());
+    }
+    }
+
+    private static boolean ExisteActividade(String tipo) {
+    return fitness.ExisteActvidade(tipo);
+    }
 }
+
+    
+    
+
