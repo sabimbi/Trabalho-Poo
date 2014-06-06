@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
+ 
 package events;
-
 /**
  *
  * @author Mesas
@@ -13,6 +13,7 @@ package events;
 import java.io.Serializable;
 import java.util.*;
 import exceptions.*;
+
 public class Eventos implements Serializable{
     private HashMap<String,Evento> eventos;
     public Eventos(){

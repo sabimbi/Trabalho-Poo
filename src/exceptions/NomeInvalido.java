@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
+ 
 package exceptions;
-
 /**
  *
  * @author Mesas

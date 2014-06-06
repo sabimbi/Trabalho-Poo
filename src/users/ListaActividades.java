@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+ 
 package users;
-
 import java.util.*;
-import activities.*;
 import java.io.*;
-import comparators.DateComparator;
+import activities.*;
 import exceptions.*;
-
+import comparators.*;
 /**
  *
  * @author Mesas
@@ -45,8 +44,8 @@ public class ListaActividades implements Serializable {
                 aux = ((Distancia) a).clone();
                 copia.put(aux.getData(), aux);
             }
-            if (a instanceof Desporto) {
-                aux = ((Desporto) a).clone();
+            if (a instanceof Competicao) {
+                aux = ((Competicao) a).clone();
                 copia.put(aux.getData(), aux);
             }
             if (a instanceof Altitude) {
@@ -70,8 +69,8 @@ public class ListaActividades implements Serializable {
                 aux = ((Distancia) a).clone();
                 this.actividades.put(aux.getData(), aux);
             }
-            if (a instanceof Desporto) {
-                aux = ((Desporto) a).clone();
+            if (a instanceof Competicao) {
+                aux = ((Competicao) a).clone();
                 this.actividades.put(aux.getData(), aux);
             }
             if (a instanceof Altitude) {
@@ -101,8 +100,14 @@ public class ListaActividades implements Serializable {
             }
         } else {
             for (GregorianCalendar g : this.actividades.descendingKeySet()) {
+                dia=g.get(Calendar.DATE);
+                mes=g.get(Calendar.MONTH);
+                ano=g.get(Calendar.YEAR);
+                hora=g.get(Calendar.HOUR_OF_DAY);
+                minuto=g.get(Calendar.MINUTE);
                 if (i < 10) {
-                    s.append(this.actividades.get(g).toString());
+                    s.append("Data: "+dia+"-"+mes+"-"+ano+" Hora: "+hora+":"+minuto+" Nome: "+this.actividades.get(g).getNome()+"\n");
+                i++;
                 } else {
                     break;
                 }
@@ -125,8 +130,8 @@ public class ListaActividades implements Serializable {
             this.actividades.put(aux.getData(), aux);
 
         }
-        if (g instanceof Desporto) {
-            aux = ((Desporto) g).clone();
+        if (g instanceof Competicao) {
+            aux = ((Competicao) g).clone();
             this.actividades.put(aux.getData(), aux);
         }
         if (g instanceof Altitude) {
@@ -154,8 +159,8 @@ public class ListaActividades implements Serializable {
                 if (aux instanceof Distancia) {
          return ((Distancia)aux).toString();
         }
-        if (aux instanceof Desporto) {
-            return ((Desporto)aux).toString();
+        if (aux instanceof Competicao) {
+            return ((Competicao)aux).toString();
         }
         if (aux instanceof Altitude) {
             return ((Altitude)aux).toString();
@@ -170,7 +175,7 @@ public class ListaActividades implements Serializable {
         }
     
     return details;}
-
+  
     public int NrdeActividades() {
         return this.actividades.size();
     }

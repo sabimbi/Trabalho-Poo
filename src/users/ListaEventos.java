@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package users;
+ package users;
 import java.io.Serializable;
 import java.util.*;
 /**

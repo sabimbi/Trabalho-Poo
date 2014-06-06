@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 
+ 
 package users;
-
 import java.util.*;
 import java.io.*;
 /**
@@ -14,10 +14,12 @@ import java.io.*;
  */
 public class ListaAmigos implements Serializable{
     private TreeSet<String> friends;
-    private ArrayList<String> pedidos;
+    private ArrayList<String> pedidosfeitos;
+    private ArrayList<String> pedidosrecebidos;
     public ListaAmigos(){
         friends=new TreeSet<>();
-        pedidos=new ArrayList<>();
+        pedidosfeitos=new ArrayList<>();
+        pedidosrecebidos=new ArrayList<>();
     }
     public TreeSet<String> getFriends() {
         TreeSet<String> aux=new TreeSet<>();
@@ -27,29 +29,41 @@ for(String s:this.friends){
 }
         return aux;
     }
-    public ArrayList<String> getPedidos(){
+    public ArrayList<String> getPedidosFeitos(){
         ArrayList<String> copia=new ArrayList<>();
-        for(String s:this.pedidos){
+        for(String s:this.pedidosfeitos){
             copia.add(s);
         }
     return copia;
     }
-    public ListaAmigos(TreeSet<String> users,ArrayList<String> requests){
+    public ArrayList<String> getPedidosRecebidos(){
+        ArrayList<String> copia=new ArrayList<>();
+        for(String s:this.pedidosrecebidos){
+            copia.add(s);
+        }
+    return copia;
+    }
+    public ListaAmigos(TreeSet<String> users,ArrayList<String> requestsmade,ArrayList<String> requestsreceived){
         this.friends=new TreeSet<>();
-        this.pedidos=new ArrayList<>();
+        this.pedidosfeitos=this.pedidosrecebidos=new ArrayList<>();
         for(String s:users){
             this.friends.add(s);
         }
-         for(String s:requests){
-            this.pedidos.add(s);
+         for(String s:requestsmade){
+            this.pedidosfeitos.add(s);
+        }
+         for(String s:requestsreceived){
+            this.pedidosrecebidos.add(s);
         }
         
     }
     public ListaAmigos(ListaAmigos l){
-        this.friends=new TreeSet<>();
-        this.pedidos=new ArrayList<>();
+        this.friends=new TreeSet<String>();
+        this.pedidosfeitos=new ArrayList<String>();
+        this.pedidosrecebidos=new ArrayList<String>();
         this.friends=l.getFriends();
-        this.pedidos=l.getPedidos();
+        this.pedidosfeitos=l.getPedidosFeitos();
+        this.pedidosrecebidos=l.getPedidosRecebidos();
     }
     public ListaAmigos clone(){
         return new ListaAmigos(this);
@@ -73,4 +87,19 @@ for(String s:this.friends){
   public int NrdeAmigos() {
   return this.friends.size();
   }
+
+    public void FazerPedido(String user) {
+    this.pedidosfeitos.add(user);
+    }
+
+    public void ReceberPedido(String user) {
+    this.pedidosrecebidos.add(user);
+    }
+
+    public void RemoverPedidoRecebido(String email) {
+    this.pedidosrecebidos.remove(email);
+    }
+    public void RemoverPedidoFeito(String email) {
+    this.pedidosfeitos.remove(email);
+    }
 }

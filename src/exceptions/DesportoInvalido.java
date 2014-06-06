@@ -3,19 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
  package exceptions;
 
 /**
  *
- * @author mesas
+ * @author Mesas
  */
-public class TipoNaoExiste extends Excepcoes {
-
-    public TipoNaoExiste() {
-        super();
-    }
-
-    public TipoNaoExiste(String tipo) {
-        super("Este desporto " + tipo + " não existe na lista");
+public class DesportoInvalido extends Excepcoes {
+    public DesportoInvalido(){
+        super("Desporto invalido");
     }
 }

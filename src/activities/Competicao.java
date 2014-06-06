@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package activities;
+ package activities;
 
 /**
  *
@@ -11,19 +11,19 @@ package activities;
  */
 import java.util.*;
 
-public class Desporto extends GeneralActivity {
+public class Competicao extends GeneralActivity {
 
     private double distancia;
     private String resultado;
  private double avgspd;
  private double maxspd;
-    public Desporto() {
+    public Competicao() {
         super();
         distancia = 0.0;
         resultado = "";
     }
 
-    public Desporto(GregorianCalendar date, String nome, double cal, double hidration, double distance, String result,double avgspd,double maxspd,int hora,int minuto) {
+    public Competicao(GregorianCalendar date, String nome, double cal, double hidration, double distance, String result,double avgspd,double maxspd,int hora,int minuto) {
         super(date, nome, cal, hidration,hora,minuto);
         this.resultado = result;
         this.distancia = distance;
@@ -31,7 +31,7 @@ public class Desporto extends GeneralActivity {
         this.maxspd=maxspd;
     }
 
-    public Desporto(Desporto a) {
+    public Competicao(Competicao a) {
         super(a.getData(), a.getNome(), a.getCalories(), a.getHidration(),a.getHora(),a.getMinuto());
         this.resultado = a.getResultado();
         this.distancia = a.getDistancia();
@@ -39,8 +39,8 @@ public class Desporto extends GeneralActivity {
         this.maxspd=a.getMaxspd();
     }
 
-    public Desporto clone() {
-        return new Desporto(this);
+    public Competicao clone() {
+        return new Competicao(this);
     }
 
     public String toString() {

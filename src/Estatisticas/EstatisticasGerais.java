@@ -3,16 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
- package exceptions;
+
+package Estatisticas;
 
 /**
  *
- * @author mesas
+ * @author Mesas
  */
-public class PassInvalida extends Excepcoes {
-
-    public PassInvalida() {
-        super("Passwords nao correspondem");
-    }
-
+public class EstatisticasGerais {
+    
 }

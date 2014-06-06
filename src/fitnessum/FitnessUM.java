@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+ 
 package fitnessum;
-
 /**
  *
  * @author Mesas
  */
-import events.*;
-import java.util.*;
-import users.*;
-import exceptions.*;
-import java.io.*;
 
+import java.util.*;
+import java.io.*;
+import exceptions.*;
+import users.*;
+import events.*;
 public class FitnessUM implements Serializable {
 
     private HashMap<String, User> userlist;
-    private TreeSet<String> distancia,altitude,desporto,outros;
+    private TreeSet<String> distancia,altitude,competicao,outros;
     private Eventos lista;
     
 
     public FitnessUM() {
         userlist = new HashMap<String, User>();
-        distancia=altitude=desporto=outros=new TreeSet<String>();
+        distancia=altitude=competicao=outros=new TreeSet<String>();
         lista = new Eventos();
         
     }
@@ -36,12 +36,12 @@ public class FitnessUM implements Serializable {
         for (String s : list.keySet()) {
             this.userlist.put(s, list.get(s).clone());
         }
-        this.altitude=this.desporto=this.distancia=this.outros=new TreeSet<String>();
+        this.altitude=this.competicao=this.distancia=this.outros=new TreeSet<String>();
         for(String s:distance){
             this.distancia.add(s);
         }
         for(String s:sports){
-            this.desporto.add(s);
+            this.competicao.add(s);
         }
         for(String s:alt){
             this.altitude.add(s);
@@ -58,7 +58,7 @@ public class FitnessUM implements Serializable {
         
         this.lista = f.getEventos();
        this.altitude=f.getAltitude();
-       this.desporto=f.getDesporto();
+       this.competicao=f.getDesporto();
        this.distancia=f.getDistancia();
        this.outros=f.getOutros();
     }
@@ -163,13 +163,17 @@ public class FitnessUM implements Serializable {
         InputStream file = new FileInputStream(fich);
         InputStream buffer = new BufferedInputStream(file);
         ObjectInput input = new ObjectInputStream(buffer);
-        this.userlist = (HashMap<String, User>) input.readObject();
+        this.userlist = (HashMap<String,User>) input.readObject();
         this.lista = (Eventos) input.readObject();
         
     }
 
     public void RemoverUtilizador(String user) {
+        User u;
         this.userlist.remove(user);
+        for(String s:this.userlist.keySet()){
+            this.userlist.get(s).RemoverAmigo(user);
+        }
     }
 
     public String ListarEventos() {
@@ -197,7 +201,7 @@ public class FitnessUM implements Serializable {
 
     public TreeSet<String> getDesporto() {
     TreeSet<String> sports=new TreeSet<String>();
-    for(String s:this.desporto){
+    for(String s:this.competicao){
         sports.add(s);
     }
     return sports;
@@ -219,13 +223,13 @@ public class FitnessUM implements Serializable {
     return others;
     }
 
-    public String ListarDesportos() {
-        StringBuilder s=new StringBuilder();
+    public String ListarDesportos() throws Excepcoes {
+        StringBuilder s=new StringBuilder("-----LISTA DE DESPORTOS-----");
         TreeSet<String> actividades=new TreeSet<String>();
         for(String str:this.altitude){
             actividades.add(str);
         }
-        for(String str:this.desporto){
+        for(String str:this.competicao){
             actividades.add(str);
         }
         for(String str:this.distancia){
@@ -234,28 +238,32 @@ public class FitnessUM implements Serializable {
         for(String str:this.outros){
             actividades.add(str);
         }
+        if(actividades.isEmpty()){
+        throw new NaoTemDesportos();
+        }else{
         for(String str:actividades){
             s.append(str+"\n");
         }
-        return s.toString();
+        }
+    return s.toString();
     }
 
  public boolean ExisteActvidade(String tipo) {
- return (this.altitude.contains(tipo) ||this.desporto.contains(tipo) || this.distancia.contains(tipo) || this.outros.contains(tipo) );   
+ return (this.altitude.contains(tipo) ||this.competicao.contains(tipo) || this.distancia.contains(tipo) || this.outros.contains(tipo) );   
  }
 
-public void CarregarDesportos(String[] distancia, String[] desportos, String[] alt, String[] outros) {
+public void CarregarDesportos(String[] distancia, String[] competicaos, String[] alt, String[] outros) {
 for(String s:distancia){
     this.distancia.add(s);
 }
-for(String s:desportos){
-    this.desporto.add(s);
+for(String s:competicaos){
+    this.competicao.add(s);
 }
 for(String s:alt){
     this.altitude.add(s);
 }
 for(String s:outros){
-    this.altitude.add(s);
+    this.outros.add(s);
 }
 }
 
@@ -270,4 +278,47 @@ for(String s:outros){
  public int NrdeEventosValidos() {
  return this.lista.NrdeEventosValidos();   
  }
+
+  public String getTipo(String nome) {
+  String tipo;
+  tipo="";
+      if(this.distancia.contains(nome)){
+      tipo= "Distancia";
+      return tipo;
+  }
+  if(this.altitude.contains(nome)){
+      tipo="Altitude";
+      return tipo;
+  }
+  if(this.competicao.contains(nome)){
+      tipo= "Desporto";
+      return tipo;
+      
+  }
+  if(this.outros.contains(nome)){
+      tipo= "Outros";
+      return tipo;
+  }
+  return tipo;
+  }
+
+  public void InserirDesporto(String nome, String tipo) throws Excepcoes {
+  if(tipo.equals("Competição")==true){
+      this.competicao.add(nome);
+  }else{
+    if(tipo.equals("Distância")==true){
+      this.distancia.add(nome);
+  }else{
+      if(tipo.equals("Altitude")==true){
+      this.altitude.add(nome);
+  }else{
+    if(tipo.equals("Outros")==true){
+      this.outros.add(nome);
+  }else{
+      throw new TipoNaoExiste(tipo);
+  }   
+  } 
+  }   
+  }  
+  }
 }

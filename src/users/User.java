@@ -3,18 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package users;
+ 
 
-import exceptions.*;
-import activities.*;
+package users;
 
 import java.util.*;
 import java.io.*;
-
+import exceptions.*;
+import activities.*;
 /**
  *
  * @author Dimz
  */
+
 public class User implements Serializable {
 
     private String email;
@@ -27,7 +28,6 @@ public class User implements Serializable {
     private String desporto_favorito;
     private ListaActividades actividades;
     private ListaAmigos friends;
-    private ListaRecordes records;
     private ListaEventos events;
     public User() {
         email = password = nome = gen = "";
@@ -37,7 +37,7 @@ public class User implements Serializable {
         desporto_favorito = "";
         actividades = new ListaActividades();
         friends = new ListaAmigos();
-        records = new ListaRecordes();
+        
         events=new ListaEventos();
     }
 
@@ -60,12 +60,12 @@ public class User implements Serializable {
         this.data_de_nascimento.set(Calendar.YEAR, ano);
         this.friends = new ListaAmigos();
         this.actividades = new ListaActividades();
-        this.records=new ListaRecordes();
+       
         
         this.events=new ListaEventos();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l, ListaRecordes r,ListaEventos e) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l, ListaEventos e) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -82,8 +82,7 @@ public class User implements Serializable {
         this.actividades = lista.clone();
         this.friends = new ListaAmigos();
         this.friends = l.clone();
-        this.records = new ListaRecordes();
-        this.records = r.clone();
+        
         this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
 this.events=new ListaEventos();
 this.events=e.clone();
@@ -108,7 +107,6 @@ this.events=e.clone();
         this.actividades = u.getListadeActividades();
         this.friends = u.getListaAmigos();
         this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
-this.records=u.getRecords();
 this.events=u.getEvents();
     }
 
@@ -310,29 +308,29 @@ this.events=u.getEvents();
         this.friends.RemoverAmigo(user);
     }
 
-    public String ListarRecordes() throws Excepcoes {
-        if (this.actividades.NrdeActividades() == 0) {
-            throw new NaoTemActividades();
-        } else {
-            return this.records.toString();
-        }
-    }
-
-    public String ConsultarRecorde(String nome) {
-        return this.records.ConsultarRecorde(nome);
-    }
-
-    public boolean ExisteRecorde(String nome) {
-        return this.records.ExisteRecorde(nome);
-    }
-
-    public void ActualizarRecorde(GeneralActivity g) {
-        this.records.AdicionarRecorde(g);
-    }
-
-    public ListaRecordes getRecords() {
-    return this.records.clone();
-    }
+//    public String ListarRecordes() throws Excepcoes {
+//        if (this.actividades.NrdeActividades() == 0) {
+//            throw new NaoTemActividades();
+//        } else {
+//            return this.records.toString();
+//        }
+//   }
+//
+//    public String ConsultarRecorde(String nome) {
+//        return this.records.ConsultarRecorde(nome);
+//    }
+//
+//    public boolean ExisteRecorde(String nome) {
+//        return this.records.ExisteRecorde(nome);
+//    }
+//
+//    public void ActualizarRecorde(GeneralActivity g) {
+//        this.records.AdicionarRecorde(g);
+//    }
+//
+//    public ListaRecordes getRecords() {
+//    return this.records.clone();
+//    }
 
     public void InscreverEvento(String nome) {
     this.events.InscreverEvento(nome);
@@ -340,5 +338,21 @@ this.events=u.getEvents();
 
     public ListaEventos getEvents() {
     return this.events.clone();
+    }
+
+    public void FazerPedido(String user) {
+    this.friends.FazerPedido(user);
+    }
+
+    public void ReceberPedido(String user) {
+    this.friends.ReceberPedido(user);
+    }
+
+    public void RemoverPedidoRecebido(String user) {
+    this.friends.RemoverPedidoRecebido(user);
+    }
+
+    public void RemoverPedidoFeito(String email) {
+    this.friends.RemoverPedidoFeito(email);
     }
 }
