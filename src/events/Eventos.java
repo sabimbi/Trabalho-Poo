@@ -44,18 +44,13 @@ public class Eventos implements Serializable{
     StringBuilder s=new StringBuilder();
     Evento e;
     GregorianCalendar data=new GregorianCalendar();
-    GregorianCalendar fim;
+    GregorianCalendar date;
     int dia,mes,ano;
-    s.append("-----LISTA DE EVENTOS DISPONÍVEIS----\n");
+    s.append("-----LISTA DE EVENTOS----\n");
     for(String event:this.eventos.keySet()){
         e=this.eventos.get(event);
-        fim=e.getDatafim();
-        dia=fim.get(Calendar.DAY_OF_MONTH);
-        mes=fim.get(Calendar.MONTH);
-        ano=fim.get(Calendar.YEAR);
-        if(fim.after(data)==true){
-        s.append(event+" Data de fim de inscrições: "+dia+"-"+mes+"-"+ano+"\n");
-        }
+       s.append(e.toString());
+        
     }
     return s.toString();
     }
@@ -65,11 +60,7 @@ public class Eventos implements Serializable{
     }
 
     public boolean ExisteEvento(String event) throws Excepcoes {
-    if(this.eventos.containsKey(event)==true){
-        throw new EventoJaExistente(event);
-    }else{
-        return false;
-    }
+    return this.eventos.containsKey(event);
     }
 
     public int NrdeEventos() {
@@ -94,5 +85,22 @@ public class Eventos implements Serializable{
     }
         return n;
     }
-    
+
+    public Evento getEvento(String nome) {
+    return this.eventos.get(nome).clone();
+    }
+    public boolean equals(Object o){
+    boolean op=false;
+    if(this==o){
+        op=true;
+    }
+    if(o==null || this.getClass()!=o.getClass()){
+        op=false;
+    }
+    Eventos aux=(Eventos)o;
+    if(this.getEventos().equals(aux.getEventos())){
+        op=true;
+    }
+    return op;
+}
 }

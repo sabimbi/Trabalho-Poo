@@ -22,20 +22,15 @@ public class FitnessMenu {
 
     public static void main(String[] args) throws Excepcoes {
         int resultado = 1;
-        String[] desportos;
-        String[] alt;
-        String[] outros;
-        String[] distancia;
+       
 //        distancia = new String[]{"Cycling, Sport", "Cycling, Transport", "Fitness Walking", "Golf", "Indoor Cycling", "Kayaking", "Kitesurfing", "Riding", "Roller Skiing", "Rowing", "Running", "Sailing", "Skating", "Swimming", "Walking", "Wind Surfing"};
 //        desportos = new String[]{"Badminton", "Baseball", "Basketball", "Boxing", "Cricket", "Football, american", "Football, rugby", "Football, soccer", "Handball", "Hockey", "Polo", "Squash", "Table Tennis", "Tennis", "Volleyball, beach", "Volleyball, indoor"};
 //        alt = new String[]{"Hiking", "Mountain Biking", "Orienteering", "Skiing, cross country", "Skiing, downhill", "Snowboarding", "Climbing stairs", "Scuba diving"};
 //        outros = new String[]{"Aerobics", "Eliptical training", "Dancing", "Fencing", "Gymnastics", "Martial Arts", "Pilates"};
         fitness = new FitnessUM();
 //        fitness.CarregarDesportos(distancia, desportos, alt, outros);
-        fitness.AdicionaUser(new User("lol", "Helena Fernandes", "lol", "Feminino", 1.5, 40.0, "LOL", new GregorianCalendar(2002, 9, 4)));
-        fitness.AdicionaUser(new User("joao", "Joao Fernandes", "joao", "Masculino", 1.9, 70.0, "LOL", new GregorianCalendar(1993, 7, 21)));
-
-        while (resultado != 0) {
+        
+while (resultado != 0) {
             resultado = FitnessMenu.Menu();
         }
     }
@@ -56,15 +51,16 @@ public class FitnessMenu {
         System.out.println("2 - Registar");
         System.out.println("3 - Userlist");
         System.out.println("4 - Listar Desportos disponíveis");
-        System.out.println("5 - Gravar objecto");
-        System.out.println("6 - Gravar txt");
-        System.out.println("7 - Carregar Objecto");
-        System.out.println("8 - Sair");
+        System.out.println("5 - Listar Eventos");
+        System.out.println("6 - Gravar objecto");
+        System.out.println("7 - Gravar txt");
+        System.out.println("8 - Carregar Objecto");
+        System.out.println("9 - Sair");
         System.out.print("Opção: ");
-        r = 0;
-
+        r = 1;
+ try {
         op = ler.nextInt();
-        try {
+       
             switch (op) {
                 case 1: {
                     r = FitnessMenu.Login();
@@ -85,7 +81,12 @@ public class FitnessMenu {
                     r = 1;
                     break;
                 }
-                case 5: {
+                case 5:{
+                    ListarEventos();
+                    r=1;
+                    break;
+                }
+                case 6: {
                     try {
                         FitnessMenu.GravarObjecto();
                     } catch (IOException e) {
@@ -94,7 +95,7 @@ public class FitnessMenu {
                     r = 1;
                     break;
                 }
-                case 6: {
+                case 7: {
                     try {
                         FitnessMenu.GravarTxt();
 
@@ -104,7 +105,7 @@ public class FitnessMenu {
                     r = 1;
                     break;
                 }
-                case 7: {
+                case 8: {
                     try {
                         FitnessMenu.CarregarObjecto();
 
@@ -114,7 +115,7 @@ public class FitnessMenu {
                     r = 1;
                     break;
                 }
-                case 8: {
+                case 9: {
                     r = 0;
                     break;
                 }
@@ -123,7 +124,7 @@ public class FitnessMenu {
 
                 }
             }
-        } catch (OpcaoInvalida e) {
+        } catch (OpcaoInvalida | InputMismatchException | NaoTemEventos e) {
             System.out.println(e.getMessage());
         }
         return r;
@@ -191,9 +192,9 @@ public class FitnessMenu {
                     break;
                 }
                 case 6: {
-//                    while (r != 0) {
-//                        r = FitnessMenu.MenuRecordes(aux);
-//                    }
+                    while (r != 0) {
+                        r = FitnessMenu.MenuRecordes(aux);
+                    }
                     r = 1;
                     break;
                 }
@@ -225,7 +226,7 @@ public class FitnessMenu {
         System.out.print("Password: ");
         pass = ler.nextLine();
         try {
-            if (user.equals("admin") == true && pass.equals("admin") == true) {
+            if (fitness.LoginAdmin(user,pass)==true) {
                 while (resultado != 0) {
                     resultado = FitnessMenu.MenuAdmin();
                 }
@@ -239,7 +240,7 @@ public class FitnessMenu {
                 }
             }
 
-        } catch (UserNaoExiste e) {
+        } catch (UserNaoExiste | LoginInvalido e) {
             System.out.println(e.getMessage());
 
         }
@@ -274,7 +275,7 @@ public class FitnessMenu {
         System.out.print("Data de Nascimento(dd-mm-aa): ");
         date = ler.nextLine();
 
-        System.out.print("Altura: ");
+        System.out.print("Altura(cm): ");
         altura = ler.nextDouble();
 
         System.out.print("Peso: ");
@@ -413,7 +414,8 @@ public class FitnessMenu {
         System.out.println("1 - Remover Utilizador");
         System.out.println("2 - Remover Evento");
         System.out.println("3 - Adicionar Desporto");
-        System.out.println("4 - Logout");
+        System.out.println("4 - Criar Evento");
+        System.out.println("5 - Logout");
         System.out.print("Opção: ");
         op = ler.nextInt();
         try {
@@ -445,7 +447,12 @@ public class FitnessMenu {
                     r = 1;
                     break;
                 }
-                case 4: {
+                case 4:{
+                    CriarEvento();
+                    r=1;
+                    break;
+                }
+                case 5: {
                     r = 0;
                     break;
                 }
@@ -528,24 +535,22 @@ public class FitnessMenu {
     }
 
     private static void RegistarActividade(User u)throws Excepcoes  {
-        String nome, date, tipo, duracao, horas;
+        String nome, date, tipo, duracao, horas,type;
         int dia, mes, ano, hora, minuto;
         Double cal, hidration, duration;
         Scanner ler = new Scanner(System.in);
         GregorianCalendar data;
         String[] datas, time;
-        TreeSet<String> distance, sports, altitude, others;
+        
 
         
         try {
         System.out.print(fitness.ListarDesportos());
-        distance = fitness.getDistancia();
-        sports = fitness.getDesporto();
-        altitude = fitness.getAltitude();
-        others = fitness.getOutros();
         System.out.println("-----REGISTAR ACTIVIDADE-----");
-        System.out.print("Nome da Actividade: ");
+        System.out.print("Descrição da Actividade: ");
         nome = ler.nextLine();
+        System.out.print("Tipo da Actividade: ");
+        type=ler.nextLine();
         System.out.print("Duração(h:m): ");
 
         duracao = ler.nextLine();
@@ -561,29 +566,29 @@ public class FitnessMenu {
         time = horas.split(":");
         hora = Integer.parseInt(time[0]);
         minuto = Integer.parseInt(time[1]);
-
         dia = Integer.parseInt(datas[0]);
         mes = Integer.parseInt(datas[1]);
         ano = Integer.parseInt(datas[2]);
         data = new GregorianCalendar(ano, mes, dia, hora, minuto);
-        tipo = fitness.getTipo(nome);
-        System.out.println(tipo);
         
+       
+        tipo=fitness.getTipo(type);
+      System.out.println(tipo);
             switch (tipo) {
-                case "Desporto": {
-                    FitnessMenu.ActividadeDesporto(u, data, tipo, duracao, hidration);
+                case "Competicao": {
+                    FitnessMenu.ActividadeCompeticao(u, data,nome, type, duracao,hidration);
                     break;
                 }
                 case "Distancia": {
-                    FitnessMenu.ActividadeDistancia(u, data, tipo, duracao, hidration);
+                    FitnessMenu.ActividadeDistancia(u, data,nome, type,duracao,hidration);
                     break;
                 }
                 case "Altitude": {
-                    FitnessMenu.ActividadeAltitude(u, data, tipo, duracao, hidration);
+                    FitnessMenu.ActividadeAltitude(u, data,nome, type, duracao,hidration);
                     break;
                 }
                 case "Outros": {
-                    FitnessMenu.ActividadeOutros(u, data, tipo, duracao, hidration);
+                    FitnessMenu.ActividadeOutros(u, data, nome,type, duracao, hidration);
                     break;
                 }
                 default: {
@@ -606,9 +611,9 @@ try{
 
 }
 
-    private static void ActividadeDistancia(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
-        double avgspd, maxspd, distancia, cal, peso, altura, bmr, duracao;
-        int idade;
+    private static void ActividadeDistancia(User u, GregorianCalendar date, String nome,String tipo, String duration, Double hidration) {
+        double avgspd, maxspd, distancia, cal, bmr, val;
+       
         int hora, minuto;
         double convertido;
         String[] time;
@@ -619,28 +624,22 @@ try{
         convertido += (double) hora;
         Scanner ler = new Scanner(System.in);
         GeneralActivity g;
-        String genero;
+      
         System.out.print("Distancia(em KM): ");
         distancia = ler.nextDouble();
         avgspd = distancia / convertido;
         maxspd = ((avgspd * avgspd) / (2 * distancia)) * convertido;
-        peso = u.getPeso();
-        altura = u.getAltura();
-        genero = u.getGen();
-        idade = u.getIdade();
-        if (genero.equals("Masculino") == true) {
-            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * idade));
-        } else {
-            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
-        }
-        cal = bmr * 1.55;
-        g = new Distancia(date, tipo, cal, hidration, distancia, maxspd, avgspd, hora, minuto);
+        
+       bmr=u.getTaxa();
+       val=fitness.getVarCal(tipo);
+        cal = bmr * val;
+        g = new Distancia(date,nome, tipo, cal, hidration, distancia, maxspd, avgspd, hora, minuto);
         u.AdicionarActividade(g);
-
+       
     }
 
-    private static void ActividadeAltitude(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
-        double avgspd, maxspd, distancia, cal, peso, altura, bmr, altmax, altmin, maxdesc, mindesc, convertido;
+    private static void ActividadeAltitude(User u, GregorianCalendar date, String nome,String tipo, String duration, Double hidration) {
+        double avgspd, maxspd, distancia, cal,  bmr, altmax, altmin, maxdesc, mindesc, convertido,val;
         int idade, hora, minuto;
         String time[] = duration.split(":");
         hora = Integer.parseInt(time[0]);
@@ -667,29 +666,25 @@ try{
         convertido += (double) hora;
         avgspd = distancia / convertido;
         maxspd = ((avgspd * avgspd) / (2 * distancia)) * convertido;
-        peso = u.getPeso();
-        altura = u.getAltura();
-        genero = u.getGen();
-        idade = u.getIdade();
-        if (genero.equals("Masculino") == true) {
-            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * idade));
-        } else {
-            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
-        }
-        cal = bmr * 1.55;
-        g = new Altitude(date, tipo, cal, hidration, altmax, altmin, maxdesc, mindesc, distancia, maxspd, avgspd, tempo, hora, minuto);
+       
+       bmr=u.getTaxa();
+        val=fitness.getVarCal(tipo);
+        cal = bmr * val;
+        g = new Altitude(date, nome,tipo, cal, hidration, altmax, altmin, maxdesc, mindesc, distancia, maxspd, avgspd, tempo, hora, minuto);
         u.AdicionarActividade(g);
+       
     }
 
-    private static void ActividadeDesporto(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
-        double avgspd, maxspd, distancia, cal, peso, altura, bmr, convertido;
+    private static void ActividadeCompeticao(User u, GregorianCalendar date, String nome,String tipo, String duration, Double hidration) {
+        double avgspd, maxspd, distancia, cal, bmr, convertido,val;
         int idade, hora, minuto;
         String time[] = duration.split(":");
         hora = Integer.parseInt(time[0]);
         minuto = Integer.parseInt(time[1]);
+        
         Scanner ler = new Scanner(System.in);
         GeneralActivity g;
-        String genero, resultado;
+        String  resultado;
         System.out.print("Distância(em KM): ");
         distancia = ler.nextDouble();
         ler.nextLine();
@@ -699,41 +694,32 @@ try{
         convertido += (double) hora;
         avgspd = distancia / convertido;
         maxspd = ((avgspd * avgspd) / (2 * distancia)) * convertido;
-        peso = u.getPeso();
-        altura = u.getAltura();
-        genero = u.getGen();
-        idade = u.getIdade();
-        if (genero.equals("Masculino") == true) {
-            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * idade));
-        } else {
-            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
-        }
-        cal = bmr * 1.55;
-        g = new Competicao(date, tipo, cal, hidration, distancia, resultado, avgspd, maxspd, hora, minuto);
+        
+        bmr=u.getTaxa();
+        val=fitness.getVarCal(tipo);
+        cal = bmr * val;
+        g = new Competicao(date, nome,tipo, cal, hidration, distancia, resultado, avgspd, maxspd, hora, minuto);
         u.AdicionarActividade(g);
+        
+      
     }
 
-    private static void ActividadeOutros(User u, GregorianCalendar date, String tipo, String duration, Double hidration) {
-        double cal, peso, altura, bmr, convertido;
-        String genero;
-        int idade, hora, minuto;
+    private static void ActividadeOutros(User u, GregorianCalendar date, String nome,String tipo, String duration, Double hidration) {
+        double cal,bmr, val;
+        
+        int hora, minuto;
         GeneralActivity g;
         String time[] = duration.split(":");
         hora = Integer.parseInt(time[0]);
         minuto = Integer.parseInt(time[1]);
-        convertido = (double) minuto / 60;
-        convertido += (double) hora;
-        peso = u.getPeso();
-        altura = u.getAltura();
-        genero = u.getGen();
-        idade = u.getIdade();
-        if (genero.equals("Masculino") == true) {
-            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * idade));
-        } else {
-            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * idade));
-        }
-        cal = bmr * 1.55;
-        g = new Outros(date, tipo, cal, hidration, hora, minuto);
+        
+        bmr=u.getTaxa();
+        
+        val=fitness.getVarCal(tipo);
+        
+        cal = bmr * val;
+      
+        g = new Outros(date,nome, tipo, cal, hidration, hora, minuto);
         u.AdicionarActividade(g);
     }
 
@@ -808,9 +794,8 @@ try{
         GeneralActivity g = null;
         Scanner ler = new Scanner(System.in);
         try {
-
+     System.out.print(aux.ListarActividades());
             System.out.print("Data de realização(dd-mm-aa): ");
-
             date = ler.nextLine();
             System.out.print("Hora de Início da Actividade(hh:mm): ");
             horas = ler.nextLine();
@@ -824,7 +809,7 @@ try{
             ano = Integer.parseInt(datas[2]);
             data = new GregorianCalendar(ano, mes, dia, hora, minuto);
 
-            System.out.println(aux.ConsultarActividade(data));
+            System.out.print(aux.ConsultarActividade(data));
 
         } catch (ActividadeNaoExiste | NaoTemActividades e) {
             System.out.println(e.getMessage());
@@ -839,7 +824,8 @@ try{
         System.out.println("1 - Registar Actividades");
         System.out.println("2 - Listar Actividade");
         System.out.println("3 - Consultar Actividade");
-        System.out.println("4 - Voltar ao menu de utilizador");
+        System.out.println("4 - Remover Actividade");
+        System.out.println("5 - Voltar ao menu de utilizador");
         System.out.print("Opção: ");
         op = ler.nextInt();
         try {
@@ -865,7 +851,12 @@ try{
                     r = 1;
                     break;
                 }
-                case 4: {
+                case 4:{
+                    FitnessMenu.RemoverActividade(aux);
+                    r=1;
+                    break;
+                }
+                case 5: {
                     r = 0;
                     break;
                 }
@@ -1012,29 +1003,26 @@ try{
         int op, r;
         r = 1;
         System.out.println("----EVENTOS----");
-        System.out.println("1 - Criar Evento");
-        System.out.println("2 - Listar Eventos disponíveis");
-        System.out.println("3 - Inscrever num Evento");
-        System.out.println("4 - Voltar ao menu de utilizador");
+       
+        System.out.println("1 - Listar Eventos disponíveis");
+        System.out.println("2 - Inscrever num Evento");
+        System.out.println("3 - Voltar ao menu de utilizador");
         System.out.print("Opção: ");
         op = ler.nextInt();
         try {
             switch (op) {
+                
                 case 1: {
-                    FitnessMenu.CriarEvento(aux);
-                    r = 1;
-                    break;
-                }
-                case 2: {
                     FitnessMenu.ListarEventos();
                     r = 1;
                     break;
                 }
-                case 3: {
+                case 2: {
+                    InscreverEvento(aux);
                     r = 1;
                     break;
                 }
-                case 4: {
+                case 3: {
                     fitness.AdicionaUser(aux);
                     r = 0;
                     break;
@@ -1049,19 +1037,21 @@ try{
         return r;
     }
 
-    private static void CriarEvento(User aux) throws Excepcoes {
+    private static void CriarEvento() throws Excepcoes {
         Scanner ler = new Scanner(System.in);
-        int dia, mes, ano;
-        String[] args;
-        String nome, local, date, tipo;
-        GregorianCalendar datafim;
+        int dia, mes, ano,max;
+        String[] fim,fazer;
+        String nome, localrealizacao,localinscricao, date1,date2, tipo;
+        GregorianCalendar datafim,datarealizacao;
         Evento e;
         try {
             System.out.print("Nome do Evento: ");
             nome = ler.nextLine();
-            System.out.print("Local do Evento: ");
-            local = ler.nextLine();
-            if (nome.equals("") == true || local.equals("") == true) {
+            System.out.print("Local de realização do evento: ");
+            localrealizacao = ler.nextLine();
+            System.out.print("Local de inscrição do evento: ");
+            localinscricao = ler.nextLine();
+            if (nome.equals("") == true || localinscricao.equals("") == true || localrealizacao.equals("")==true) {
                 throw new NomeInvalido();
             }
             if (fitness.ExisteEvento(nome) == true) {
@@ -1069,24 +1059,35 @@ try{
             }
             System.out.print("Tipo de Actividade: ");
             tipo = ler.nextLine();
-            if (FitnessMenu.ExisteActividade(tipo) == false) {
+            if (FitnessMenu.ExisteDesporto(tipo) == false) {
                 throw new TipoNaoExiste(tipo);
             }
             System.out.print("Data limite de inscrições(dd-mm-aa): ");
-            date = ler.nextLine();
-            if (date.equals("") == true) {
+            date1 = ler.nextLine();
+            
+            System.out.print("Data da realização do eveto:(dd-mm-aa): ");
+            date2 = ler.nextLine();
+            if (date1.equals("") == true || date2.equals("") == true) {
                 throw new DataInvalida();
             }
-            args = date.split("-");
-            dia = Integer.parseInt(args[0]);
-            mes = Integer.parseInt(args[1]);
-            ano = Integer.parseInt(args[2]);
+            System.out.print("Número Máximo de inscrições: ");
+            max = ler.nextInt();
+            fim = date1.split("-");
+            fazer=date2.split("-");
+            dia = Integer.parseInt(fim[0]);
+            mes = Integer.parseInt(fim[1]);
+            ano = Integer.parseInt(fim[2]);
             datafim = new GregorianCalendar(ano, mes, dia);
-            e = new Evento(nome, local, 1, datafim);
-            e.InscreverUser(aux.getNome());
+            dia = Integer.parseInt(fazer[0]);
+            mes = Integer.parseInt(fazer[1]);
+            ano = Integer.parseInt(fazer[2]);
+            datarealizacao=new GregorianCalendar(dia, mes, ano);
+            e = new Evento(nome, tipo, localrealizacao, localinscricao, datarealizacao, datafim, max);
+            if(fitness.ExisteEvento(nome)){
+                throw new EventoJaExistente(nome);
+            }else{
             fitness.AdicionarEvento(e);
-            aux.InscreverEvento(e.getNome());
-            fitness.AdicionaUser(aux);
+            }
         } catch (NomeInvalido | TipoNaoExiste | DataInvalida | EventoJaExistente a) {
             System.out.println(a.getMessage());
         }
@@ -1100,24 +1101,29 @@ try{
         }
     }
 
-    private static boolean ExisteActividade(String tipo) {
-        return fitness.ExisteActvidade(tipo);
+    private static boolean ExisteDesporto(String nome) {
+        return fitness.ExisteDesporto(nome);
     }
 
     private static void AdicionarDesporto() throws Excepcoes {
         Scanner ler = new Scanner(System.in);
         String nome;
         String tipo;
-
+double cal;
         try {
             System.out.print("Nome do desporto: ");
             nome = ler.nextLine();
             if (nome.equals("") == true) {
                 throw new DesportoInvalido();
             }
-            System.out.print("Tipo de Desporto(Altitude,Competição,Distância,Outros):");
+            System.out.print("Tipo de Desporto(Altitude,Competicao,Distancia,Outros):");
             tipo = ler.nextLine();
-            fitness.InserirDesporto(nome, tipo);
+            System.out.print("Variável das calorias: ");
+           cal = ler.nextDouble();
+            if(fitness.ExisteTipo(tipo)){
+            fitness.InserirDesporto(nome, tipo,cal);    
+            }
+            
         } catch (DesportoInvalido | TipoNaoExiste e) {
             System.out.println(e.getMessage());
         }
@@ -1143,7 +1149,7 @@ System.out.print("Opção: ");
 op = ler.nextInt();            
 switch (op) {
                 case 1: {
-                    ListarPedidos(aux);
+                    ListarPedidosRecebidos(aux);
                     System.out.print("User: ");
                     ler.nextLine();
                     user = ler.nextLine();
@@ -1160,7 +1166,7 @@ switch (op) {
                 break;
                 }
                 case 2: {
-                    ListarPedidos(aux);
+                    ListarPedidosRecebidos(aux);
 System.out.print("User: ");
                     ler.nextLine();
                     user = ler.nextLine();
@@ -1189,25 +1195,130 @@ System.out.print("User: ");
         return r;
     }
 
-    private static void ListarPedidos(User aux) throws Excepcoes {
-    ArrayList<String> feitos,recebidos;
+    private static void ListarPedidosFeitos(User aux) throws Excepcoes {
+    ArrayList<String> feitos;
     
         feitos = aux.getListaAmigos().getPedidosFeitos();
-            recebidos = aux.getListaAmigos().getPedidosRecebidos();
+           
             if (!feitos.isEmpty()) {
                 System.out.println("Pedidos feitos:");
                 for (String s : feitos) {
                     System.out.println(s);
                 }
+            }else{
+            
+            {
+                throw new NaoTemPedidos();
             }
+    }}
+    private static void ListarPedidosRecebidos(User aux) throws Excepcoes {
+    ArrayList<String> recebidos;
+    
+        recebidos = aux.getListaAmigos().getPedidosRecebidos();
+           
             if (!recebidos.isEmpty()) {
                 System.out.println("Pedidos recebidos:");
                 for (String s : recebidos) {
                     System.out.println(s);
                 }
-            }
-            if (recebidos.isEmpty() && feitos.isEmpty()) {
+            }else{
+            
+            {
                 throw new NaoTemPedidos();
             }
+    }}
+
+    private static void RemoverActividade(User u) throws Excepcoes {
+   Scanner ler=new Scanner(System.in);
+   String[]aux1,aux2;
+   GregorianCalendar date;
+   String nome,data,horas;
+   int hora,minuto,dia,mes,ano;
+        try{
+            System.out.print(u.ListarActividades());
+            System.out.print("Designação da actividade: ");
+            nome=ler.nextLine();
+           System.out.print("Data de realização da actividade(dd-mm-aa): ");
+           data=ler.nextLine();
+           System.out.print("Hora de realização da actividade(hh:mm): ");
+           horas=ler.nextLine();
+           aux1=data.split("-");
+           aux2=horas.split(":");
+           dia=Integer.parseInt(aux1[0]);
+        mes=Integer.parseInt(aux1[1]);
+        ano=Integer.parseInt(aux1[2]);
+        hora=Integer.parseInt(aux2[0]);
+        minuto=Integer.parseInt(aux2[1]);
+        date=new GregorianCalendar(ano, mes, dia,hora,minuto);
+        if(!u.ExisteActividade(date)){
+            throw new ActividadeNaoExiste();
+        }
+        u.RemoverActividade(date);
+        fitness.AdicionaUser(u);
+        }catch(ActividadeNaoExiste | NaoTemDesportos e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static int MenuRecordes(User aux) throws Excepcoes {
+    Scanner ler=new Scanner(System.in);
+    int op,r;
+    r=op=1;
+    String tipo;
+    System.out.println("-----MENU RECORDES-----");
+    System.out.println("1 - Listar Recordes");
+    System.out.println("2 - Consultar Recordes");
+    System.out.println("3 - Voltar atrás");
+    System.out.print("Opção: ");
+    op=ler.nextInt();
+    try{
+        switch(op){
+            case 1:{
+                System.out.print(aux.ListarRecordes());
+                r=1;
+                break;
+            }
+            case 2:{
+                System.out.print(aux.ListarRecordes());
+                System.out.print("Recorde: ");
+                ler.nextLine();
+                tipo=ler.nextLine();
+                System.out.print(aux.ConsultarRecorde(tipo));
+            }
+        }
+    }catch(NaoTemRecordes | RecordeNaoExistente e){
+        System.out.println(e.getMessage());
+    }
+    return r;
+    }
+
+    private static void InscreverEvento(User aux) throws Excepcoes {
+    Scanner ler=new Scanner(System.in);
+    String nome;
+    Evento e;
+    GregorianCalendar system=new GregorianCalendar();
+        try{
+        System.out.print(fitness.ListarEventosDisponiveis());
+        System.out.print("Nome do evento em qual se quer inscrever: ");
+        nome=ler.nextLine();
+        if(!fitness.ExisteEvento(nome)){
+            throw new EventoNaoExiste();
+        }else{
+            e=fitness.getEvento(nome).clone();
+            if(aux.TemActividades(e.getTipo())==false || e.getDatafim().before(system)==true){
+                throw new InscricaoInvalida();
+            }else{
+                e.InscreverUser(aux.getEmail());
+                fitness.AdicionarEvento(e);
+                aux.InscreverEvento(nome);
+                fitness.AdicionaUser(aux);
+                  
+            }
+        }
+    }catch(NaoTemEventos | InscricaoInvalida a){
+        System.out.println(a.getMessage());
+    }
     }
 }
+
+

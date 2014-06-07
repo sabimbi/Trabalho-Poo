@@ -23,8 +23,8 @@ public class Competicao extends GeneralActivity {
         resultado = "";
     }
 
-    public Competicao(GregorianCalendar date, String nome, double cal, double hidration, double distance, String result,double avgspd,double maxspd,int hora,int minuto) {
-        super(date, nome, cal, hidration,hora,minuto);
+    public Competicao(GregorianCalendar date, String nome,String tipo, double cal, double hidration, double distance, String result,double avgspd,double maxspd,int hora,int minuto) {
+        super(date, nome,tipo, cal, hidration,hora,minuto);
         this.resultado = result;
         this.distancia = distance;
         this.avgspd=avgspd;
@@ -32,7 +32,7 @@ public class Competicao extends GeneralActivity {
     }
 
     public Competicao(Competicao a) {
-        super(a.getData(), a.getNome(), a.getCalories(), a.getHidration(),a.getHora(),a.getMinuto());
+        super(a.getData(), a.getNome(),a.getTipo(), a.getCalories(), a.getHidration(),a.getHora(),a.getMinuto());
         this.resultado = a.getResultado();
         this.distancia = a.getDistancia();
         this.avgspd=a.getAvgspd();
@@ -42,7 +42,20 @@ public class Competicao extends GeneralActivity {
     public Competicao clone() {
         return new Competicao(this);
     }
-
+public boolean equals(Object o){
+        boolean op=false;
+        if(this==o){
+            op=true;
+        }
+        if(o==null || this.getClass()!=o.getClass()){
+            op=false;
+        }
+   Competicao aux=(Competicao)o;
+   if(super.equals(aux) && this.getResultado().equals(aux.getResultado()) && this.getMaxspd()==aux.getMaxspd() && this.getAvgspd()==aux.getAvgspd()){
+       op=true;
+   }
+   return op;
+}
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(super.toString());

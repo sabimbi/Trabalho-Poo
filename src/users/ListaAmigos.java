@@ -29,6 +29,20 @@ for(String s:this.friends){
 }
         return aux;
     }
+    public boolean equals(Object o){
+    boolean op=false;
+    if(this==o){
+        op=true;
+    }
+    if(o==null | this.getClass() !=o.getClass()){
+        op=false;
+    }
+    ListaAmigos aux=(ListaAmigos)o;
+    if(this.getFriends().equals(aux.getFriends())&& this.getPedidosFeitos().equals(aux.getPedidosFeitos())&& this.getPedidosRecebidos().equals(aux.getPedidosRecebidos())){
+        op=true;
+    }
+    return op;
+}
     public ArrayList<String> getPedidosFeitos(){
         ArrayList<String> copia=new ArrayList<>();
         for(String s:this.pedidosfeitos){

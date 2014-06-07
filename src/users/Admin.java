@@ -10,6 +10,7 @@
  *
  * @author Mesas
  */
+package users;
 public class Admin {
     private String email;
     private String password;
@@ -73,5 +74,18 @@ public class Admin {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+public boolean equals(Object o){
+    boolean op=false;
+    if(this==o){
+        op=true;
+    }
+    if(o==null | this.getClass() !=o.getClass()){
+        op=false;
+    }
+    Admin aux=(Admin)o;
+    if(this.getEmail().equals(aux.getEmail()) && this.getNome().equals(aux.getNome()) && this.getPassword().equals(aux.getPassword())){
+        op=true;
+    }
+    return op;
+}
 }

@@ -28,7 +28,8 @@ public class User implements Serializable {
     private String desporto_favorito;
     private ListaActividades actividades;
     private ListaAmigos friends;
-    private ListaEventos events;
+    private EventosInscritos events;
+    private ListaRecordes recordes;
     public User() {
         email = password = nome = gen = "";
         altura = 1.0;
@@ -37,8 +38,8 @@ public class User implements Serializable {
         desporto_favorito = "";
         actividades = new ListaActividades();
         friends = new ListaAmigos();
-        
-        events=new ListaEventos();
+        recordes=new ListaRecordes();
+        events=new EventosInscritos();
     }
 
     public User(String email, String nome, String password, String gen, double altura, double peso, String favsport, GregorianCalendar date) {
@@ -60,12 +61,12 @@ public class User implements Serializable {
         this.data_de_nascimento.set(Calendar.YEAR, ano);
         this.friends = new ListaAmigos();
         this.actividades = new ListaActividades();
-       
+       this.recordes=new ListaRecordes();
         
-        this.events=new ListaEventos();
+        this.events=new EventosInscritos();
     }
 
-    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l, ListaEventos e) {
+    public User(String email, String nome, String password, String gen, double altura, double peso, GregorianCalendar date, String favorito, ListaActividades lista, ListaAmigos l, EventosInscritos e, ListaRecordes r) {
         this.email = email;
         this.password = password;
         this.nome = nome;
@@ -82,9 +83,10 @@ public class User implements Serializable {
         this.actividades = lista.clone();
         this.friends = new ListaAmigos();
         this.friends = l.clone();
-        
+        this.recordes=new ListaRecordes();
+        this.recordes=r.clone();
         this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
-this.events=new ListaEventos();
+this.events=new EventosInscritos();
 this.events=e.clone();
     }
 
@@ -107,14 +109,17 @@ this.events=e.clone();
         this.actividades = u.getListadeActividades();
         this.friends = u.getListaAmigos();
         this.data_de_nascimento = new GregorianCalendar(ano, mes, dia);
-this.events=u.getEvents();
+this.events=u.getEventosInscritos();
     }
-
+public ListaRecordes getRecordes(){
+    return this.recordes.clone();
+}
     @Override
     public User clone() {
 
         return new User(this);
     }
+    
 
     /**
      * @return the gen
@@ -122,7 +127,20 @@ this.events=u.getEvents();
     public ListaActividades getListadeActividades() {
         return this.actividades.clone();
     }
-
+public boolean equals(Object o){
+    boolean op=false;
+    if(this==o){
+        op=true;
+    }
+    if(o==null || this.getClass()!=o.getClass()){
+        op=false;
+    }
+    User aux=(User )o;
+    if(this.getEmail().equals(aux.getEmail()) && this.getNome().equals(aux.getNome()) && this.getPassword().equals(aux.getPassword()) && this.getGen().equals(aux.getGen()) && this.getPeso()==aux.getPeso() && this.getAltura()==aux.getAltura() && this.getDesporto_favorito().equals(aux.getDesporto_favorito()) && this.getData_de_nascimento()==aux.getData_de_nascimento() && this.getListaAmigos().equals(aux.getListaAmigos()) && this.getListadeActividades().equals(aux.getListadeActividades()) && this.getEventosInscritos().equals(aux.getEventosInscritos()) && this.getRecordes().equals(aux.getRecordes()) ){
+        op=true;
+    }
+    return op;
+}
     public String toString() {
         int dia, mes, ano;
         dia = mes = ano = 0;
@@ -132,7 +150,7 @@ this.events=u.getEvents();
         ano = this.data_de_nascimento.get(Calendar.YEAR);
         s.append("Nome: " + this.getNome() + "\n");
         s.append("Sexo: " + this.gen + "\n");
-        s.append("Altura: " + this.altura + " m\n");
+        s.append("Altura: " + this.altura/100 + " m\n");
         s.append("Peso: " + this.peso + " Kg\n");
         s.append("Data de Nascimento: " + dia + "-" + mes + "-" + ano + "\n");
         s.append("Desporto Favorito: " + this.desporto_favorito + "\n");
@@ -154,7 +172,7 @@ this.events=u.getEvents();
      * @return the altura
      */
     public double getAltura() {
-        return altura;
+        return this.altura;
     }
 
     /**
@@ -336,7 +354,7 @@ this.events=u.getEvents();
     this.events.InscreverEvento(nome);
     }
 
-    public ListaEventos getEvents() {
+    public EventosInscritos getEventosInscritos() {
     return this.events.clone();
     }
 
@@ -354,5 +372,47 @@ this.events=u.getEvents();
 
     public void RemoverPedidoFeito(String email) {
     this.friends.RemoverPedidoFeito(email);
+    }
+
+    public void ActualizarRecordes(String tipo, double distancia, int hora,int  minuto) {
+   this.recordes.ActualizarRecordes(tipo, distancia, hora,minuto);
+    }
+
+    public boolean ExisteActividade(GregorianCalendar date) {
+   return this.actividades.ExisteActividade(date);
+    }
+
+    public void RemoverActividade(GregorianCalendar date) {
+   this.actividades.RemoverActividade(date);
+    }
+
+    public String ListarRecordes() throws Excepcoes{
+    if(this.recordes.TemRecordes()){
+        return this.recordes.toString();
+    }else{
+        throw new NaoTemRecordes();
+    }
+}
+
+    public String ConsultarRecorde(String tipo) throws Excepcoes {
+    if(!this.recordes.ExisteRecorde(tipo)){
+        throw new RecordeNaoExistente(nome);
+    }else{
+       return( this.recordes.ConsultaRecorde(tipo));
+    }
+    }
+    public double getTaxa(){
+        double bmr;
+        
+        if (this.gen.equals("Masculino") == true) {
+            bmr = ((6.23 * peso) + (altura * 12.7) + (6.8 * this.getIdade()));
+        } else {
+            bmr = ((4.35 * peso) + (altura * 4.7) + (4.7 * this.getIdade()));
+        }
+    return bmr;
+    }
+
+   public boolean TemActividades(String tipo) {
+   return this.actividades.TemActividades(tipo); 
     }
 }

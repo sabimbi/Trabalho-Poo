@@ -27,8 +27,8 @@ public class Altitude extends GeneralActivity {
     weather="";
     }
 
-    public Altitude(GregorianCalendar date, String nome, double cal, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia,String tempo,int hora,int minuto) {
-        super(date, nome, cal, hidration,hora,minuto);
+    public Altitude(GregorianCalendar date, String nome, String tipo,double cal, double hidration, double altitudemax, double altitudemin, double distanciasubida, double distanciadescida, double distancia, double velocidademax, double velocidademedia,String tempo,int hora,int minuto) {
+        super(date, nome,tipo, cal, hidration,hora,minuto);
         this.altitudemax = altitudemax;
         this.altitudemin = altitudemin;
         this.distanciadescida = distanciadescida;
@@ -40,7 +40,7 @@ public class Altitude extends GeneralActivity {
     }
 
     public Altitude(Altitude a) {
-        super(a.getData(), a.getNome(), a.getCalories(), a.getHidration(),a.getHora(),a.getMinuto());
+        super(a.getData(), a.getNome(), a.getTipo(),a.getCalories(), a.getHidration(),a.getHora(),a.getMinuto());
         this.altitudemax = a.getAltitudemax();
         this.altitudemin = a.getAltitudemin();
         this.distanciadescida = a.getDistanciadescida();
@@ -53,6 +53,20 @@ public class Altitude extends GeneralActivity {
 
     public Altitude clone() {
         return new Altitude(this);
+    }
+    public boolean equals(Object o){
+        boolean op=false;
+        if(this==o){
+            op=true;
+        }
+        if(o==null || this.getClass()!=o.getClass()){
+            op=false;
+        }
+        Altitude aux=(Altitude)o;
+        if(super.equals(aux) && this.getWeather().equals(aux.getWeather()) && this.getVelocidademedia()==aux.getVelocidademedia() && this.getVelocidademax()==aux.getVelocidademax() && this.getDistanciasubida()==aux.getDistanciasubida() && this.getDistanciadescida()==aux.getDistanciadescida() && this.getDistancia()==aux.getDistancia() && this.getAltitudemax()==aux.getAltitudemax() && this.getAltitudemin()==aux.getAltitudemin()){
+            op=true;
+        }
+        return true;
     }
 
     public double getDistancia() {

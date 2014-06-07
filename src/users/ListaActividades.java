@@ -9,7 +9,7 @@ import java.util.*;
 import java.io.*;
 import activities.*;
 import exceptions.*;
-import comparators.*;
+
 /**
  *
  * @author Mesas
@@ -19,7 +19,7 @@ public class ListaActividades implements Serializable {
     private TreeMap<GregorianCalendar, GeneralActivity> actividades;
 
     public ListaActividades() {
-        actividades = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
+        actividades = new TreeMap<GregorianCalendar, GeneralActivity>();
     }
 
     public ListaActividades(TreeMap<GregorianCalendar, GeneralActivity> l) {
@@ -27,7 +27,7 @@ public class ListaActividades implements Serializable {
     }
 
     public ListaActividades(ListaActividades l) {
-        actividades = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
+        actividades = new TreeMap<GregorianCalendar, GeneralActivity>();
         actividades = l.getActividades();
     }
 
@@ -36,7 +36,7 @@ public class ListaActividades implements Serializable {
     }
 
     public TreeMap<GregorianCalendar, GeneralActivity> getActividades() {
-        TreeMap<GregorianCalendar, GeneralActivity> copia = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
+        TreeMap<GregorianCalendar, GeneralActivity> copia = new TreeMap<GregorianCalendar, GeneralActivity>();
         GeneralActivity aux, a;
         for (GregorianCalendar g : this.actividades.keySet()) {
             a = this.actividades.get(g);
@@ -61,7 +61,7 @@ public class ListaActividades implements Serializable {
     }
 
     public void setActividades(TreeMap<GregorianCalendar, GeneralActivity> lista) {
-        this.actividades = new TreeMap<GregorianCalendar, GeneralActivity>(new DateComparator());
+        this.actividades = new TreeMap<GregorianCalendar, GeneralActivity>();
         GeneralActivity aux, a;
         for (GregorianCalendar g : lista.keySet()) {
             a = lista.get(g);
@@ -83,40 +83,42 @@ public class ListaActividades implements Serializable {
             }
         }
     }
-
+public boolean equals(Object o){
+    boolean op=false;
+    if(this==o){
+        op=true;
+    }
+    if(o==null | this.getClass() !=o.getClass()){
+        op=false;
+    }
+    ListaActividades aux=(ListaActividades)o;
+    if(this.getActividades().equals(aux.getActividades())){
+        op=true;
+    }
+    return op;
+}
     public String toString() {
         StringBuilder s = new StringBuilder("-----ULTIMAS DEZ ACTIVIDADES-----\n");
         int i = 0;
         int dia,mes,ano,hora,minuto;
-        if (this.actividades.size() < 10) {
-            for (GregorianCalendar g : this.actividades.descendingKeySet()) {
-                dia=g.get(Calendar.DATE);
-                mes=g.get(Calendar.MONTH);
-                ano=g.get(Calendar.YEAR);
-                hora=g.get(Calendar.HOUR_OF_DAY);
-                minuto=g.get(Calendar.MINUTE);
-                s.append("Data: "+dia+"-"+mes+"-"+ano+" Hora: "+hora+":"+minuto+" Nome: "+this.actividades.get(g).getNome()+"\n");
-                
+ GeneralActivity g;
+ GregorianCalendar date;
+                Iterator<GregorianCalendar> it=this.actividades.descendingKeySet().iterator();
+                while(it.hasNext() && i!=10){
+date=it.next();
+g=this.actividades.get(date);
+dia=date.get(Calendar.DAY_OF_MONTH);
+mes=date.get(Calendar.MONTH);
+ano=date.get(Calendar.YEAR);
+hora=date.get(Calendar.HOUR_OF_DAY);
+minuto=date.get(Calendar.MINUTE);
+s.append("Data da actividade: "+dia+"-"+mes+"-"+ano+" Hora: "+hora+":"+minuto+" Descrição da actividade: "+g.getNome()+" Desporto: "+g.getTipo()+"\n");
+i++;
             }
-        } else {
-            for (GregorianCalendar g : this.actividades.descendingKeySet()) {
-                dia=g.get(Calendar.DATE);
-                mes=g.get(Calendar.MONTH);
-                ano=g.get(Calendar.YEAR);
-                hora=g.get(Calendar.HOUR_OF_DAY);
-                minuto=g.get(Calendar.MINUTE);
-                if (i < 10) {
-                    s.append("Data: "+dia+"-"+mes+"-"+ano+" Hora: "+hora+":"+minuto+" Nome: "+this.actividades.get(g).getNome()+"\n");
-                i++;
-                } else {
-                    break;
-                }
-
-            }
-        }
-
-        return s.toString();
+    
+        return s.toString();   
     }
+
 
     public boolean ExisteActividade(GregorianCalendar g) {
         return this.actividades.containsKey(g);
@@ -152,23 +154,8 @@ public class ListaActividades implements Serializable {
             if(this.NrdeActividades()==0 || this.ExisteActividade(date) ==false ) {
                 throw new ActividadeNaoExiste();
             } else {
-       
-               
-               
                aux=this.actividades.get(date);
-                if (aux instanceof Distancia) {
-         return ((Distancia)aux).toString();
-        }
-        if (aux instanceof Competicao) {
-            return ((Competicao)aux).toString();
-        }
-        if (aux instanceof Altitude) {
-            return ((Altitude)aux).toString();
-        }
-        if (aux instanceof Outros) {
-            return ((Outros)aux).toString();
-        }
-    
+               return aux.toString();
             }
         }catch(ActividadeNaoExiste e){
             System.out.println(e.getMessage());
@@ -179,5 +166,18 @@ public class ListaActividades implements Serializable {
     public int NrdeActividades() {
         return this.actividades.size();
     }
+
+  public  void RemoverActividade(GregorianCalendar date) {
+  this.actividades.remove(date);
+  }
+
+ public  boolean TemActividades(String tipo) {
+ for(GregorianCalendar g:this.actividades.keySet()){
+     if(this.actividades.get(g).getTipo().equals(tipo)==true){
+         return true;
+     }
+ }
+ return false;
+ }
 
 }

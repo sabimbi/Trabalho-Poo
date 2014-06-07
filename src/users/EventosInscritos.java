@@ -11,19 +11,19 @@ import java.util.*;
  *
  * @author Mesas
  */
-public class ListaEventos implements Serializable{
+public class EventosInscritos implements Serializable{
     private TreeSet<String> eventos;
-    public ListaEventos(){
+    public EventosInscritos(){
         this.eventos=new TreeSet<String>();
     }
-    public ListaEventos(TreeSet<String> events){
+    public EventosInscritos(TreeSet<String> events){
         this.eventos=new TreeSet<String>();
         for(String s:events){
             this.eventos.add(s);
         }
     }
     
-    public ListaEventos(ListaEventos l){
+    public EventosInscritos(EventosInscritos l){
         this.eventos=new TreeSet<String>();
         this.eventos=l.getEventos();
     }
@@ -34,11 +34,26 @@ public class ListaEventos implements Serializable{
         }
         return copia;
     }
-    public ListaEventos clone(){
-        return new ListaEventos(this);
+    public EventosInscritos clone(){
+        return new EventosInscritos(this);
     }
 
    public void InscreverEvento(String nome) {
    this.eventos.add(nome);
    }
+   public boolean equals(Object o){
+    boolean op=false;
+    if(this==o){
+        op=true;
+    }
+    if(o==null | this.getClass() !=o.getClass()){
+        op=false;
+    }
+    EventosInscritos aux=(EventosInscritos)o;
+    if(this.getEventos().equals(aux.getEventos())){
+        op=true;
+    }
+    return op;
+}
+ 
 }
