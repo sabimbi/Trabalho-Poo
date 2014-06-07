@@ -11,22 +11,22 @@ import java.util.GregorianCalendar;
  *
  * @author Mesas
  */
-public class Outros extends GeneralActivity {
+public class Fitness extends GeneralActivity {
 
-    public Outros() {
+    public Fitness() {
         super();
     }
 
-    public Outros(GregorianCalendar date, String nome,String tipo, double calories,double hidration,int hora,int minuto) {
+    public Fitness(GregorianCalendar date, String nome,String tipo, double calories,double hidration,int hora,int minuto) {
         super(date, nome,tipo, calories,hidration,hora,minuto);
     }
 
-    public Outros(Outros o) {
+    public Fitness(Fitness o) {
         super(o.getData(), o.getNome(),o.getTipo(), o.getCalories(), o.getHidration(),o.getHora(),o.getMinuto());
     }
 
-    public Outros clone() {
-        return new Outros(this);
+    public Fitness clone() {
+        return new Fitness(this);
     }
 public boolean equals(Object o){
         boolean op=false;
@@ -36,7 +36,7 @@ public boolean equals(Object o){
         if(o==null || this.getClass()!=o.getClass()){
             op=false;
         }
-  Outros aux=(Outros)o;
+  Fitness aux=(Fitness)o;
    if(super.equals(aux)){
        op=true;
    }

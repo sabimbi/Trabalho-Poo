@@ -249,7 +249,7 @@ public TreeMap<String,Desporto> getSports(){
   }
 
     public boolean ExisteTipo(String tipo) throws Excepcoes{
-    return(tipo.equals("Distancia") || tipo.equals("Competicao") || tipo.equals("Outros") || tipo.equals("Altitude") );
+    return(tipo.equals("Distancia") || tipo.equals("Competicao") || tipo.equals("Fitness") || tipo.equals("Altitude") );
     }
 
   public double getVarCal(String tipo) {

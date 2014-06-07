@@ -52,8 +52,8 @@ public class ListaActividades implements Serializable {
                 aux = ((Altitude) a).clone();
                 copia.put(aux.getData(), aux);
             }
-            if (a instanceof Outros) {
-                aux = ((Outros) a).clone();
+            if (a instanceof Fitness) {
+                aux = ((Fitness) a).clone();
                 copia.put(aux.getData(), aux);
             }
         }
@@ -77,8 +77,8 @@ public class ListaActividades implements Serializable {
                 aux = ((Altitude) a).clone();
                 this.actividades.put(aux.getData(), aux);
             }
-            if (a instanceof Outros) {
-                aux = ((Outros) a).clone();
+            if (a instanceof Fitness) {
+                aux = ((Fitness) a).clone();
                 this.actividades.put(aux.getData(), aux);
             }
         }
@@ -140,8 +140,8 @@ i++;
             aux = ((Altitude) g).clone();
             this.actividades.put(aux.getData(), aux);
         }
-        if (g instanceof Outros) {
-            aux = ((Outros) g).clone();
+        if (g instanceof Fitness) {
+            aux = ((Fitness) g).clone();
             this.actividades.put(aux.getData(), aux);
         }
 

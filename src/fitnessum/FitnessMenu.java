@@ -587,8 +587,8 @@ while (resultado != 0) {
                     FitnessMenu.ActividadeAltitude(u, data,nome, type, duracao,hidration);
                     break;
                 }
-                case "Outros": {
-                    FitnessMenu.ActividadeOutros(u, data, nome,type, duracao, hidration);
+                case "Fitness": {
+                    FitnessMenu.ActividadeFitness(u, data, nome,type, duracao, hidration);
                     break;
                 }
                 default: {
@@ -704,7 +704,7 @@ try{
       
     }
 
-    private static void ActividadeOutros(User u, GregorianCalendar date, String nome,String tipo, String duration, Double hidration) {
+    private static void ActividadeFitness(User u, GregorianCalendar date, String nome,String tipo, String duration, Double hidration) {
         double cal,bmr, val;
         
         int hora, minuto;
@@ -719,7 +719,7 @@ try{
         
         cal = bmr * val;
       
-        g = new Outros(date,nome, tipo, cal, hidration, hora, minuto);
+        g = new Fitness(date,nome, tipo, cal, hidration, hora, minuto);
         u.AdicionarActividade(g);
     }
 
@@ -1116,7 +1116,7 @@ double cal;
             if (nome.equals("") == true) {
                 throw new DesportoInvalido();
             }
-            System.out.print("Tipo de Desporto(Altitude,Competicao,Distancia,Outros):");
+            System.out.print("Tipo de Desporto(Altitude,Competicao,Distancia,Fitness):");
             tipo = ler.nextLine();
             System.out.print("Variável das calorias: ");
            cal = ler.nextDouble();
