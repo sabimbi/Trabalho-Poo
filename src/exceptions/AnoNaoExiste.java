@@ -4,12 +4,14 @@
  * and open the template in the editor.
  */
 
-package Estatisticas;
+package exceptions;
 
 /**
  *
  * @author Mesas
  */
-public class EstatisticasGerais {
-    
+public class AnoNaoExiste extends Excepcoes {
+    public AnoNaoExiste(int ano){
+        super("Não realizou nenhuma actividade em "+ano);
+    }
 }

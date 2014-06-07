@@ -14,35 +14,39 @@ import java.io.*;
 import exceptions.*;
 import users.*;
 import events.*;
-
+import stats.*;
 public class FitnessUM implements Serializable {
 
     private TreeMap<String, User> userlist;
     private TreeMap<String,Desporto> sports;
     private Eventos lista;
     private TreeMap<String, Admin> admin;
+    private EstatisticasGerais stats;
     public FitnessUM() {
         userlist = new TreeMap<String, User>();
        sports=new TreeMap<String, Desporto>();
         lista = new Eventos();
 admin=new TreeMap<String, Admin>();
+stats=new EstatisticasGerais();
     }
 
-    public FitnessUM(TreeMap<String, User> list, Eventos e, TreeMap<String,Desporto>sports,TreeMap<String, Admin> admin) {
+    public FitnessUM(TreeMap<String, User> list, Eventos e, TreeMap<String,Desporto>sports,TreeMap<String, Admin> admin,EstatisticasGerais s) {
         this.userlist = new TreeMap<String, User>();
         this.lista = new Eventos();
         this.lista = e.clone();
         this.sports=new TreeMap<String,Desporto>();
         this.admin=new TreeMap<String, Admin>();
-        for (String s : list.keySet()) {
-            this.userlist.put(s, list.get(s).clone());
+        this.stats=new EstatisticasGerais();
+        for (String str : list.keySet()) {
+            this.userlist.put(str, list.get(str).clone());
         }
-        for (String s : sports.keySet()) {
-            this.sports.put(s,sports.get(s));
+        for (String str : sports.keySet()) {
+            this.sports.put(str,sports.get(str));
         }
-        for (String s :admin.keySet()) {
-            this.admin.put(s,admin.get(s).clone());
+        for (String str :admin.keySet()) {
+            this.admin.put(str,admin.get(str).clone());
         }
+        this.stats=s.clone();
         
     }
 
@@ -53,6 +57,7 @@ admin=new TreeMap<String, Admin>();
         this.lista = f.getEventos();
         this.sports=f.getSports();
         this.admin=f.getAdmin();
+        this.stats=f.getStats();
     }
 
     public FitnessUM clone() {
@@ -67,7 +72,7 @@ admin=new TreeMap<String, Admin>();
         op=false;
     }
     FitnessUM aux=(FitnessUM)o;
-    if(this.getUserlist().equals(aux.getUserlist()) && this.getEventos().equals(aux.getEventos()) && this.getSports().equals(aux.getSports()) && this.getAdmin().equals(aux.getAdmin())){
+    if(this.getUserlist().equals(aux.getUserlist()) && this.getEventos().equals(aux.getEventos()) && this.getSports().equals(aux.getSports()) && this.getAdmin().equals(aux.getAdmin()) && this.getStats().equals(aux.getStats())){
         op=true;
     }
     return op;
@@ -103,8 +108,8 @@ public TreeMap<String,Desporto> getSports(){
     }
 
     public boolean ExisteUser(String email) throws Excepcoes {
-        if (this.userlist.containsKey(email) == false) {
-            throw new UserNaoExiste(email);
+        if (this.userlist.containsKey(email) == true) {
+            throw new UserInvalido(email);
         } else {
             return true;
         }
@@ -121,16 +126,16 @@ public TreeMap<String,Desporto> getSports(){
     }
 
     public boolean LoginValido(String user, String pass) throws Excepcoes {
-        if (this.getUserlist().containsKey(user) == false) {
-            throw new UserNaoExiste(user);
+       boolean op=false;
+        if (this.userlist.containsKey(user)==true) {
+            op=true;
+        return op;
         } else {
             if (pass.equals(this.getUser(user).getPassword()) == false) {
                 throw new LoginInvalido();
-            } else {
-                return true;
-            }
+            } 
         }
-
+return op;
     }
 
     /**
@@ -169,7 +174,7 @@ public TreeMap<String,Desporto> getSports(){
         InputStream file = new FileInputStream(fich);
         InputStream buffer = new BufferedInputStream(file);
         ObjectInput input = new ObjectInputStream(buffer);
-        this.userlist = (TreeMap<String, User>) input.readObject();
+        this.userlist =(TreeMap<String, User>)input.readObject();
         this.lista = (Eventos) input.readObject();
 
     }
@@ -292,21 +297,49 @@ public TreeMap<String,Desporto> getSports(){
  }
 
   public boolean LoginAdmin(String user, String pass) throws Excepcoes {
-        if (this.getAdmin().containsKey(user) == false) {
-            throw new UserNaoExiste(user);
-        } else {
-            if (pass.equals(this.getAdmin(user).getPassword()) == false) {
-                throw new LoginInvalido();
-            } else {
-                return true;
-            }
-        }
-
+      boolean op=false;  
+      if (this.getAdmin().containsKey(user) == false) {
+        op=false;
+        }else{
+          op=true;
+      }
+return op;
     }
 
     public Admin getAdmin(String user) {
     return this.admin.get(user).clone();
     }
+
+    public EstatisticasGerais getStats() {
+    return this.stats.clone();
+    }
+
+  public  void ActualizarStats(int ano, int mes, int hora, int minuto, double cal, double distancia) {
+  EstatisticaAnual e;
+  if(this.stats.getGeral().containsKey(ano)){
+      e=this.stats.getGeral().get(ano).clone();
+      e.ActualizarStats(mes,hora,minuto,cal,distancia);
+      this.stats.AdicionarEstatistica(ano,e);
+  }else{
+      e=new EstatisticaAnual();
+      e.ActualizarStats(mes,hora,minuto,cal,distancia);
+  this.stats.AdicionarEstatistica(ano,e);
+  }
+  }
+
+ public String ConsultarStatsAno(int ano) throws Excepcoes{
+ StringBuilder s;
+     if(this.stats.getGeral().containsKey(ano)){
+     s=new StringBuilder(this.stats.getGeral().get(ano).toString());
+ }else{
+     throw new AnoNaoExiste(ano);
+ }
+     return s.toString();
+ }
+
+  public String  ConsularStats() {
+  return this.stats.toString();
+  }
     
 }
         

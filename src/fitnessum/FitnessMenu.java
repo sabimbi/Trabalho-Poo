@@ -22,14 +22,9 @@ public class FitnessMenu {
 
     public static void main(String[] args) throws Excepcoes {
         int resultado = 1;
-       
-//        distancia = new String[]{"Cycling, Sport", "Cycling, Transport", "Fitness Walking", "Golf", "Indoor Cycling", "Kayaking", "Kitesurfing", "Riding", "Roller Skiing", "Rowing", "Running", "Sailing", "Skating", "Swimming", "Walking", "Wind Surfing"};
-//        desportos = new String[]{"Badminton", "Baseball", "Basketball", "Boxing", "Cricket", "Football, american", "Football, rugby", "Football, soccer", "Handball", "Hockey", "Polo", "Squash", "Table Tennis", "Tennis", "Volleyball, beach", "Volleyball, indoor"};
-//        alt = new String[]{"Hiking", "Mountain Biking", "Orienteering", "Skiing, cross country", "Skiing, downhill", "Snowboarding", "Climbing stairs", "Scuba diving"};
-//        outros = new String[]{"Aerobics", "Eliptical training", "Dancing", "Fencing", "Gymnastics", "Martial Arts", "Pilates"};
+
         fitness = new FitnessUM();
-//        fitness.CarregarDesportos(distancia, desportos, alt, outros);
-        
+        fitness.AdicionaUser(new User());
 while (resultado != 0) {
             resultado = FitnessMenu.Menu();
         }
@@ -225,6 +220,7 @@ while (resultado != 0) {
         user = ler.nextLine();
         System.out.print("Password: ");
         pass = ler.nextLine();
+
         try {
             if (fitness.LoginAdmin(user,pass)==true) {
                 while (resultado != 0) {
@@ -640,7 +636,7 @@ try{
 
     private static void ActividadeAltitude(User u, GregorianCalendar date, String nome,String tipo, String duration, Double hidration) {
         double avgspd, maxspd, distancia, cal,  bmr, altmax, altmin, maxdesc, mindesc, convertido,val;
-        int idade, hora, minuto;
+        int idade, hora, minuto,ano,mes,dia;
         String time[] = duration.split(":");
         hora = Integer.parseInt(time[0]);
         minuto = Integer.parseInt(time[1]);
@@ -672,6 +668,10 @@ try{
         cal = bmr * val;
         g = new Altitude(date, nome,tipo, cal, hidration, altmax, altmin, maxdesc, mindesc, distancia, maxspd, avgspd, tempo, hora, minuto);
         u.AdicionarActividade(g);
+        dia=date.get(Calendar.DAY_OF_MONTH);
+        mes=date.get(Calendar.MONTH);
+        ano=date.get(Calendar.YEAR);
+        fitness.ActualizarStats(ano,mes,hora,minuto,cal,distancia);
        
     }
 
@@ -825,7 +825,8 @@ try{
         System.out.println("2 - Listar Actividade");
         System.out.println("3 - Consultar Actividade");
         System.out.println("4 - Remover Actividade");
-        System.out.println("5 - Voltar ao menu de utilizador");
+        System.out.println("5 - Estatísticas de uma Actividade");
+        System.out.println("6 - Voltar ao menu de utilizador");
         System.out.print("Opção: ");
         op = ler.nextInt();
         try {
@@ -856,7 +857,12 @@ try{
                     r=1;
                     break;
                 }
-                case 5: {
+                case 5:{
+                   FitnessMenu.Estatisticas(aux);
+                    r=1;
+                    break;
+                }
+                case 6: {
                     r = 0;
                     break;
                 }
@@ -1317,6 +1323,31 @@ System.out.print("User: ");
         }
     }catch(NaoTemEventos | InscricaoInvalida a){
         System.out.println(a.getMessage());
+    }
+    }
+
+    private static void Estatisticas(User aux) throws Excepcoes{
+    int op,mes,ano;
+    Scanner ler=new Scanner(System.in);
+    System.out.println("------ESTATISTICAS------");
+    System.out.print("1 - Por mês ");
+    System.out.print("2 - Por ano");
+     System.out.print("3 - Voltar atrás");
+    op=ler.nextInt();
+    try{
+    switch(op){
+        case 1:{
+            System.out.print("Ano: ");
+            ano=ler.nextInt();
+            System.out.print(fitness.ConsultarStatsAno(ano));
+            break;
+        }
+        case 2:{
+            System.out.print(fitness.ConsularStats());
+            break;
+        }
+    }}catch(OpcaoInvalida | AnoNaoExiste e){
+        System.out.println(e.getMessage());
     }
     }
 }
